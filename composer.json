@@ -1,0 +1,12 @@
+{
+    "name": "seboettg/collection",
+    "description": "Simple PHP ArrayList collection",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian Böttger",
+            "email": "seboettg@gmail.com"
+        }
+    ],
+    "require": {}
+}

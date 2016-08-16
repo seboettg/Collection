@@ -12,8 +12,11 @@
 namespace Seboettg\Collection;
 
 /**
- * Comparable Interface for Elements as part of an <code>Model\ArrayList</code> (e.g. Post, Tag, Group) that should be
- * comparable and sortable.
+ * Comparable Interface for elements as part of an ArrayList.
+ *
+ * This interface imposes a total ordering on the objects of each class that implements it. This ordering is referred
+ * to as the class's natural ordering, and the class's compareTo method is referred to as its natural comparison method.
+ *
  * @package Seboettg\Collection
  *
  * @author Sebastian Böttger <seboettg@gmail.com>

@@ -20,5 +20,15 @@ namespace Seboettg\Collection;
  */
 interface Comparable {
 
-    public function compare(Comparable $b);
+    /**
+     * Compares this object with the specified object for order. Returns a negative integer, zero, or a positive
+     * integer as this object is less than, equal to, or greater than the specified object.
+     *
+     * The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
+     *
+     * @param Comparable $b
+     * @return int
+     */
+    public function compareTo(Comparable $b);
+
 }

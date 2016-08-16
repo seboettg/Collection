@@ -12,10 +12,10 @@
 namespace Seboettg\Collection;
 
 /**
- * Interface Collection
+ * Wrapper Interface for \ArrayAccess, \IteratorAggregate, \Countable, ToArrayInterface
  * @package Seboettg\Collection
  * 
- * @author <seboettg@gmail.com>
+ * @author Sebastian Böttger <seboettg@gmail.com>
  */
 interface Collection extends \ArrayAccess, \IteratorAggregate, \Countable, ToArrayInterface
 {

@@ -34,20 +34,32 @@ abstract class Comparator
     const ORDER_DESC = "DESC";
 
     /**
+     * static constant for a custom sorting order
+     */
+    const ORDER_CUSTOM = "CUSTOM";
+
+    /**
      * defines the order (ascending|descending) for a comparison
      *
      * @var string
      */
     protected $sortingOrder;
 
+    /**
+     * object/array which can be used to define a custom order
+     * @var mixed
+     */
+    protected $customOrder;
 
     /**
      * Comparator constructor.
      * @param string $sortingOrder defines the order (ascending|descending) for a comparison
+     * @param mixed $customOrder
      */
-    public function __construct($sortingOrder = self::ORDER_ASC)
+    public function __construct($sortingOrder = self::ORDER_ASC, $customOrder = null)
     {
         $this->sortingOrder = $sortingOrder;
+        $this->customOrder = $customOrder;
     }
 
     /**

@@ -11,5 +11,7 @@
     "autoload": {
         "psr-4": {"": "src/"}
     },
-    "require": {}
+    "require": {
+        "satooshi/php-coveralls": "^1"
+    }
 }

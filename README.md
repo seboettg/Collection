@@ -1,7 +1,7 @@
 [![PHP](https://img.shields.io/badge/PHP-%3E=5.4-green.svg?style=flat)](http://docs.php.net/manual/en/migration54.new-features.php)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://bitbucket.org/bibsonomy/restclient-php/raw/default/license.txt)
-[![Build Status](https://travis-ci.org/seboettg/Collection.svg?branch=master)](https://travis-ci.org/seboettg/Collection)
-[![Coverage Status](https://coveralls.io/repos/github/seboettg/Collection/badge.svg?branch=master)](https://coveralls.io/github/seboettg/Collection?branch=master)
+[![Build Status](https://travis-ci.org/seboettg/Collection.svg?branch=release%2Fv1.1.0)](https://travis-ci.org/seboettg/Collection)
+[![Coverage Status](https://coveralls.io/repos/github/seboettg/Collection/badge.svg?branch=release%2Fv1.1.0)](https://coveralls.io/github/seboettg/Collection?branch=master)
 # Collection
 
 Collection is a set of useful wrapper classes for arrays, similar to Java Collection.

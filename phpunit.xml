@@ -17,12 +17,11 @@
 
     <filter>
         <whitelist>
-            <directory>src/</directory>
-            <!--
+            <directory suffix=".php">./src</directory>
             <exclude>
-                <directory> </directory>
+                <directory>./vendor</directory>
+                <directory>./tests</directory>
             </exclude>
-            -->
         </whitelist>
     </filter>
 

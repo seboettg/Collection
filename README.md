@@ -228,7 +228,7 @@ $list = new ArrayList([
 ]);
 
 Collections::sort(
-    $list, ["d", "k", "a", "b", "c"]
+    $list, new MyCustomOrderComparator(Comparator::ORDER_CUSTOM, ["d", "k", "a", "b", "c"])
 );
 
 ```

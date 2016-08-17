@@ -12,7 +12,9 @@
 namespace Seboettg\Collection;
 
 /**
+ *
  * ToArrayInterface
+ *
  * @package Seboettg\Collection
  *
  * @author Sebastian Böttger <seboettg@gmail.com>

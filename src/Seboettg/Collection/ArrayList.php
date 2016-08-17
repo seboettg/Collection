@@ -27,8 +27,6 @@ class ArrayList implements Collection
      */
     protected $array;
 
-    private $order;
-
     /**
      * ArrayList constructor.
      * @param array $data
@@ -79,8 +77,7 @@ class ArrayList implements Collection
      */
     public function setArray(array $array)
     {
-        $this->array = $array;
-        return $this;
+        return $this->replace($array);
     }
 
     /**
@@ -142,14 +139,17 @@ class ArrayList implements Collection
     }
 
     /**
-     * Returns true if the specified value exists in this list.
+     * Returns true if the specified value exists in this list. Uses PHP's array_search function
+     * @link http://php.net/manual/en/function.array-search.php
+     *
      * @param string $value
      *
      * @return mixed
      */
     public function hasValue($value)
     {
-        return array_search($value, $this->array, true);
+        $result = array_search($value, $this->array, true);
+        return ($result !== false);
     }
 
     /**

@@ -12,6 +12,6 @@
         "psr-4": {"": "src/"}
     },
     "require": {
-        "satooshi/php-coveralls": "^1"
+        "satooshi/php-coveralls": "dev-master"
     }
 }

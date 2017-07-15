@@ -11,11 +11,11 @@
 
 namespace Seboettg\Collection\Test;
 
-
+use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
 use Seboettg\Collection\Comparable;
 
-class ArrayListTest extends \PHPUnit_Framework_TestCase
+class ArrayListTest extends TestCase
 {
 
     /**
@@ -134,9 +134,8 @@ class ArrayListTest extends \PHPUnit_Framework_TestCase
 
     public function testHasKey()
     {
-        $this->numeratedArrayList->hasKey(0);
-        $this->hashMap->hasKey("c");
-
+        $this->assertTrue($this->numeratedArrayList->hasKey(0));
+        $this->assertTrue($this->hashMap->hasKey("c"));
     }
 
     public function testHasValue()

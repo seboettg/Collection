@@ -11,7 +11,8 @@
     "autoload": {
         "psr-4": {"": "src/"}
     },
-    "require": {
-        "satooshi/php-coveralls": "^1"
+    "require-dev": {
+        "phpunit/phpunit": "^6.2",
+        "satooshi/php-coveralls": "dev-master"
     }
 }

@@ -58,6 +58,43 @@ class ArrayList implements Collection
     }
 
     /**
+     * Returns the value of the array element that's currently being pointed to by the
+     * internal pointer. It does not move the pointer in any way. If the
+     * internal pointer points beyond the end of the elements list or the array is
+     * empty, current returns false.
+     *
+     * @return mixed|false
+     */
+    public function current()
+    {
+        return current($this->array);
+    }
+
+    /**
+     * Advance the internal array pointer of an array.
+     * Returns the array value in the next place that's pointed to by the
+     * internal array pointer, or false if there are no more elements.
+     *
+     * @return mixed|false
+     */
+    public function next()
+    {
+        return next($this->array);
+    }
+
+    /**
+     * Rewind the internal array pointer.
+     * Returns the array value in the previous place that's pointed to by
+     * the internal array pointer, or false if there are no more
+     *
+     * @return mixed|false
+     */
+    public function prev()
+    {
+        return prev($this->array);
+    }
+
+    /**
      * Inserts or replaces the element at the specified position in this list with the specified element.
      *
      * @param $key
@@ -243,22 +280,27 @@ class ArrayList implements Collection
         return $this;
     }
 
-    /*
-     * @param $order
-     *
-    public function sort($order = Comparator::ORDER_ASC)
+    /**
+     * returns a clone of this ArrayList, filtered by the given closure function
+     * @param \Closure $closure
+     * @return ArrayList
+     */
+    public function filter(\Closure $closure)
     {
-        Collections::sort($this, new class($order) extends Comparator {
-
-
-            public function compare(Comparable $a, Comparable $b)
-            {
-                if ($this->sortingOrder === Comparator::ORDER_ASC) {
-                    return $a->compareTo($b);
-                }
-                return $b->compareTo($a);
-            }
-        });
+        return new self(array_filter($this->array, $closure));
     }
-    */
+
+    /**
+     * returns a clone of this ArrayList, filtered by the given array keys
+     * @param array $keys
+     * @return ArrayList
+     */
+    public function filterByKeys(array $keys)
+    {
+        return new ArrayList(
+            array_filter($this->array, function($key) use ($keys) {
+                return array_search($key, $keys) !== false;
+            }, ARRAY_FILTER_USE_KEY)
+        );
+    }
 }

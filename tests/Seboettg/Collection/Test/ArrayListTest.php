@@ -46,6 +46,24 @@ class ArrayListTest extends TestCase
         ]);
     }
 
+    public function testCurrent()
+    {
+        $this->assertTrue($this->numeratedArrayList->current()->getAttr2() === "aa");
+        $arrayList = new ArrayList();
+        $this->assertFalse($arrayList->current());
+    }
+
+    public function testNext()
+    {
+        $this->assertTrue($this->numeratedArrayList->next()->getAttr2() === "bb");
+    }
+
+    public function testPrev()
+    {
+        $this->numeratedArrayList->next();
+        $this->assertEquals($this->numeratedArrayList->prev()->getAttr2(), "aa");
+        $this->assertFalse($this->numeratedArrayList->prev());
+    }
 
     public function testAppend()
     {
@@ -215,6 +233,28 @@ class ArrayListTest extends TestCase
         $this->assertEquals('ddd', $dl[1]);
     }
 
+    public function testFilter()
+    {
+        // filter elements that containing values with attr1 'c' or 'h'
+        $arrayList = $this->hashMap->filter(function (Element $elem) {
+            return $elem->getAttr1() === 'c' || $elem->getAttr1() === 'h';
+        });
+
+        $this->assertTrue($arrayList->hasKey('c'));
+        $this->assertTrue($arrayList->hasKey('h'));
+        $this->assertFalse($arrayList->hasKey('a'));
+        $this->assertEquals($arrayList->get('c')->getAttr1(), 'c');
+        $this->assertEquals($arrayList->get('h')->getAttr1(), 'h');
+    }
+
+    public function testFilterByKeys()
+    {
+        $arrayList = $this->numeratedArrayList->filterByKeys([0, 3]);
+        $this->assertFalse($arrayList->hasKey(1));
+        $this->assertEquals($arrayList->count(), 2);
+        $this->assertEquals($arrayList->current()->getAttr1(), "a");
+        $this->assertEquals($arrayList->next()->getAttr1(), "k");
+    }
 }
 
 class Element implements Comparable

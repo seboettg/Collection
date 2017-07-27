@@ -245,7 +245,7 @@ $list = new ArrayList([
     new Element("d", "dd"),
 ]);
 
-$newList = $list->filterByKeys(['a', 'c']); //return new list containing two elements
+$newList = $list->filterByKeys([0, 2]); //returns new list containing 1st and 3rd element of $list
 ```
 
 #### custom filter ####

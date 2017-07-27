@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://bitbucket.org/bibsonomy/restclient-php/raw/default/license.txt)
 [![Build Status](https://travis-ci.org/seboettg/Collection.svg?branch=master)](https://travis-ci.org/seboettg/Collection)
 [![Coverage Status](https://coveralls.io/repos/github/seboettg/Collection/badge.svg?branch=master)](https://coveralls.io/github/seboettg/Collection?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=release%2Fv1.1.0)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=release%2Fv1.1.0)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
 
 # Collection
 
@@ -234,5 +234,36 @@ Collections::sort(
 
 ```
 
+#### filter your list ####
+
+```php
+$list = new ArrayList([
+    new Element("a", "aa"),
+    new Element("b", "bb"),
+    new Element("c", "cc"),
+    new Element("k", "kk"),
+    new Element("d", "dd"),
+]);
+
+$newList = $list->filterByKeys(['a', 'c']); //return new list containing two elements
+```
+
+#### custom filter ####
+```php
+$list = new ArrayList([
+    new Element("a", "aa"),
+    new Element("b", "bb"),
+    new Element("c", "cc"),
+    new Element("k", "kk"),
+    new Element("d", "dd"),
+]);
+
+$arrayList = $list->filter(function (Element $elem) {
+    return $elem->getAttribute2() === 'bb' || $elem->getAttribute2() === 'kk';
+});
+
+// $arrayList contains just the 2nd and the 4th element of $list
+
+```
 ## Contribution ##
 Fork this Repo and feel free to contribute your ideas using pull requests.

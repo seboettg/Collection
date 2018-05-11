@@ -128,6 +128,43 @@ $list->clear(); //removes all elements of the list
 
 
 ### Advanced Usage ###
+
+#### Inherit from ArrayList ####
+Inherit from ArrayList to extend your class with the whole functionality from ArrayList:
+```php
+<?php 
+namespace Vendor\Project;
+use Seboettg\Collection\ArrayList;
+class MyCustomList extends ArrayList {
+    
+    protected $myCustomProperty;
+    
+    protected function myCustomFunction()
+    {
+        //...
+    }
+}
+
+``` 
+Or use the ArrayListTrait in case of that your custom class inherits already from another class
+```php
+<?php 
+namespace Vendor\Project;
+use Seboettg\Collection\ArrayListTrait;
+class MyCustomList extends MyOtherCustomClass {
+    
+    use ArrayListTrait;
+    
+    protected $myCustomProperty;
+    
+    protected function myCustomFunction()
+    {
+        //...
+    }
+}
+```
+
+
 #### Sorting an ArrayList ####
 Implement the Comparable interface 
 ```php

@@ -20,4 +20,13 @@ namespace Seboettg\Collection;
 class ArrayList implements Collection
 {
     use ArrayListTrait;
+
+    /**
+     * ArrayList constructor.
+     * @param array $data
+     */
+    public function __construct(array $data = [])
+    {
+        $this->array = $data;
+    }
 }

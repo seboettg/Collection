@@ -19,15 +19,6 @@ trait ArrayListTrait
     protected $array;
 
     /**
-     * ArrayList constructor.
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        $this->array = $data;
-    }
-
-    /**
      * flush array list
      *
      * @return $this

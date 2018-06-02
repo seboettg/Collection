@@ -269,7 +269,7 @@ trait ArrayListTrait
      */
     public function filter(\Closure $closure)
     {
-        return new self(array_filter($this->array, $closure));
+        return new ArrayList(array_filter($this->array, $closure));
     }
 
     /**
@@ -284,5 +284,28 @@ trait ArrayListTrait
                 return array_search($key, $keys) !== false;
             }, ARRAY_FILTER_USE_KEY)
         );
+    }
+
+    /**
+     * returns a new ArrayList containing all the elements of this ArrayList after applying the callback function to each one.
+     * @param \closure $mapFunction
+     * @return ArrayList
+     */
+    public function map(\closure $mapFunction)
+    {
+        return new ArrayList(array_map($mapFunction, $this->array));
+    }
+
+    /**
+     * Returns a new ArrayList containing an one-dimensional array of all elements of this ArrayList. Keys are going lost.
+     * @return ArrayList
+     */
+    public function flatten()
+    {
+        $flattenedArray = [];
+        array_walk_recursive($this->array, function($item) use(&$flattenedArray) {
+            $flattenedArray[] = $item;
+        });
+        return new ArrayList($flattenedArray);
     }
 }

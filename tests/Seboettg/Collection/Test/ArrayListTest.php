@@ -255,6 +255,28 @@ class ArrayListTest extends TestCase
         $this->assertEquals($arrayList->current()->getAttr1(), "a");
         $this->assertEquals($arrayList->next()->getAttr1(), "k");
     }
+
+    public function testMap()
+    {
+        $cubic = function($i) {
+            return $i * $i * $i;
+        };
+        $list = new ArrayList([1, 2, 3, 4, 5]);
+        $cubicList = $list->map($cubic);
+        $this->assertEquals([1, 8, 27, 64, 125], $cubicList->toArray());
+
+        $list = new ArrayList(['a', 'b', 'c']);
+        $toUpper = $list->map(function($item) {return ucfirst($item);});
+        $this->assertEquals(['A', 'B', 'C'], $toUpper->toArray());
+    }
+
+    public function testFlatten()
+    {
+        $list = new ArrayList([['a', 'b'], 'c']);
+        $this->assertEquals(['a', 'b', 'c'], $list->flatten()->toArray());
+        $list = new ArrayList(["term" => ['a', 'b'], 'c']);
+        $this->assertEquals(['a', 'b', 'c'], $list->flatten()->toArray());
+    }
 }
 
 class Element implements Comparable

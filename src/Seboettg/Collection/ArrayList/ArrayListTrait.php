@@ -1,22 +1,31 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: seboettg
- * Date: 09.05.18
- * Time: 17:50
+/*
+ * Copyright (C) 2018 Sebastian Böttger <seboettg@gmail.com>
+ * You may use, distribute and modify this code under the
+ * terms of the MIT license.
+ *
+ * You should have received a copy of the MIT license with
+ * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
  */
 
-namespace Seboettg\Collection;
+namespace Seboettg\Collection\ArrayList;
 
+use Seboettg\Collection\ArrayList;
+use Seboettg\Collection\CollectionTrait;
 
+/**
+ * Trait ArrayListTrait
+ * @package Seboettg\Collection
+ * @author Sebastian Böttger <seboettg@gmail.com>
+ */
 trait ArrayListTrait
 {
     /**
-     * internal array
-     *
      * @var array
      */
     protected $array;
+
+    use ArrayAccessTrait;
 
     /**
      * flush array list
@@ -30,9 +39,7 @@ trait ArrayListTrait
     }
 
     /**
-     * returns element with key $key
-     * @param $key
-     * @return mixed|null
+     * {@inheritdoc}
      */
     public function get($key)
     {
@@ -40,12 +47,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Returns the value of the array element that's currently being pointed to by the
-     * internal pointer. It does not move the pointer in any way. If the
-     * internal pointer points beyond the end of the elements list or the array is
-     * empty, current returns false.
-     *
-     * @return mixed|false
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -53,11 +55,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Advance the internal array pointer of an array.
-     * Returns the array value in the next place that's pointed to by the
-     * internal array pointer, or false if there are no more elements.
-     *
-     * @return mixed|false
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -65,11 +63,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Rewind the internal array pointer.
-     * Returns the array value in the previous place that's pointed to by
-     * the internal array pointer, or false if there are no more
-     *
-     * @return mixed|false
+     * {@inheritdoc}
      */
     public function prev()
     {
@@ -77,11 +71,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Inserts or replaces the element at the specified position in this list with the specified element.
-     *
-     * @param $key
-     * @param $element
-     * @return $this
+     * {@inheritdoc}
      */
     public function set($key, $element)
     {
@@ -90,9 +80,7 @@ trait ArrayListTrait
     }
 
     /**
-     * overrides contents of ArrayList with the contents of $array
-     * @param array $array
-     * @return $this
+     * {@inheritdoc}
      */
     public function setArray(array $array)
     {
@@ -100,10 +88,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Appends the specified element to the end of this list.
-     *
-     * @param $element
-     * @return $this
+     * {@inheritdoc}
      */
     public function append($element)
     {
@@ -112,13 +97,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Inserts the specified element at the specified position in this list. If an other element already exist at the
-     * specified position the affected positions will transformed into a numerated array. As well the existing element
-     * as the specified element will be appended to this array.
-     *
-     * @param $key
-     * @param $element
-     * @return $this
+     * {@inheritdoc}
      */
     public function add($key, $element)
     {
@@ -135,10 +114,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Removes the element at the specified position in this list.
-     *
-     * @param $key
-     * @return $this
+     * {@inheritdoc}
      */
     public function remove($key)
     {
@@ -147,10 +123,7 @@ trait ArrayListTrait
     }
 
     /**
-     * Returns true if an element exists on the specified position.
-     *
-     * @param mixed $key
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasKey($key)
     {
@@ -158,24 +131,16 @@ trait ArrayListTrait
     }
 
     /**
-     * Returns true if the specified value exists in this list. Uses PHP's array_search function
-     * @link http://php.net/manual/en/function.array-search.php
-     *
-     * @param string $value
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function hasValue($value)
+    public function hasElement($value)
     {
         $result = array_search($value, $this->array, true);
         return ($result !== false);
     }
 
     /**
-     * replaces this list by the specified array
-     * @param array $data
-     *
-     * @return ArrayList
+     * {@inheritdoc}
      */
     public function replace(array $data)
     {
@@ -184,56 +149,24 @@ trait ArrayListTrait
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the first element
+     * @return mixed
      */
-    public function getIterator()
+    public function first()
     {
-        return new \ArrayIterator($this->array);
+        reset($this->array);
+        return $this->array[key($this->array)];
     }
 
     /**
-     * Offset to retrieve
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset The offset to retrieve.
-     *
-     * @return mixed Can return all value types.
+     * Returns the last element
+     * @return mixed
      */
-    public function offsetGet($offset)
+    public function last()
     {
-        return isset($this->array[$offset]) ? $this->array[$offset] : null;
-    }
-
-    /**
-     * Offset to set
-     * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset The offset to assign the value to.
-     * @param mixed $value The value to set.
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->array[$offset] = $value;
-    }
-
-    /**
-     * Whether a offset exists
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     *
-     * @param  mixed $offset
-     * @return bool
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->array[$offset]);
-    }
-
-    /**
-     * Offset to unset
-     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset The offset to unset.
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->array[$offset]);
+        $item = end($this->array);
+        reset($this->array);
+        return $item;
     }
 
     /**
@@ -245,17 +178,9 @@ trait ArrayListTrait
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function count()
-    {
-        return count($this->array);
-    }
-
-    /**
      * Shuffles this list (randomizes the order of the elements in). It uses the PHP function shuffle
      * @see http://php.net/manual/en/function.shuffle.php
-     * @return $this
+     * @return ArrayList
      */
     public function shuffle() {
         shuffle($this->array);

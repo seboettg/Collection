@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -9,7 +8,7 @@
  * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
  */
 
-namespace Seboettg\Collection;
+namespace Seboettg\Collection\Comparable;
 
 /**
  * Abstract class Comparator. If extending this class the compare function must be implemented. compare() is a

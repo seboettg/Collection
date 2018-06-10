@@ -13,7 +13,7 @@ namespace Seboettg\Collection\Test;
 
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
-use Seboettg\Collection\Comparable;
+use Seboettg\Collection\Comparable\Comparable;
 
 class ArrayListTest extends TestCase
 {
@@ -164,7 +164,7 @@ class ArrayListTest extends TestCase
             "c"
         ]);
 
-        $this->assertTrue($list->hasValue("a"));
+        $this->assertTrue($list->hasElement("a"));
     }
 
     public function testGetIterator()
@@ -186,9 +186,9 @@ class ArrayListTest extends TestCase
         ]);
 
         $list->append("d");
-        $this->assertTrue($list->hasValue("d"));
+        $this->assertTrue($list->hasElement("d"));
         $list->remove(0);
-        $this->assertFalse($list->hasValue("a"));
+        $this->assertFalse($list->hasElement("a"));
     }
 
     public function testOffsetGet()

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -9,7 +8,7 @@
  * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
  */
 
-namespace Seboettg\Collection;
+namespace Seboettg\Collection\Comparable;
 
 /**
  * Comparable Interface for elements as part of an ArrayList.
@@ -18,7 +17,6 @@ namespace Seboettg\Collection;
  * to as the class's natural ordering, and the class's compareTo method is referred to as its natural comparison method.
  *
  * @package Seboettg\Collection
- *
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
 interface Comparable {

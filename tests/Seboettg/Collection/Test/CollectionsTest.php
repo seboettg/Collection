@@ -14,8 +14,8 @@ namespace Seboettg\Collection\Test;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
 use Seboettg\Collection\Collections;
-use Seboettg\Collection\Comparable;
-use Seboettg\Collection\Comparator;
+use Seboettg\Collection\Comparable\Comparable;
+use Seboettg\Collection\Comparable\Comparator;
 
 class CollectionsTest extends TestCase
 {

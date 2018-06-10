@@ -10,25 +10,13 @@
 
 namespace Seboettg\Collection;
 
-use Seboettg\Collection\ArrayList\ArrayListInterface;
-use Seboettg\Collection\ArrayList\ArrayListTrait;
-
 /**
- * ArrayList is a useful wrapper class for an array, similar to Java's ArrayList
+ * Wrapper Interface for \ArrayAccess, \IteratorAggregate, \Countable, ToArrayInterface
  * @package Seboettg\Collection
- *
+ * 
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
-class ArrayList implements ArrayListInterface
+interface CollectionInterface
 {
-    use ArrayListTrait;
 
-    /**
-     * ArrayList constructor.
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        $this->array = $data;
-    }
 }

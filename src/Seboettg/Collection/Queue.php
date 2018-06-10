@@ -1,7 +1,6 @@
 <?php
-
 /*
- * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
+ * Copyright (C) 2018 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
  * terms of the MIT license.
  *
@@ -11,20 +10,16 @@
 
 namespace Seboettg\Collection;
 
+use Seboettg\Collection\Queue\QueueInterface;
+use Seboettg\Collection\Queue\QueueTrait;
+
+
 /**
- *
- * ToArrayInterface
- *
+ * Class Queue
  * @package Seboettg\Collection
- *
- * @author Sebastian Böttger <seboettg@gmail.com>
+ * @author Sebastian Böttger <boettger@hebis.uni-frankfurt.de>
  */
-interface ToArrayInterface
+class Queue implements QueueInterface
 {
-    /**
-     * Get the array representation of an object
-     *
-     * @return array
-     */
-    public function toArray();
+    use QueueTrait;
 }

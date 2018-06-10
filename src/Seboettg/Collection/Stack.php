@@ -1,7 +1,6 @@
 <?php
-
 /*
- * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
+ * Copyright (C) 2018 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
  * terms of the MIT license.
  *
@@ -11,13 +10,20 @@
 
 namespace Seboettg\Collection;
 
+use Seboettg\Collection\Stack\StackInterface;
+use Seboettg\Collection\Stack\StackTrait;
+
 /**
- * Wrapper Interface for \ArrayAccess, \IteratorAggregate, \Countable, ToArrayInterface
+ * Class Stack
  * @package Seboettg\Collection
- * 
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
-interface Collection extends \ArrayAccess, \IteratorAggregate, \Countable, ToArrayInterface
+class Stack implements StackInterface
 {
+    /**
+     * @var array
+     */
+    protected $array;
 
+    use StackTrait;
 }

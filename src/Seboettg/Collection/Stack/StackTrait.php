@@ -19,17 +19,16 @@ trait StackTrait
 {
 
     /**
-     * Pushes an item onto the top of this stack. This has exactly the same effect as:
-     * @param mixed $item
+     * {@inheritdoc}
      */
     public function push($item)
     {
         $this->array[] = $item;
+        return $this;
     }
 
     /**
-     * Removes the object at the top of this stack and returns that object as the value of this function.
-     * @return mixed
+     * {@inheritdoc}
      */
     public function pop()
     {
@@ -37,8 +36,7 @@ trait StackTrait
     }
 
     /**
-     * Returns the object at the top of this stack without removing it from the stack.
-     * @return mixed
+     * {@inheritdoc}
      */
     public function peek()
     {
@@ -46,8 +44,7 @@ trait StackTrait
     }
 
     /**
-     * Returns the number of items in the stack
-     * @return int
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -55,20 +52,15 @@ trait StackTrait
     }
 
     /**
-     * Returns the position where an item is on this stack. If the passed item occurs as an item in this stack, this
-     * method returns the distance from the top of the stack of the occurrence nearest the top of the stack; the topmost
-     * item on the stack is considered to be at distance 1. If the passed item does not occur in this stack, this method
-     * returns 0.
-     *
-     * @param $item
-     * @return int
+     * {@inheritdoc}
      */
-    public function search($item)
+    public function search($element)
     {
-        $pos = intval(array_search($item, $this->array));
-        if (!$pos) {
+        $pos = array_search($element, $this->array);
+        if ($pos === false) {
             return 0;
         }
-        return $this->count() - $pos;
+        $count = $this->count();
+        return $count - $pos;
     }
 }

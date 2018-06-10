@@ -21,6 +21,11 @@ use Seboettg\Collection\ArrayList\ArrayListTrait;
  */
 class ArrayList implements ArrayListInterface
 {
+    /**
+     * @var array
+     */
+    protected $array;
+
     use ArrayListTrait;
 
     /**

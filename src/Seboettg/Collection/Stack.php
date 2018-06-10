@@ -26,4 +26,12 @@ class Stack implements StackInterface
     protected $array;
 
     use StackTrait;
+
+    /**
+     * Stack constructor.
+     */
+    public function __construct()
+    {
+        $this->array = [];
+    }
 }

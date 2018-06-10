@@ -23,6 +23,7 @@ interface StackInterface extends CollectionInterface, \Countable
     /**
      * Pushes an element onto the top of this stack. This has exactly the same effect as:
      * @param mixed $element
+     * @return StackInterface
      */
     public function push($element);
 
@@ -44,8 +45,8 @@ interface StackInterface extends CollectionInterface, \Countable
      * the topmost element on the stack is considered to be at distance 1. If the passed element does not occur in this
      * stack, this method returns 0.
      *
-     * @param $item
+     * @param $element
      * @return int
      */
-    public function search($item);
+    public function search($element);
 }

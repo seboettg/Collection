@@ -21,14 +21,14 @@ interface QueueInterface extends CollectionInterface, \Countable
 {
 
     /**
-     * Adds an item to the queue
-     * @param $item
+     * Adds an element to the queue
+     * @param $element
      * @return mixed
      */
-    public function enqueue($item);
+    public function enqueue($element);
 
     /**
-     * Dequeues an item from the queue
+     * Dequeues an element from the queue
      * @return mixed
      */
     public function dequeue();

@@ -233,6 +233,12 @@ class ArrayListTest extends TestCase
         $this->assertEquals('ddd', $dl[1]);
     }
 
+    public function testFirst()
+    {
+        $this->assertEquals("a", $this->numeratedArrayList->first()->getAttr1());
+        $this->assertEquals("d", $this->numeratedArrayList->last()->getAttr1());
+    }
+
     public function testFilter()
     {
         // filter elements that containing values with attr1 'c' or 'h'

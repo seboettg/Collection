@@ -20,10 +20,6 @@ use Seboettg\Collection\CollectionTrait;
  */
 trait ArrayListTrait
 {
-    /**
-     * @var array
-     */
-    protected $array;
 
     use ArrayAccessTrait;
 

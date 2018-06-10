@@ -35,8 +35,7 @@ trait QueueTrait
     }
 
     /**
-     * Returns the total number elements in this queue
-     * @return int
+     * {@inheritdoc}
      */
     public function count()
     {

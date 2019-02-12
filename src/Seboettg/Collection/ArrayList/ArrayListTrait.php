@@ -10,8 +10,6 @@
 
 namespace Seboettg\Collection\ArrayList;
 
-use Seboettg\Collection\ArrayList;
-
 /**
  * Trait ArrayListTrait
  * @package Seboettg\Collection
@@ -186,40 +184,45 @@ trait ArrayListTrait
     /**
      * returns a clone of this ArrayList, filtered by the given closure function
      * @param \Closure $closure
-     * @return ArrayList
+     * @return ArrayListInterface|ArrayListTrait
      */
     public function filter(\Closure $closure)
     {
-        return new ArrayList(array_filter($this->array, $closure));
+        $newInstance = new self();
+        $newInstance->setArray(array_filter($this->array, $closure));
+        return $newInstance;
     }
 
     /**
      * returns a clone of this ArrayList, filtered by the given array keys
      * @param array $keys
-     * @return ArrayList
+     * @return ArrayListInterface|ArrayListTrait
      */
     public function filterByKeys(array $keys)
     {
-        return new ArrayList(
-            array_filter($this->array, function ($key) use ($keys) {
-                return array_search($key, $keys) !== false;
-            }, ARRAY_FILTER_USE_KEY)
-        );
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        $newInstance = new self();
+        $newInstance->setArray(array_filter($this->array, function ($key) use ($keys) {
+            return array_search($key, $keys) !== false;
+        }, ARRAY_FILTER_USE_KEY));
+        return $newInstance;
     }
 
     /**
      * returns a new ArrayList containing all the elements of this ArrayList after applying the callback function to each one.
      * @param \closure $mapFunction
-     * @return ArrayList
+     * @return ArrayListInterface|ArrayListTrait
      */
     public function map(\closure $mapFunction)
     {
-        return new ArrayList(array_map($mapFunction, $this->array));
+        $newInstance = new self();
+        $newInstance->setArray(array_map($mapFunction, $this->array));
+        return $newInstance;
     }
 
     /**
      * Returns a new ArrayList containing an one-dimensional array of all elements of this ArrayList. Keys are going lost.
-     * @return ArrayList
+     * @return ArrayListInterface|ArrayListTrait
      */
     public function flatten()
     {
@@ -227,6 +230,8 @@ trait ArrayListTrait
         array_walk_recursive($this->array, function ($item) use (&$flattenedArray) {
             $flattenedArray[] = $item;
         });
-        return new ArrayList($flattenedArray);
+        $newInstance = new self();
+        $newInstance->setArray($flattenedArray);
+        return $newInstance;
     }
 }

@@ -13,7 +13,6 @@ namespace Seboettg\Collection;
 use Seboettg\Collection\Queue\QueueInterface;
 use Seboettg\Collection\Queue\QueueTrait;
 
-
 /**
  * Class Queue
  * @package Seboettg\Collection

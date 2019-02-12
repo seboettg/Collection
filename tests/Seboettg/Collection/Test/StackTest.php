@@ -66,7 +66,8 @@ class StackTest extends TestCase
 
     private function pushElements()
     {
-        $this->stack->push("a")
+        $this->stack
+            ->push("a")
             ->push("b")
             ->push("c");
     }

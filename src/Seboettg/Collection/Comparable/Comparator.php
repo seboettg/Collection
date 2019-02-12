@@ -11,7 +11,7 @@
 namespace Seboettg\Collection\Comparable;
 
 /**
- * Abstract class Comparator. If extending this class the compare function must be implemented. compare() is a
+ * Abstract class Comparator. When extending this class the compare function must be implemented. compare() is a
  * comparison function, which imposes a total ordering on some collection of objects. Comparators can be passed to a
  * sort method to allow precise control over the sort order.
  *

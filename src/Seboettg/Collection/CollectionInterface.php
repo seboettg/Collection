@@ -11,9 +11,9 @@
 namespace Seboettg\Collection;
 
 /**
- * Wrapper Interface for \ArrayAccess, \IteratorAggregate, \Countable, ToArrayInterface
+ * Parent interface for all collection interfaces (ArrayListInterface, QueueInterface, StackInterface)
  * @package Seboettg\Collection
- * 
+ *
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
 interface CollectionInterface

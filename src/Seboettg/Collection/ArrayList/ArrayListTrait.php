@@ -11,7 +11,6 @@
 namespace Seboettg\Collection\ArrayList;
 
 use Seboettg\Collection\ArrayList;
-use Seboettg\Collection\CollectionTrait;
 
 /**
  * Trait ArrayListTrait
@@ -176,9 +175,10 @@ trait ArrayListTrait
     /**
      * Shuffles this list (randomizes the order of the elements in). It uses the PHP function shuffle
      * @see http://php.net/manual/en/function.shuffle.php
-     * @return ArrayList
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function shuffle() {
+    public function shuffle()
+    {
         shuffle($this->array);
         return $this;
     }
@@ -201,7 +201,7 @@ trait ArrayListTrait
     public function filterByKeys(array $keys)
     {
         return new ArrayList(
-            array_filter($this->array, function($key) use ($keys) {
+            array_filter($this->array, function ($key) use ($keys) {
                 return array_search($key, $keys) !== false;
             }, ARRAY_FILTER_USE_KEY)
         );
@@ -224,7 +224,7 @@ trait ArrayListTrait
     public function flatten()
     {
         $flattenedArray = [];
-        array_walk_recursive($this->array, function($item) use(&$flattenedArray) {
+        array_walk_recursive($this->array, function ($item) use (&$flattenedArray) {
             $flattenedArray[] = $item;
         });
         return new ArrayList($flattenedArray);

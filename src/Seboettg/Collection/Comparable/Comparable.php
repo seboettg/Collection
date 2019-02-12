@@ -19,8 +19,8 @@ namespace Seboettg\Collection\Comparable;
  * @package Seboettg\Collection
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
-interface Comparable {
-
+interface Comparable
+{
     /**
      * Compares this object with the specified object for order. Returns a negative integer, zero, or a positive
      * integer as this object is less than, equal to, or greater than the specified object.
@@ -31,5 +31,4 @@ interface Comparable {
      * @return int
      */
     public function compareTo(Comparable $b);
-
 }

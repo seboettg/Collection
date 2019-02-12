@@ -17,6 +17,12 @@ namespace Seboettg\Collection\Queue;
  */
 trait QueueTrait
 {
+
+    /**
+     * @var array
+     */
+    protected $array;
+
     /**
      * {@inheritdoc}
      */

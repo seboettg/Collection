@@ -19,6 +19,11 @@ trait StackTrait
 {
 
     /**
+     * @var array
+     */
+    protected $array;
+
+    /**
      * {@inheritdoc}
      */
     public function push($item)

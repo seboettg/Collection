@@ -17,6 +17,10 @@ namespace Seboettg\Collection\ArrayList;
  */
 trait ArrayListTrait
 {
+    /**
+     * @var array
+     */
+    protected $array;
 
     use ArrayAccessTrait;
 

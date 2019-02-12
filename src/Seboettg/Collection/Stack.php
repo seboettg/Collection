@@ -20,10 +20,6 @@ use Seboettg\Collection\Stack\StackTrait;
  */
 class Stack implements StackInterface
 {
-    /**
-     * @var array
-     */
-    protected $array;
 
     use StackTrait;
 

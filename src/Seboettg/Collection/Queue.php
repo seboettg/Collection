@@ -20,7 +20,6 @@ use Seboettg\Collection\Queue\QueueTrait;
  */
 class Queue implements QueueInterface
 {
-    protected $array;
 
     use QueueTrait;
 

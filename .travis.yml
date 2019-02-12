@@ -3,6 +3,11 @@ php:
   - '7.0'
   - '7.1'
 
+#env:
+#  - CI_BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
+#  - CI_PULL_REQUEST="$TRAVIS_PULL_REQUEST"
+#  - CI_BRANCH="$TRAVIS_BRANCH"
+
 before_script:
  - wget http://getcomposer.org/composer.phar
  - php composer.phar install --dev --no-interaction

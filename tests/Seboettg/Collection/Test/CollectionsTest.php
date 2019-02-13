@@ -27,13 +27,13 @@ class CollectionsTest extends TestCase
 
     public function setUp()
     {
-        $this->numeratedArrayList = new ArrayList([
+        $this->numeratedArrayList = new ArrayList(
             new Element("a", "aa"),
             new Element("b", "bb"),
             new Element("c", "cc"),
             new Element("k", "kk"),
-            new Element("d", "dd"),
-        ]);
+            new Element("d", "dd")
+        );
     }
 
     public function testSort()

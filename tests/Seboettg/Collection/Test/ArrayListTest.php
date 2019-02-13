@@ -31,19 +31,21 @@ class ArrayListTest extends TestCase
 
     public function setUp()
     {
-        $this->numeratedArrayList = new ArrayList([
+        $this->numeratedArrayList = new ArrayList(
             new Element("a", "aa"),
             new Element("b", "bb"),
             new Element("c", "cc"),
             new Element("k", "kk"),
-            new Element("d", "dd"),
-        ]);
+            new Element("d", "dd")
+        );
 
-        $this->hashMap = new ArrayList([
+        $this->hashMap = new ArrayList();
+        $this->hashMap->setArray([
             "c" => new Element("c"),
             "a" => new Element("a"),
-            "h" => new Element("h"),
+            "h" => new Element("h")
         ]);
+
     }
 
     public function testCurrent()
@@ -158,11 +160,7 @@ class ArrayListTest extends TestCase
 
     public function testHasValue()
     {
-        $list = new ArrayList([
-            "a",
-            "b",
-            "c"
-        ]);
+        $list = new ArrayList("a", "b", "c");
 
         $this->assertTrue($list->hasElement("a"));
     }
@@ -214,7 +212,7 @@ class ArrayListTest extends TestCase
 
     public function testOffsetUnset()
     {
-        $list = new ArrayList(['a' => 'aa', 'b' => 'bb']);
+        $list = (new ArrayList())->setArray(['a' => 'aa', 'b' => 'bb']);
         unset($list['a']);
         $this->assertFalse($list->hasKey('a'));
         $this->assertTrue($list->hasKey('b'));
@@ -222,7 +220,7 @@ class ArrayListTest extends TestCase
 
     public function testAdd()
     {
-        $list = new ArrayList(['a' => 'aa', 'b' => 'bb', 'c' => 'cc']);
+        $list = (new ArrayList())->setArray(['a' => 'aa', 'b' => 'bb', 'c' => 'cc']);
         $list->add('d', 'dd');
         $this->assertEquals('dd', $list->get('d'));
         $list->add('d', 'ddd');
@@ -267,11 +265,11 @@ class ArrayListTest extends TestCase
         $cubic = function($i) {
             return $i * $i * $i;
         };
-        $list = new ArrayList([1, 2, 3, 4, 5]);
+        $list = new ArrayList(1, 2, 3, 4, 5);
         $cubicList = $list->map($cubic);
         $this->assertEquals([1, 8, 27, 64, 125], $cubicList->toArray());
 
-        $list = new ArrayList(['a', 'b', 'c']);
+        $list = new ArrayList('a', 'b', 'c');
         $toUpper = $list->map(function($item) {return ucfirst($item);});
         $this->assertEquals(['A', 'B', 'C'], $toUpper->toArray());
     }

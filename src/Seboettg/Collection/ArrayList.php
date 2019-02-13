@@ -28,7 +28,7 @@ class ArrayList implements ArrayListInterface
      * ArrayList constructor.
      * @param array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(...$data)
     {
         $this->array = $data;
     }

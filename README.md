@@ -1,9 +1,9 @@
 [![PHP](https://img.shields.io/badge/PHP-%3E=5.4-green.svg?style=flat)](http://docs.php.net/manual/en/migration54.new-features.php)
 [![Total Downloads](https://poser.pugx.org/seboettg/collection/downloads)](https://packagist.org/packages/seboettg/collection) 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://bitbucket.org/bibsonomy/restclient-php/raw/default/license.txt)
-[![Build Status](https://travis-ci.org/seboettg/Collection.svg?branch=master)](https://travis-ci.org/seboettg/Collection)
-[![Coverage Status](https://coveralls.io/repos/github/seboettg/Collection/badge.svg?branch=master)](https://coveralls.io/github/seboettg/Collection?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=version-1.x)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=version-1.x)
+[![Build Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/build.png?b=version-1.x)](https://scrutinizer-ci.com/g/seboettg/Collection/build-status/version-1.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/seboettg/Collection/badges/coverage.png?b=version-1.x)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=version-1.x)
 
 # Collection
 

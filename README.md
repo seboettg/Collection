@@ -1,7 +1,10 @@
 [![PHP](https://img.shields.io/badge/PHP-%3E=5.4-green.svg?style=flat)](http://docs.php.net/manual/en/migration54.new-features.php)
 [![Total Downloads](https://poser.pugx.org/seboettg/collection/downloads)](https://packagist.org/packages/seboettg/collection) 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://bitbucket.org/bibsonomy/restclient-php/raw/default/license.txt)
-
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/build.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/seboettg/Collection/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 # Collection
 

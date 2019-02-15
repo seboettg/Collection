@@ -10,9 +10,9 @@
 
 Collection is a set of useful wrapper classes for arrays, similar to Java Collection.
 
-The current version comes with a ArrayList, a Stack and a Queue, These classes can be used as wrapper for simple arrays. 
+The current version comes with a ArrayList, a Stack, and a Queue. These classes can be used as wrapper for simple arrays. 
 Using ArrayList, furthermore you can implement the Comparable interface for elements of the ArrayList and the abstract class Comparator 
-to sort the Elements in the ArrayList.  
+to be able to sort the Elements in the ArrayList comfortable. 
 
 ## Installing Collection ##
 

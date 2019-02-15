@@ -1,17 +1,17 @@
-[![PHP](https://img.shields.io/badge/PHP-%3E=5.4-green.svg?style=flat)](http://docs.php.net/manual/en/migration54.new-features.php)
+[![PHP](https://img.shields.io/badge/PHP-%3E=7.0-green.svg?style=flat)](http://docs.php.net/manual/en/migration70.new-features.php)
 [![Total Downloads](https://poser.pugx.org/seboettg/collection/downloads)](https://packagist.org/packages/seboettg/collection) 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://bitbucket.org/bibsonomy/restclient-php/raw/default/license.txt)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/build.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/seboettg/Collection/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/seboettg/Collection/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/code-structure/master)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 # Collection
 
 Collection is a set of useful wrapper classes for arrays, similar to Java Collection.
 
-The current version comes with the ArrayList class, which can be used as wrapper for arrays. 
-Furthermore you can implement the Comparable interface for elements of the ArrayList and the abstract class Comparator 
+The current version comes with a ArrayList, a Stack and a Queue, These classes can be used as wrapper for simple arrays. 
+Using ArrayList, furthermore you can implement the Comparable interface for elements of the ArrayList and the abstract class Comparator 
 to sort the Elements in the ArrayList.  
 
 ## Installing Collection ##
@@ -42,7 +42,7 @@ You can then later update Collection using composer:
 composer.phar update
  ```
 
-## Examples ##
+## ArrayList ##
 
 ### Simple Usage ###
 
@@ -50,8 +50,9 @@ Initialize ArrayList
 ```php
 <?php
 use Seboettg\Collection\ArrayList;
-$list = new ArrayList(["a", "c", "h", "k", "j"]);
-$map = new ArrayList([
+$list = new ArrayList("a", "c", "h", "k", "j");
+$map = new ArrayList();
+$map->setArray([
     "c" => "cc",
     "b" => "bb",
     "a" => "aa"
@@ -228,11 +229,11 @@ use Vendor\App\Util\Attribute1Comparator;
 use Vendor\App\Model\Element;
 
 
-$list = new ArrayList([
+$list = new ArrayList(
     new Element("b","bar"),
     new Element("a","foo"),
     new Element("c","foobar")
-]);
+);
 
 Collections::sort($list, new Attribute1Comparator(Comparator::ORDER_ASC));
 
@@ -258,13 +259,13 @@ class MyCustomOrderComparator extends Comparator
     }
 }
 
-$list = new ArrayList([
+$list = new ArrayList(
     new Element("a", "aa"),
     new Element("b", "bb"),
     new Element("c", "cc"),
     new Element("k", "kk"),
     new Element("d", "dd"),
-]);
+);
 
 Collections::sort(
     $list, new MyCustomOrderComparator(Comparator::ORDER_CUSTOM, ["d", "k", "a", "b", "c"])
@@ -275,33 +276,101 @@ Collections::sort(
 #### filter your list ####
 
 ```php
-$list = new ArrayList([
+$list = new ArrayList(
     new Element("a", "aa"),
     new Element("b", "bb"),
     new Element("c", "cc"),
     new Element("k", "kk"),
     new Element("d", "dd"),
-]);
+);
 
 $newList = $list->filterByKeys([0, 2]); //returns new list containing 1st and 3rd element of $list
 ```
 
 #### custom filter ####
 ```php
-$list = new ArrayList([
+$list = new ArrayList(
     new Element("a", "aa"),
     new Element("b", "bb"),
     new Element("c", "cc"),
     new Element("k", "kk"),
     new Element("d", "dd"),
-]);
+);
 
 $arrayList = $list->filter(function (Element $elem) {
     return $elem->getAttribute2() === 'bb' || $elem->getAttribute2() === 'kk';
 });
 
 // $arrayList contains just the 2nd and the 4th element of $list
-
 ```
+
+#### apply a function on each element ####
+
+```php
+$list = new ArrayList(1, 2, 3, 4, 5);
+$cubicList = $list->map(function($i) {
+    return $i * $i * $i;
+});
+
+// cubicList looks like this now: [1, 8, 27, 64, 125]
+```
+
+## Stack ##
+
+A stack is a collection of elements, with two principal operations:
+
+* push, which adds an element to the collection, and
+* pop, which removes the most recently added element that was not yet removed.
+
+An Stack is a LIFO data structure: last in, first out. 
+
+### Examples ###
+
+#### push, pop and peek ####
+``` 
+stack = new Stack();
+$stack->push("a")
+      ->push("b")
+      ->push("c");
+echo $stack->pop(); // outputs c
+echo $stack->count(); // outputs 2
+
+// peek returns the element at the top of this stack without removing it from the stack.
+echo $stack->peek(); // outputs b
+echo $stack->count(); // outputs 2
+```
+
+#### search ####
+The search function returns the position where an element is on this stack. If the passed element occurs as an element 
+in this stack, this method returns the distance from the top of the stack of the occurrence nearest the top of the 
+stack; the topmost element on the stack is considered to be at distance 1. If the passed element does not occur in 
+the stack, this method returns 0.
+
+``` 
+echo $stack->search("c"); //outputs 0 due c does not exist anymore
+echo $stack->search("a"); //outputs 2
+echo $stack->search("b"); //outputs 1
+```
+
+## Queue ##
+A queue is collection in which the elements are kept in order. A queue has two principle operations:
+
+* enqueue
+* dequeue 
+
+### Examples ###
+```php
+$queue = new Queue();
+$queue->enqueue("d")
+    ->enqueue("z")
+    ->enqueue("b")
+    ->enqueue("a");
+    
+echo $queue->dequeue(); // outputs d
+echo $queue->dequeue(); // outputs z
+echo $queue->dequeue(); // outputs b
+echo $queue->count(); // outputs 1
+```
+
 ## Contribution ##
 Fork this Repo and feel free to contribute your ideas using pull requests.

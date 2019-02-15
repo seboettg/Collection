@@ -38,6 +38,7 @@ class CollectionsTest extends TestCase
 
     public function testSort()
     {
+        $lte = false;
         Collections::sort($this->numeratedArrayList, new MyAscendingComparator());
         $arr = $this->numeratedArrayList;
         for ($i = 0; $i < $arr->count() - 1; ++$i) {
@@ -54,7 +55,9 @@ class CollectionsTest extends TestCase
         $order = ["d", "k", "a", "b", "c"];
         Collections::sort($this->numeratedArrayList, new MyCustomOrderComparator(Comparator::ORDER_CUSTOM, $order));
         for ($i = 0; $i < count($order); ++$i) {
-            $this->assertTrue($order[$i] === $this->numeratedArrayList->get($i)->getAttr1());
+            /** @var Element $elem */
+            $elem = $this->numeratedArrayList->get($i);
+            $this->assertTrue($order[$i] === $elem->getAttr1());
         }
     }
 
@@ -105,6 +108,10 @@ class MyCustomOrderComparator extends Comparator
      */
     public function compare(Comparable $a, Comparable $b)
     {
+        /**
+         * @var Element $a
+         * @var Element $b
+         */
         return (array_search($a->getAttr1(), $this->customOrder) >= array_search($b->getAttr1(), $this->customOrder)) ? 1 : -1;
     }
 }

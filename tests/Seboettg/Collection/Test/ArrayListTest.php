@@ -73,13 +73,17 @@ class ArrayListTest extends TestCase
         $this->numeratedArrayList->append(new Element("3", "33"));
         $j = $this->numeratedArrayList->count();
         $this->assertEquals($i + 1, $j);
-        $this->assertEquals("3", $this->numeratedArrayList->toArray()[$i]->getAttr1());
+        /** @var Element $eI */
+        $eI = $this->numeratedArrayList->toArray()[$i];
+        $this->assertEquals("3", $eI->getAttr1());
     }
 
     public function testSet()
     {
         $this->hashMap->set("c", new Element("ce"));
-        $this->assertEquals("ce", $this->hashMap->toArray()['c']->getAttr1());
+        /** @var Element $ce */
+        $ce = $this->hashMap->toArray()['c'];
+        $this->assertEquals("ce", $ce->getAttr1());
     }
 
     public function testCompareTo()
@@ -88,10 +92,15 @@ class ArrayListTest extends TestCase
         usort($arr, function (Comparable $a, Comparable $b) {
             return $a->compareTo($b);
         });
-
-        $this->assertEquals("a", $arr[0]->getAttr1());
-        $this->assertEquals("c", $arr[1]->getAttr1());
-        $this->assertEquals("h", $arr[2]->getAttr1());
+        /** @var Element $e0 */
+        $e0 = $arr[0];
+        /** @var Element $e1 */
+        $e1 = $arr[1];
+        /** @var Element $e2 */
+        $e2 = $arr[2];
+        $this->assertEquals("a", $e0->getAttr1());
+        $this->assertEquals("c", $e1->getAttr1());
+        $this->assertEquals("h", $e2->getAttr1());
     }
 
     public function testReplace()
@@ -122,13 +131,23 @@ class ArrayListTest extends TestCase
 
     public function testShuffle()
     {
+        $this->numeratedArrayList
+            ->append(new Element("x", "xx"))
+            ->append(new Element("y", "yy"))
+            ->append(new Element("z", "zz"));
+
         $arr = $this->numeratedArrayList->toArray();
         usort($arr, function (Comparable $a, Comparable $b) {
             return $a->compareTo($b);
         });
         $this->numeratedArrayList->replace($arr);
+        $lte = false;
         for ($i = 0; $i < $this->numeratedArrayList->count() - 1; ++$i) {
-            $lte = ($this->numeratedArrayList->get($i)->getAttr1() <= $this->numeratedArrayList->get($i + 1)->getAttr1());
+            /** @var Element $elemI */
+            $elemI = $this->numeratedArrayList->get($i);
+            /** @var Element $elemtI1 */
+            $elemtI1 = $this->numeratedArrayList->get($i + 1);
+            $lte = ($elemI->getAttr1() <= $elemtI1->getAttr1());
             if (!$lte) {
                 break;
             }
@@ -140,10 +159,14 @@ class ArrayListTest extends TestCase
         $this->numeratedArrayList->shuffle();
 
         $arr2 = $this->numeratedArrayList->toArray();
-
+        $equal = false;
         // at least one element has another position as before
         for ($i = 0; $i < count($arr); ++$i) {
-            $equal = ($arr1[$i]->getAttr1() == $arr2[$i]->getAttr1());
+            /** @var Element $elem1 */
+            $elem1 = $arr1[$i];
+            /** @var Element $elem2 */
+            $elem2 = $arr2[$i];
+            $equal = ($elem1->getAttr1() == $elem2->getAttr1());
             if (!$equal) {
                 break;
             }
@@ -200,8 +223,10 @@ class ArrayListTest extends TestCase
         $pos = $this->numeratedArrayList->count();
         $this->numeratedArrayList[$pos] = new Element($pos, $pos . $pos);
         $arr = $this->numeratedArrayList->toArray();
-        $this->assertNotEmpty($arr[$pos]);
-        $this->assertEquals($pos, $arr[$pos]->getAttr1());
+        /** @var Element $elem */
+        $elem = $arr[$pos];
+        $this->assertNotEmpty($elem);
+        $this->assertEquals($pos, $elem->getAttr1());
     }
 
     public function testOffestExist()
@@ -286,11 +311,17 @@ class ArrayListTest extends TestCase
 class Element implements Comparable
 {
 
+    /**
+     * @var string
+     */
     private $attr1;
 
+    /**
+     * @var string
+     */
     private $attr2;
 
-    public function __construct($attr1, $attr2 = "")
+    public function __construct(string $attr1, string $attr2 = "")
     {
         $this->attr1 = $attr1;
         $this->attr2 = $attr2;
@@ -299,31 +330,31 @@ class Element implements Comparable
     /**
      * @return mixed
      */
-    public function getAttr1()
+    public function getAttr1(): string
     {
         return $this->attr1;
     }
 
     /**
-     * @param mixed $attr1
+     * @param string $attr1
      */
-    public function setAttr1($attr1)
+    public function setAttr1(string $attr1)
     {
         $this->attr1 = $attr1;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getAttr2()
+    public function getAttr2(): string
     {
         return $this->attr2;
     }
 
     /**
-     * @param mixed $attr2
+     * @param string $attr2
      */
-    public function setAttr2($attr2)
+    public function setAttr2(string $attr2)
     {
         $this->attr2 = $attr2;
     }
@@ -339,6 +370,7 @@ class Element implements Comparable
      */
     public function compareTo(Comparable $b)
     {
+        /** @var Element $b */
         return strcmp($this->attr1, $b->getAttr1());
     }
 }

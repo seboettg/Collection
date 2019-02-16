@@ -356,7 +356,7 @@ stack; the topmost element on the stack is considered to be at distance 1. If th
 the stack, this method returns 0.
 
 ```php
-echo $stack->search("c"); //outputs 0 due c does not exist anymore
+echo $stack->search("c"); //outputs 0 since c does not exist anymore
 echo $stack->search("a"); //outputs 2
 echo $stack->search("b"); //outputs 1
 ```

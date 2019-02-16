@@ -1,5 +1,5 @@
 [![PHP](https://img.shields.io/badge/PHP-%3E=7.0-green.svg?style=flat)](http://docs.php.net/manual/en/migration70.new-features.php)
-[![Total Downloads](https://poser.pugx.org/seboettg/collection/downloads)](https://packagist.org/packages/seboettg/collection) 
+[![Total Downloads](https://poser.pugx.org/seboettg/collection/downloads)](https://packagist.org/packages/seboettg/collection/stats) 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://bitbucket.org/bibsonomy/restclient-php/raw/default/license.txt)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/build.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/build-status/master)
@@ -10,11 +10,20 @@
 
 Collection is a set of useful wrapper classes for arrays, similar to Java Collection.
 
-The current version comes with a ArrayList, a Stack, and a Queue. These classes can be used as wrapper for simple arrays. 
-Using ArrayList, furthermore you can implement the Comparable interface for elements of the ArrayList and the abstract class Comparator 
-to be able to sort the Elements in the ArrayList comfortable. 
+### ArrayList, Stack, Queue ###
+The current version comes with a [ArrayList](#arraylist), a [Stack](#stack), and a [Queue](#queue). These classes can be used as wrapper instead using simple arrays. This approach guarantees consistently object-oriented handling for collection-like data-structures.
 
-## Installing Collection ##
+### Advantages of ArrayList ###
+ArrayList is powerful alternative with a lot of of features: 
+* Sorting: You may implement the Comparable interface for elements of the ArrayList and the abstract class Comparator to be able to [sort the Elements in the ArrayList](#sorting-an-arraylist) comfortable. 
+* Filter: Apply a [filter](#filter-your-list) function or filter by keys.
+* Map: [Apply a function on each list item](#apply-a-function-on-each-element).
+
+### Easy and versatile to integrate ###
+* Use inheritance to take advantages of the classes, or
+* Use the interfaces and the belonging traits, if you already inherit another class
+
+# Installing Collection ##
 
 The recommended way to install Collection is through
 [Composer](http://getcomposer.org).
@@ -353,7 +362,7 @@ echo $stack->search("b"); //outputs 1
 ```
 
 ## Queue ##
-A queue is collection in which the elements are kept in order. A queue has two principle operations:
+A queue is a collection in which the elements are kept in order. A queue has two principle operations:
 
 * enqueue
 * dequeue 

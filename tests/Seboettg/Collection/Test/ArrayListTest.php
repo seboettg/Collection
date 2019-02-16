@@ -13,7 +13,9 @@ namespace Seboettg\Collection\Test;
 
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
+use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparable;
+use Seboettg\Collection\Comparable\Comparator;
 
 class ArrayListTest extends TestCase
 {
@@ -136,11 +138,11 @@ class ArrayListTest extends TestCase
             ->append(new Element("y", "yy"))
             ->append(new Element("z", "zz"));
 
-        $arr = $this->numeratedArrayList->toArray();
-        usort($arr, function (Comparable $a, Comparable $b) {
-            return $a->compareTo($b);
+        Collections::sort($this->numeratedArrayList, new class extends Comparator{
+            public function compare(Comparable $a, Comparable $b) {
+                return $a->compareTo($b);
+            }
         });
-        $this->numeratedArrayList->replace($arr);
         $lte = false;
         for ($i = 0; $i < $this->numeratedArrayList->count() - 1; ++$i) {
             /** @var Element $elemI */
@@ -154,14 +156,14 @@ class ArrayListTest extends TestCase
         }
         //each element on position $i is smaller than or equal to the element on position $i+1
         $this->assertTrue($lte);
+
         $arr1 = $this->numeratedArrayList->toArray();
-
         $this->numeratedArrayList->shuffle();
+        $arr2 = $this->numeratedArrayList->toArray(); //shuffled array
 
-        $arr2 = $this->numeratedArrayList->toArray();
         $equal = false;
         // at least one element has another position as before
-        for ($i = 0; $i < count($arr); ++$i) {
+        for ($i = 0; $i < count($arr1); ++$i) {
             /** @var Element $elem1 */
             $elem1 = $arr1[$i];
             /** @var Element $elem2 */

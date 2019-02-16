@@ -23,6 +23,8 @@ ArrayList is powerful alternative with a lot of of features:
 * Use inheritance to take advantages of the classes, or
 * Use the interfaces and the belonging traits, if you already inherit another class
 
+Take also a look to the UML [class diagram](#class-diagram).
+
 # Installing Collection ##
 
 The recommended way to install Collection is through
@@ -382,6 +384,10 @@ echo $queue->dequeue(); // outputs z
 echo $queue->dequeue(); // outputs b
 echo $queue->count(); // outputs 1
 ```
+
+## Class diagram ##
+![class diagram](https://github.com/seboettg/collection/raw/master/class-diagram.png "class diagram")
+
 
 ## Contribution ##
 Fork this Repo and feel free to contribute your ideas using pull requests.

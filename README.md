@@ -157,12 +157,14 @@ class MyCustomList extends ArrayList {
 }
 
 ``` 
-Or use the ArrayListTrait in case of that your custom class inherits already from another class
+Or implement ArrayListInterface and use the ArrayListTrait (which implements all functions that are required by the interface) in case of that your custom class inherits already from another class
 ```php
 <?php 
 namespace Vendor\Project;
-use Seboettg\Collection\ArrayListTrait;
-class MyCustomList extends MyOtherCustomClass {
+use Seboettg\Collection\ArrayList\ArrayListInterface;
+use Seboettg\Collection\ArrayList\ArrayListTrait;
+
+class MyCustomList extends MyOtherCustomClass implements ArrayListInterface {
     
     use ArrayListTrait;
     
@@ -181,7 +183,7 @@ Implement the Comparable interface
 ```php
 <?php
 namespace Vendor\App\Model;
-use Seboettg\Collection\Comparable;
+use Seboettg\Collection\Comparable\Comparable;
 class Element implements Comparable
 {
     private $attribute1;
@@ -212,8 +214,8 @@ Create a comparator class
 <?php
 namespace Vendor\App\Util;
 
-use Seboettg\Collection\Comparator;
-use Seboettg\Collection\Comparable;
+use Seboettg\Collection\Comparable\Comparator;
+use Seboettg\Collection\Comparable\Comparable;
 
 class Attribute1Comparator extends Comparator
 {
@@ -233,7 +235,7 @@ Sort your list
 <?php
 use Seboettg\Collection\ArrayList;
 use Seboettg\Collection\Collections;
-use Seboettg\Collection\Comparator;
+use Seboettg\Collection\Comparable\Comparator;
 use Vendor\App\Util\Attribute1Comparator;
 use Vendor\App\Model\Element;
 
@@ -253,8 +255,8 @@ Collections::sort($list, new Attribute1Comparator(Comparator::ORDER_ASC));
 
 ```php
 <?php
-use Seboettg\Collection\Comparator;
-use Seboettg\Collection\Comparable;
+use Seboettg\Collection\Comparable\Comparator;
+use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\ArrayList;
 use Seboettg\Collection\Collections;
 use Vendor\App\Model\Element;

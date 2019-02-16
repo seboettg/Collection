@@ -336,8 +336,8 @@ An Stack is a LIFO data structure: last in, first out.
 ### Examples ###
 
 #### push, pop and peek ####
-``` 
-stack = new Stack();
+```php
+$stack = new Stack();
 $stack->push("a")
       ->push("b")
       ->push("c");
@@ -355,7 +355,7 @@ in this stack, this method returns the distance from the top of the stack of the
 stack; the topmost element on the stack is considered to be at distance 1. If the passed element does not occur in 
 the stack, this method returns 0.
 
-``` 
+```php
 echo $stack->search("c"); //outputs 0 due c does not exist anymore
 echo $stack->search("a"); //outputs 2
 echo $stack->search("b"); //outputs 1

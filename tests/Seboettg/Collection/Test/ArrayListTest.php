@@ -308,6 +308,18 @@ class ArrayListTest extends TestCase
         $list = new ArrayList(["term" => ['a', 'b'], 'c']);
         $this->assertEquals(['a', 'b', 'c'], $list->flatten()->toArray());
     }
+
+    public function testMerge()
+    {
+        $array = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        $abc = array_slice($array, 0, 3);
+        $defgh = array_slice($array, 3);
+        $first = new ArrayList(...$abc);
+        $second = new ArrayList(...$defgh);
+        $first->merge($second);
+        $this->assertEquals(count($array), $first->count());
+        $this->assertEquals($first->toArray(), $array);
+    }
 }
 
 class Element implements Comparable

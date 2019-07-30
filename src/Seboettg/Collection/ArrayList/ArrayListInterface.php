@@ -10,13 +10,17 @@
 
 namespace Seboettg\Collection\ArrayList;
 
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
 use Seboettg\Collection\CollectionInterface;
+use Traversable;
 
 /**
  * Interface ArrayListInterface
  * @package Seboettg\Collection\ArrayList
  */
-interface ArrayListInterface extends CollectionInterface, \Traversable, \IteratorAggregate, \ArrayAccess, \Countable, ToArrayInterface
+interface ArrayListInterface extends CollectionInterface, Traversable, IteratorAggregate, ArrayAccess, Countable, ToArrayInterface
 {
 
     /**
@@ -123,4 +127,12 @@ interface ArrayListInterface extends CollectionInterface, \Traversable, \Iterato
      * @return mixed
      */
     public function last();
+
+    /**
+     * Merges the elements of the passed list together with this list so that the values of the passed list are appended
+     * to the end of the this list
+     * @param ArrayListInterface $list
+     * @return void
+     */
+    public function merge(ArrayListInterface $list);
 }

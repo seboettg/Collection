@@ -8,9 +8,9 @@
  * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
  */
 
-
 namespace Seboettg\Collection\ArrayList;
 
+use ArrayIterator;
 
 trait ArrayAccessTrait
 {
@@ -19,7 +19,7 @@ trait ArrayAccessTrait
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->array);
+        return new ArrayIterator($this->array);
     }
 
     /**
@@ -49,7 +49,7 @@ trait ArrayAccessTrait
      * Whether a offset exists
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      *
-     * @param  mixed $offset
+     * @param mixed $offset
      * @return bool
      */
     public function offsetExists($offset)

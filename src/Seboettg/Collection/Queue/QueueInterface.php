@@ -10,6 +10,7 @@
 
 namespace Seboettg\Collection\Queue;
 
+use Countable;
 use Seboettg\Collection\CollectionInterface;
 
 /**
@@ -17,7 +18,7 @@ use Seboettg\Collection\CollectionInterface;
  * @package Seboettg\Collection\Queue
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
-interface QueueInterface extends CollectionInterface, \Countable
+interface QueueInterface extends CollectionInterface, Countable
 {
 
     /**

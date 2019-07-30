@@ -10,6 +10,7 @@
 
 namespace Seboettg\Collection\Stack;
 
+use Countable;
 use Seboettg\Collection\CollectionInterface;
 
 /**
@@ -17,7 +18,7 @@ use Seboettg\Collection\CollectionInterface;
  * @package Seboettg\Collection\Stack
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
-interface StackInterface extends CollectionInterface, \Countable
+interface StackInterface extends CollectionInterface, Countable
 {
 
     /**

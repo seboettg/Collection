@@ -10,6 +10,8 @@
 
 namespace Seboettg\Collection\ArrayList;
 
+use closure;
+
 /**
  * Trait ArrayListTrait
  * @package Seboettg\Collection
@@ -79,14 +81,6 @@ trait ArrayListTrait
     /**
      * {@inheritdoc}
      */
-    public function setArray(array $array)
-    {
-        return $this->replace($array);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function append($element)
     {
         $this->array[] = $element;
@@ -137,15 +131,6 @@ trait ArrayListTrait
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function replace(array $data)
-    {
-        $this->array = $data;
-        return $this;
-    }
-
-    /**
      * Returns the first element
      * @return mixed
      */
@@ -187,14 +172,31 @@ trait ArrayListTrait
 
     /**
      * returns a clone of this ArrayList, filtered by the given closure function
-     * @param \Closure $closure
+     * @param closure $closure
      * @return ArrayListInterface|ArrayListTrait
      */
-    public function filter(\Closure $closure)
+    public function filter(closure $closure)
     {
         $newInstance = new self();
         $newInstance->setArray(array_filter($this->array, $closure));
         return $newInstance;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setArray(array $array)
+    {
+        return $this->replace($array);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function replace(array $data)
+    {
+        $this->array = $data;
+        return $this;
     }
 
     /**
@@ -214,10 +216,10 @@ trait ArrayListTrait
 
     /**
      * returns a new ArrayList containing all the elements of this ArrayList after applying the callback function to each one.
-     * @param \closure $mapFunction
+     * @param closure $mapFunction
      * @return ArrayListInterface|ArrayListTrait
      */
-    public function map(\closure $mapFunction)
+    public function map(closure $mapFunction)
     {
         $newInstance = new self();
         $newInstance->setArray(array_map($mapFunction, $this->array));
@@ -237,5 +239,16 @@ trait ArrayListTrait
         $newInstance = new self();
         $newInstance->setArray($flattenedArray);
         return $newInstance;
+    }
+
+    /**
+     * Merges the elements of the passed list together with this list so that the values of the passed list are appended
+     * to the end of the this list
+     * @param ArrayListInterface $list
+     * @return void
+     */
+    public function merge(ArrayListInterface $list)
+    {
+        $this->array = array_merge($this->array, $list->toArray());
     }
 }

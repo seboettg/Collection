@@ -51,14 +51,6 @@ trait StackTrait
     /**
      * {@inheritdoc}
      */
-    public function count()
-    {
-        return count($this->array);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function search($element)
     {
         $pos = array_search($element, $this->array);
@@ -67,5 +59,13 @@ trait StackTrait
         }
         $count = $this->count();
         return $count - $pos;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->array);
     }
 }

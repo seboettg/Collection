@@ -25,10 +25,10 @@
         }
     ],
     "autoload": {
-        "psr-4": {"": "src/"}
+        "psr-4": {"Seboettg\\Collection\\": "src/"}
     },
     "autoload-dev": {
-        "psr-4": {"": "tests/"}
+        "psr-4": {"Seboettg\\Collection\\Test\\": "tests/"}
     },
     "require": {
         "php": ">=7.0"

@@ -12,6 +12,11 @@ namespace Seboettg\Collection\ArrayList;
 
 use ArrayIterator;
 
+/**
+ * Trait ArrayAccessTrait
+ * @package Seboettg\Collection\ArrayList
+ * @property $array Base array of this data structure
+ */
 trait ArrayAccessTrait
 {
     /**

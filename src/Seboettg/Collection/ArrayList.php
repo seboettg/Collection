@@ -21,8 +21,12 @@ use Seboettg\Collection\ArrayList\ArrayListTrait;
  */
 class ArrayList implements ArrayListInterface
 {
-
     use ArrayListTrait;
+
+    /**
+     * @var array
+     */
+    protected $array;
 
     /**
      * ArrayList constructor.

@@ -16,14 +16,10 @@ use closure;
  * Trait ArrayListTrait
  * @package Seboettg\Collection
  * @author Sebastian Böttger <seboettg@gmail.com>
+ * @property $array Base array of this data structure
  */
 trait ArrayListTrait
 {
-    /**
-     * @var array
-     */
-    protected $array;
-
     use ArrayAccessTrait;
 
     /**
@@ -206,7 +202,6 @@ trait ArrayListTrait
      */
     public function filterByKeys(array $keys)
     {
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         $newInstance = new self();
         $newInstance->setArray(array_filter($this->array, function ($key) use ($keys) {
             return array_search($key, $keys) !== false;

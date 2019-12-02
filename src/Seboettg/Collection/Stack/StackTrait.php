@@ -14,15 +14,10 @@ namespace Seboettg\Collection\Stack;
  * Trait StackTrait
  * @package Seboettg\Collection
  * @author Sebastian Böttger <seboettg@gmail.com>
+ * @property $array Base array of this data structure
  */
 trait StackTrait
 {
-
-    /**
-     * @var array
-     */
-    protected $array;
-
     /**
      * {@inheritdoc}
      */

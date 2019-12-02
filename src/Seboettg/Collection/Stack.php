@@ -24,6 +24,11 @@ class Stack implements StackInterface
     use StackTrait;
 
     /**
+     * @var array
+     */
+    protected $array;
+
+    /**
      * Stack constructor.
      */
     public function __construct()

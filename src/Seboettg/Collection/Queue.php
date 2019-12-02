@@ -20,8 +20,12 @@ use Seboettg\Collection\Queue\QueueTrait;
  */
 class Queue implements QueueInterface
 {
-
     use QueueTrait;
+
+    /**
+     * @var array
+     */
+    protected $array;
 
     /**
      * Queue constructor.

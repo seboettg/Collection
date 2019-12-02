@@ -2,6 +2,22 @@
     "name": "seboettg/collection",
     "description": "Simple PHP ArrayList collection",
     "license": "MIT",
+    "keywords": [
+        "arraylist",
+        "sort",
+        "collections",
+        "comparable",
+        "array",
+        "oop",
+        "datastructures",
+        "basic-data-structures",
+        "stack",
+        "queue",
+        "comparator",
+        "filter",
+        "map",
+        "comparable-interface"
+    ],
     "authors": [
         {
             "name": "Sebastian Böttger",

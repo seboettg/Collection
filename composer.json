@@ -1,6 +1,6 @@
 {
     "name": "seboettg/collection",
-    "description": "Simple PHP ArrayList collection",
+    "description": "Collection is a set of useful PHP wrapper classes for arrays, similar to Java Collection. Contains ArrayList, Stack, Queue.",
     "license": "MIT",
     "keywords": [
         "arraylist",

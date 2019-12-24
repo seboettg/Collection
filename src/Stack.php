@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2018 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -20,7 +21,6 @@ use Seboettg\Collection\Stack\StackTrait;
  */
 class Stack implements StackInterface
 {
-
     use StackTrait;
 
     /**

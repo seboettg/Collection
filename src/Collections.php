@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -10,8 +11,8 @@
 
 namespace Seboettg\Collection;
 
+use Seboettg\Collection\ArrayList\ArrayListInterface;
 use Seboettg\Collection\Comparable\Comparator;
-
 
 /**
  * Class Collections
@@ -25,11 +26,11 @@ class Collections
      * Sorts the specified list according to the order induced by the specified comparator. All elements in the list
      * must be mutually comparable.
      *
-     * @param ArrayList $list
+     * @param ArrayListInterface $list
      * @param Comparator $comparator
-     * @return ArrayList
+     * @return ArrayListInterface
      */
-    public static function sort(ArrayList &$list, Comparator $comparator)
+    public static function sort(ArrayListInterface $list, Comparator $comparator): ArrayListInterface
     {
         $array = $list->toArray();
         usort($array, [$comparator, "compare"]);

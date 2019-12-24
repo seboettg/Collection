@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -69,5 +70,5 @@ abstract class Comparator
      * @param Comparable $b
      * @return int
      */
-    public abstract function compare(Comparable $a, Comparable $b);
+    public abstract function compare(Comparable $a, Comparable $b): int;
 }

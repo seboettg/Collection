@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -30,5 +31,5 @@ interface Comparable
      * @param Comparable $b
      * @return int
      */
-    public function compareTo(Comparable $b);
+    public function compareTo(Comparable $b): int;
 }

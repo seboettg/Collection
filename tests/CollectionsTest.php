@@ -73,7 +73,7 @@ class MyAscendingComparator extends Comparator
      * @param Comparable $b
      * @return int
      */
-    public function compare(Comparable $a, Comparable $b)
+    public function compare(Comparable $a, Comparable $b): int
     {
         return $a->compareTo($b);
     }
@@ -89,7 +89,7 @@ class MyDescendingComparator extends Comparator
      * @param Comparable $b
      * @return int
      */
-    public function compare(Comparable $a, Comparable $b)
+    public function compare(Comparable $a, Comparable $b): int
     {
         return $b->compareTo($a);
     }
@@ -106,7 +106,7 @@ class MyCustomOrderComparator extends Comparator
      * @param Comparable $b
      * @return int
      */
-    public function compare(Comparable $a, Comparable $b)
+    public function compare(Comparable $a, Comparable $b): int
     {
         /**
          * @var Element $a

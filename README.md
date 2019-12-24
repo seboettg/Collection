@@ -1,4 +1,4 @@
-[![PHP](https://img.shields.io/badge/PHP-%3E=7.0-green.svg?style=flat)](http://docs.php.net/manual/en/migration70.new-features.php)
+[![PHP](https://img.shields.io/badge/PHP-%3E=7.1-green.svg?style=flat)](http://docs.php.net/manual/en/migration71.new-features.php)
 [![Total Downloads](https://poser.pugx.org/seboettg/collection/downloads)](https://packagist.org/packages/seboettg/collection/stats) 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/seboettg/Collection/blob/master/LICENSE)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=version-2.0)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
@@ -9,6 +9,9 @@
 # Collection
 
 Collection is a set of useful wrapper classes for arrays, similar to Java Collection.
+
+## Versions
+Since [Version 2.1](https://github.com/seboettg/Collection/releases/tag/v2.1.0) you need PHP 7.1 to use Collection library. Previous versions are running from PHP 5.6 upwards.
 
 ### ArrayList, Stack, Queue ###
 The current version comes with a [ArrayList](#arraylist), a [Stack](#stack), and a [Queue](#queue). These classes can be used as wrapper instead using simple arrays. This approach guarantees consistently object-oriented handling for collection-like data-structures.
@@ -24,6 +27,8 @@ ArrayList is powerful alternative with a lot of of features:
 * Use the interfaces and the belonging traits, if you already inherit another class
 
 Take also a look to the UML [class diagram](#class-diagram).
+
+
 
 # Installing Collection ##
 
@@ -203,7 +208,7 @@ class Element implements Comparable
     public function getAttribute2() { return $this->attribute2; }
     
     //compareTo function
-    public function compareTo(Comparable $b)
+    public function compareTo(Comparable $b): int
     {
         return strcmp($this->attribute1, $b->getAttribute1());
     }
@@ -221,7 +226,7 @@ use Seboettg\Collection\Comparable\Comparable;
 
 class Attribute1Comparator extends Comparator
 {
-    public function compare(Comparable $a, Comparable $b)
+    public function compare(Comparable $a, Comparable $b): int
     {
         if ($this->sortingOrder === Comparator::ORDER_ASC) {
             return $a->compareTo($b);
@@ -266,7 +271,7 @@ use Vendor\App\Model\Element;
 //Define a custom Comparator
 class MyCustomOrderComparator extends Comparator
 {
-    public function compare(Comparable $a, Comparable $b)
+    public function compare(Comparable $a, Comparable $b): int
     {
         return (array_search($a->getAttribute1(), $this->customOrder) >= array_search($b->getAttribute1(), $this->customOrder)) ? 1 : -1;
     }

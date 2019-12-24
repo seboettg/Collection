@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -11,6 +10,7 @@
 
 namespace Seboettg\Collection\Test;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
 use Seboettg\Collection\Collections;
@@ -139,7 +139,7 @@ class ArrayListTest extends TestCase
             ->append(new Element("z", "zz"));
 
         Collections::sort($this->numeratedArrayList, new class extends Comparator{
-            public function compare(Comparable $a, Comparable $b) {
+            public function compare(Comparable $a, Comparable $b): int {
                 return $a->compareTo($b);
             }
         });
@@ -190,6 +190,9 @@ class ArrayListTest extends TestCase
         $this->assertTrue($list->hasElement("a"));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetIterator()
     {
         $it = $this->numeratedArrayList->getIterator();
@@ -382,7 +385,7 @@ class Element implements Comparable
      * @param Comparable $b
      * @return int
      */
-    public function compareTo(Comparable $b)
+    public function compareTo(Comparable $b): int
     {
         /** @var Element $b */
         return strcmp($this->attr1, $b->getAttr1());

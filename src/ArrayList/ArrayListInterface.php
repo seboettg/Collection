@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2018 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -37,7 +38,7 @@ interface ArrayListInterface extends CollectionInterface, Traversable, IteratorA
      * @param $element
      * @return ArrayListInterface
      */
-    public function set($key, $element);
+    public function set($key, $element): ArrayListInterface;
 
     /**
      * Returns the value of the array element that's currently being pointed to by the
@@ -69,17 +70,17 @@ interface ArrayListInterface extends CollectionInterface, Traversable, IteratorA
 
     /**
      * @param array $array
-     * @return mixed
+     * @return ArrayListInterface
      */
-    public function replace(array $array);
+    public function replace(array $array): ArrayListInterface;
 
     /**
      * Appends the passed element to the end of this list.
      *
      * @param $element
-     * @return $this
+     * @return ArrayListInterface
      */
-    public function append($element);
+    public function append($element): ArrayListInterface;
 
     /**
      * Inserts the specified element at the specified position in this list. If another element already exist at the
@@ -88,17 +89,17 @@ interface ArrayListInterface extends CollectionInterface, Traversable, IteratorA
      *
      * @param $key
      * @param $element
-     * @return $this
+     * @return ArrayListInterface
      */
-    public function add($key, $element);
+    public function add($key, $element): ArrayListInterface;
 
     /**
      * Removes the element at the specified position in this list.
      *
      * @param $key
-     * @return $this
+     * @return ArrayListInterface
      */
-    public function remove($key);
+    public function remove($key): ArrayListInterface;
 
     /**
      * Returns true if an element exists on the specified position.
@@ -106,15 +107,15 @@ interface ArrayListInterface extends CollectionInterface, Traversable, IteratorA
      * @param mixed $key
      * @return bool
      */
-    public function hasKey($key);
+    public function hasKey($key): bool;
 
     /**
      * Returns true if the passed element already exists in this list, otherwise false.
      *
      * @param string $element
-     * @return mixed
+     * @return bool
      */
-    public function hasElement($element);
+    public function hasElement($element): bool;
 
     /**
      * Returns the first element in this list
@@ -129,10 +130,58 @@ interface ArrayListInterface extends CollectionInterface, Traversable, IteratorA
     public function last();
 
     /**
+     * alias of replace function
+     * @param array $array
+     * @return ArrayListInterface
+     */
+    public function setArray(array $array): ArrayListInterface;
+
+    /**
+     * flush array list
+     *
+     * @return ArrayListInterface
+     */
+    public function clear(): ArrayListInterface;
+
+    /**
+     * Shuffles this list (randomizes the order of the elements in). It uses the PHP function shuffle
+     * @see http://php.net/manual/en/function.shuffle.php
+     * @return ArrayListInterface
+     */
+    public function shuffle(): ArrayListInterface;
+
+    /**
+     * returns a clone of this ArrayList, filtered by the given closure function
+     * @param callable $filterFunction
+     * @return ArrayListInterface
+     */
+    public function filter(callable $filterFunction): ArrayListInterface;
+
+    /**
+     * returns a clone of this ArrayList, filtered by the given array keys
+     * @param array $keys
+     * @return ArrayListInterface
+     */
+    public function filterByKeys(array $keys): ArrayListInterface;
+
+    /**
      * Merges the elements of the passed list together with this list so that the values of the passed list are appended
      * to the end of the this list
      * @param ArrayListInterface $list
      * @return void
      */
-    public function merge(ArrayListInterface $list);
+    public function merge(ArrayListInterface $list): void;
+
+    /**
+     * returns a new ArrayList containing all the elements of this ArrayList after applying the callback function to each one.
+     * @param callable $mapFunction
+     * @return ArrayListInterface
+     */
+    public function map(callable $mapFunction): ArrayListInterface;
+
+    /**
+     * Returns a new ArrayList containing an one-dimensional array of all elements of this ArrayList. Keys are going lost.
+     * @return ArrayListInterface
+     */
+    public function flatten(): ArrayListInterface;
 }

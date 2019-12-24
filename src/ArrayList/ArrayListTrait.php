@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2018 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -9,8 +10,6 @@
  */
 
 namespace Seboettg\Collection\ArrayList;
-
-use closure;
 
 /**
  * Trait ArrayListTrait
@@ -25,9 +24,9 @@ trait ArrayListTrait
     /**
      * flush array list
      *
-     * @return $this
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function clear()
+    public function clear(): ArrayListInterface
     {
         $this->array = [];
         return $this;
@@ -66,27 +65,32 @@ trait ArrayListTrait
     }
 
     /**
-     * {@inheritdoc}
+     * @param $key
+     * @param $element
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function set($key, $element)
+    public function set($key, $element): ArrayListInterface
     {
         $this->array[$key] = $element;
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @param $element
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function append($element)
+    public function append($element): ArrayListInterface
     {
         $this->array[] = $element;
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @param $key
+     * @param $element
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function add($key, $element)
+    public function add($key, $element): ArrayListInterface
     {
 
         if (!array_key_exists($key, $this->array)) {
@@ -101,9 +105,10 @@ trait ArrayListTrait
     }
 
     /**
-     * {@inheritdoc}
+     * @param $key
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function remove($key)
+    public function remove($key): ArrayListInterface
     {
         unset($this->array[$key]);
         return $this;
@@ -112,7 +117,7 @@ trait ArrayListTrait
     /**
      * {@inheritdoc}
      */
-    public function hasKey($key)
+    public function hasKey($key): bool
     {
         return array_key_exists($key, $this->array);
     }
@@ -120,7 +125,7 @@ trait ArrayListTrait
     /**
      * {@inheritdoc}
      */
-    public function hasElement($value)
+    public function hasElement($value): bool
     {
         $result = array_search($value, $this->array, true);
         return ($result !== false);
@@ -150,7 +155,7 @@ trait ArrayListTrait
     /**
      * {@inheritDoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->array;
     }
@@ -160,7 +165,7 @@ trait ArrayListTrait
      * @see http://php.net/manual/en/function.shuffle.php
      * @return ArrayListInterface|ArrayListTrait
      */
-    public function shuffle()
+    public function shuffle(): ArrayListInterface
     {
         shuffle($this->array);
         return $this;
@@ -168,28 +173,30 @@ trait ArrayListTrait
 
     /**
      * returns a clone of this ArrayList, filtered by the given closure function
-     * @param closure $closure
+     * @param callable $filterFunction
      * @return ArrayListInterface|ArrayListTrait
      */
-    public function filter(closure $closure)
+    public function filter(callable $filterFunction): ArrayListInterface
     {
         $newInstance = new self();
-        $newInstance->setArray(array_filter($this->array, $closure));
+        $newInstance->setArray(array_filter($this->array, $filterFunction));
         return $newInstance;
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $array
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function setArray(array $array)
+    public function setArray(array $array): ArrayListInterface
     {
         return $this->replace($array);
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return ArrayListInterface|ArrayListTrait
      */
-    public function replace(array $data)
+    public function replace(array $data): ArrayListInterface
     {
         $this->array = $data;
         return $this;
@@ -200,7 +207,7 @@ trait ArrayListTrait
      * @param array $keys
      * @return ArrayListInterface|ArrayListTrait
      */
-    public function filterByKeys(array $keys)
+    public function filterByKeys(array $keys): ArrayListInterface
     {
         $newInstance = new self();
         $newInstance->setArray(array_filter($this->array, function ($key) use ($keys) {
@@ -211,10 +218,10 @@ trait ArrayListTrait
 
     /**
      * returns a new ArrayList containing all the elements of this ArrayList after applying the callback function to each one.
-     * @param closure $mapFunction
+     * @param callable $mapFunction
      * @return ArrayListInterface|ArrayListTrait
      */
-    public function map(closure $mapFunction)
+    public function map(callable $mapFunction): ArrayListInterface
     {
         $newInstance = new self();
         $newInstance->setArray(array_map($mapFunction, $this->array));
@@ -225,7 +232,7 @@ trait ArrayListTrait
      * Returns a new ArrayList containing an one-dimensional array of all elements of this ArrayList. Keys are going lost.
      * @return ArrayListInterface|ArrayListTrait
      */
-    public function flatten()
+    public function flatten(): ArrayListInterface
     {
         $flattenedArray = [];
         array_walk_recursive($this->array, function ($item) use (&$flattenedArray) {
@@ -237,12 +244,10 @@ trait ArrayListTrait
     }
 
     /**
-     * Merges the elements of the passed list together with this list so that the values of the passed list are appended
-     * to the end of the this list
+     * @inheritDoc
      * @param ArrayListInterface $list
-     * @return void
      */
-    public function merge(ArrayListInterface $list)
+    public function merge(ArrayListInterface $list): void
     {
         $this->array = array_merge($this->array, $list->toArray());
     }

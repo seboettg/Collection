@@ -178,7 +178,7 @@ trait ArrayListTrait
      */
     public function filter(callable $filterFunction): ArrayListInterface
     {
-        $newInstance = new self();
+        $newInstance = new static();
         $newInstance->setArray(array_filter($this->array, $filterFunction));
         return $newInstance;
     }
@@ -203,13 +203,13 @@ trait ArrayListTrait
     }
 
     /**
-     * returns a clone of this ArrayList, filtered by the given array keys
+     * returns a new ArrayList, elements are filtered by the given array keys
      * @param array $keys
      * @return ArrayListInterface|ArrayListTrait
      */
     public function filterByKeys(array $keys): ArrayListInterface
     {
-        $newInstance = new self();
+        $newInstance = new static();
         $newInstance->setArray(array_filter($this->array, function ($key) use ($keys) {
             return array_search($key, $keys) !== false;
         }, ARRAY_FILTER_USE_KEY));
@@ -223,7 +223,7 @@ trait ArrayListTrait
      */
     public function map(callable $mapFunction): ArrayListInterface
     {
-        $newInstance = new self();
+        $newInstance = new static();
         $newInstance->setArray(array_map($mapFunction, $this->array));
         return $newInstance;
     }
@@ -238,7 +238,7 @@ trait ArrayListTrait
         array_walk_recursive($this->array, function ($item) use (&$flattenedArray) {
             $flattenedArray[] = $item;
         });
-        $newInstance = new self();
+        $newInstance = new static();
         $newInstance->setArray($flattenedArray);
         return $newInstance;
     }

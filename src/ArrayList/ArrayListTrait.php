@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\ArrayList;
 
+use function Seboettg\Collection\ArrayList\strval;
+
 /**
  * Trait ArrayListTrait
  * @package Seboettg\Collection
@@ -251,4 +253,36 @@ trait ArrayListTrait
     {
         $this->array = array_merge($this->array, $list->toArray());
     }
+
+    /**
+     * @inheritDoc
+     * @param callable $collectFunction
+     * @return mixed
+     */
+    public function collect(callable $collectFunction)
+    {
+        return $collectFunction($this->array);
+    }
+
+    /**
+     * @inheritDoc
+     * @param string $delimiter
+     * @return string
+     */
+    public function collectToString(string $delimiter): string
+    {
+        return implode($delimiter, $this->map(function ($item) {
+            if (is_scalar($item)) {
+                return strval($item);
+            } else if (is_object($item)) {
+                if (method_exists($item, "toString")) {
+                    return $item->toString();
+                }
+            }
+            throw new NotConvertibleToStringException(
+                "Couldn't collectToString since any object in list contains objects which are not " .
+                "convertible to string.");
+        })->toArray());
+    }
 }
+

@@ -16,6 +16,9 @@ use Seboettg\Collection\ArrayList;
 use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Comparable\Comparator;
+use Seboettg\Collection\Stack;
+
+use function Seboettg\Collection\ArrayList\strval;
 
 class ArrayListTest extends TestCase
 {
@@ -31,7 +34,7 @@ class ArrayListTest extends TestCase
     private $hashMap;
 
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->numeratedArrayList = new ArrayList(
             new Element("a", "aa"),
@@ -323,6 +326,43 @@ class ArrayListTest extends TestCase
         $this->assertEquals(count($array), $first->count());
         $this->assertEquals($first->toArray(), $array);
     }
+
+    public function testCollect()
+    {
+        $arrayList = new ArrayList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h');
+        /** @var Stack $stack */
+        $stack = $arrayList
+            ->collect(function(array $list) {
+                $result = new Stack();
+                foreach ($list as $item) {
+                    $result->push($item);
+                }
+                return $result;
+            });
+        $this->assertEquals(8, $stack->count());
+        $this->assertTrue('h' == $stack->pop());
+    }
+
+    public function testCollectToString()
+    {
+        $arrayList = new ArrayList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h');
+        $result = $arrayList->collectToString(", ");
+        $this->assertEquals("a, b, c, d, e, f, g, h", $result);
+    }
+
+    public function testCollectToStringWithDoubleValues()
+    {
+        $arrayList = new ArrayList(1.0, 1.1, 1.2, 1.3);
+        $result = $arrayList->collectToString("; ");
+        $this->assertEquals("1.0; 1.1; 1.2; 1.3", $result);
+    }
+
+    public function testCollectToStringWithToStringObjects()
+    {
+        $arrayList = new ArrayList(new StringableObject(2), new StringableObject(3.1), new StringableObject(true));
+        $result = $arrayList->collectToString("; ");
+        $this->assertEquals("2; 3.1; true", $result);
+    }
 }
 
 class Element implements Comparable
@@ -389,5 +429,25 @@ class Element implements Comparable
     {
         /** @var Element $b */
         return strcmp($this->attr1, $b->getAttr1());
+    }
+}
+
+class StringableObject {
+    private $value;
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+    public function setValue($value) {
+        $this->value = $value;
+    }
+    public function getValue($value) {
+        return $value;
+    }
+    public function toString(): string {
+        return strval($this->value);
+    }
+    public function __toString(): string {
+        return $this->toString();
     }
 }

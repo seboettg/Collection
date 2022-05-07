@@ -25,16 +25,18 @@
         }
     ],
     "autoload": {
-        "psr-4": {"Seboettg\\Collection\\": "src/"}
+        "psr-4": {"Seboettg\\Collection\\": "src/"},
+        "files": [
+            "src/ArrayList/Functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {"Seboettg\\Collection\\Test\\": "tests/"}
     },
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "6.5.*",
-        "satooshi/php-coveralls": "2.*"
+        "phpunit/phpunit": "8.5.*"
     }
 }

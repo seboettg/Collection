@@ -184,4 +184,24 @@ interface ArrayListInterface extends CollectionInterface, Traversable, IteratorA
      * @return ArrayListInterface
      */
     public function flatten(): ArrayListInterface;
+
+    /**
+     * Expects a callable function which collects the elements of this list and returns any object. The callable
+     * function gets passed the entire array of the list
+     *
+     * @param callable $collectionFunction
+     * @return mixed
+     */
+    public function collect(callable $collectionFunction);
+
+    /**
+     * Tries to convert each element of the list to a string and concatenates them with given delimiter.
+     * Throws a <code>NotConvertibleToStringException</code> if any of the objects in the list is not a string or is not
+     * convertible to string.
+     *
+     * @param string $delimiter
+     * @throws NotConvertibleToStringException
+     * @return string
+     */
+    public function collectToString(string $delimiter): string;
 }

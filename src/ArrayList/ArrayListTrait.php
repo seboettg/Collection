@@ -39,7 +39,7 @@ trait ArrayListTrait
      */
     public function get($key)
     {
-        return isset($this->array[$key]) ? $this->array[$key] : null;
+        return $this->array[$key] ?? null;
     }
 
     /**
@@ -129,7 +129,7 @@ trait ArrayListTrait
      */
     public function hasElement($value): bool
     {
-        $result = array_search($value, $this->array, true);
+        $result = in_array($value, $this->array, true);
         return ($result !== false);
     }
 
@@ -213,7 +213,7 @@ trait ArrayListTrait
     {
         $newInstance = new static();
         $newInstance->setArray(array_filter($this->array, function ($key) use ($keys) {
-            return array_search($key, $keys) !== false;
+            return in_array($key, $keys);
         }, ARRAY_FILTER_USE_KEY));
         return $newInstance;
     }
@@ -227,6 +227,20 @@ trait ArrayListTrait
     {
         $newInstance = new static();
         $newInstance->setArray(array_map($mapFunction, $this->array));
+        return $newInstance;
+    }
+
+    /**
+     * @inheritDoc
+     * @param callable $mapFunction
+     * @return ArrayListInterface|ArrayListTrait
+     */
+    public function mapNotNull(callable $mapFunction): ArrayListInterface
+    {
+        $newInstance = new static();
+        $newInstance->setArray(array_values(array_filter(array_map($mapFunction, $this->array), function ($item) {
+            return $item !== null;
+        })));
         return $newInstance;
     }
 

@@ -68,7 +68,7 @@ class ArrayListTest extends TestCase
     public function testPrev()
     {
         $this->numeratedArrayList->next();
-        $this->assertEquals($this->numeratedArrayList->prev()->getAttr2(), "aa");
+        $this->assertEquals("aa", $this->numeratedArrayList->prev()->getAttr2());
         $this->assertFalse($this->numeratedArrayList->prev());
     }
 
@@ -113,7 +113,7 @@ class ArrayListTest extends TestCase
         $this->hashMap->replace($this->numeratedArrayList->toArray());
         $keys = array_keys($this->hashMap->toArray());
         foreach ($keys as $key) {
-            $this->assertInternalType("int", $key);
+            $this->assertIsInt($key);
             $this->assertNotEmpty($this->hashMap->get($key));
         }
     }
@@ -129,7 +129,7 @@ class ArrayListTest extends TestCase
         $this->hashMap->setArray($this->numeratedArrayList->toArray());
         $keys = array_keys($this->hashMap->toArray());
         foreach ($keys as $key) {
-            $this->assertInternalType("int", $key);
+            $this->assertIsInt($key);
             $this->assertNotEmpty($this->hashMap->get($key));
         }
     }
@@ -280,17 +280,17 @@ class ArrayListTest extends TestCase
         $this->assertTrue($arrayList->hasKey('c'));
         $this->assertTrue($arrayList->hasKey('h'));
         $this->assertFalse($arrayList->hasKey('a'));
-        $this->assertEquals($arrayList->get('c')->getAttr1(), 'c');
-        $this->assertEquals($arrayList->get('h')->getAttr1(), 'h');
+        $this->assertEquals('c', $arrayList->get('c')->getAttr1());
+        $this->assertEquals('h', $arrayList->get('h')->getAttr1());
     }
 
     public function testFilterByKeys()
     {
         $arrayList = $this->numeratedArrayList->filterByKeys([0, 3]);
         $this->assertFalse($arrayList->hasKey(1));
-        $this->assertEquals($arrayList->count(), 2);
-        $this->assertEquals($arrayList->current()->getAttr1(), "a");
-        $this->assertEquals($arrayList->next()->getAttr1(), "k");
+        $this->assertEquals(2, $arrayList->count());
+        $this->assertEquals("a", $arrayList->current()->getAttr1());
+        $this->assertEquals("k", $arrayList->next()->getAttr1());
     }
 
     public function testMap()
@@ -300,11 +300,19 @@ class ArrayListTest extends TestCase
         };
         $list = new ArrayList(1, 2, 3, 4, 5);
         $cubicList = $list->map($cubic);
-        $this->assertEquals([1, 8, 27, 64, 125], $cubicList->toArray());
+        $this->assertEquals(new ArrayList(1, 8, 27, 64, 125), $cubicList);
 
         $list = new ArrayList('a', 'b', 'c');
         $toUpper = $list->map(function($item) {return ucfirst($item);});
-        $this->assertEquals(['A', 'B', 'C'], $toUpper->toArray());
+        $this->assertEquals(new ArrayList('A', 'B', 'C'), $toUpper);
+    }
+
+    public function testMapNotNull()
+    {
+        $list = new ArrayList(1, 2, 3, 4, 5);
+        $this->assertEquals(new ArrayList(1, 3, 5), $list->mapNotNull(function($item) {
+            return $item % 2 !== 0 ? $item : null;
+        }));
     }
 
     public function testFlatten()
@@ -343,6 +351,9 @@ class ArrayListTest extends TestCase
         $this->assertTrue('h' == $stack->pop());
     }
 
+    /**
+     * @throws ArrayList\NotConvertibleToStringException
+     */
     public function testCollectToString()
     {
         $arrayList = new ArrayList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h');
@@ -350,6 +361,9 @@ class ArrayListTest extends TestCase
         $this->assertEquals("a, b, c, d, e, f, g, h", $result);
     }
 
+    /**
+     * @throws ArrayList\NotConvertibleToStringException
+     */
     public function testCollectToStringWithDoubleValues()
     {
         $arrayList = new ArrayList(1.0, 1.1, 1.2, 1.3);
@@ -357,11 +371,21 @@ class ArrayListTest extends TestCase
         $this->assertEquals("1.0; 1.1; 1.2; 1.3", $result);
     }
 
+    /**
+     * @throws ArrayList\NotConvertibleToStringException
+     */
     public function testCollectToStringWithToStringObjects()
     {
         $arrayList = new ArrayList(new StringableObject(2), new StringableObject(3.1), new StringableObject(true));
         $result = $arrayList->collectToString("; ");
         $this->assertEquals("2; 3.1; true", $result);
+    }
+
+    public function testShouldThrowExceptionWhenCollectToStringIsCalledOnListWithNotStringableObjects()
+    {
+        $arrayList = new ArrayList(new Element("0", "a"), new Element("1", "b"), new Element("2", "c"));
+        $this->expectException(ArrayList\NotConvertibleToStringException::class);
+        $arrayList->collectToString("; ");
     }
 }
 

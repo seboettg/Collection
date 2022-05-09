@@ -25,7 +25,7 @@ class CollectionsTest extends TestCase
      */
     private $numeratedArrayList;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->numeratedArrayList = new ArrayList(
             new Element("a", "aa"),

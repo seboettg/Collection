@@ -13,145 +13,100 @@ namespace Seboettg\Collection\Test;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
+use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
 use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Comparable\Comparator;
+use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Stack;
-
-use function Seboettg\Collection\ArrayList\strval;
+use function Seboettg\Collection\Lists\emptyList;
+use function Seboettg\Collection\Lists\listOf;
+use function Seboettg\Collection\Lists\strval;
 
 class ArrayListTest extends TestCase
 {
 
     /**
-     * @var ArrayList
+     * @var ListInterface
      */
-    private $numeratedArrayList;
-
-    /**
-     * @var ArrayList
-     */
-    private $hashMap;
+    private ListInterface $arrayList;
 
 
     public function setUp(): void
     {
-        $this->numeratedArrayList = new ArrayList(
+        $this->arrayList = new ArrayList(
             new Element("a", "aa"),
             new Element("b", "bb"),
             new Element("c", "cc"),
             new Element("k", "kk"),
             new Element("d", "dd")
         );
-
-        $this->hashMap = new ArrayList();
-        $this->hashMap->setArray([
-            "c" => new Element("c"),
-            "a" => new Element("a"),
-            "h" => new Element("h")
-        ]);
-
     }
 
     public function testCurrent()
     {
-        $this->assertTrue($this->numeratedArrayList->current()->getAttr2() === "aa");
-        $arrayList = new ArrayList();
+        $this->assertTrue($this->arrayList->current()->getAttr2() === "aa");
+        $arrayList = emptyList();
         $this->assertFalse($arrayList->current());
     }
 
-    public function testNext()
+    public function testAdd()
     {
-        $this->assertTrue($this->numeratedArrayList->next()->getAttr2() === "bb");
-    }
-
-    public function testPrev()
-    {
-        $this->numeratedArrayList->next();
-        $this->assertEquals("aa", $this->numeratedArrayList->prev()->getAttr2());
-        $this->assertFalse($this->numeratedArrayList->prev());
-    }
-
-    public function testAppend()
-    {
-        $i = $this->numeratedArrayList->count();
-        $this->numeratedArrayList->append(new Element("3", "33"));
-        $j = $this->numeratedArrayList->count();
+        $i = $this->arrayList->count();
+        $this->arrayList->add(new Element("3", "33"));
+        $j = $this->arrayList->count();
         $this->assertEquals($i + 1, $j);
         /** @var Element $eI */
-        $eI = $this->numeratedArrayList->toArray()[$i];
+        $eI = $this->arrayList->toArray()[$i];
         $this->assertEquals("3", $eI->getAttr1());
-    }
-
-    public function testSet()
-    {
-        $this->hashMap->set("c", new Element("ce"));
-        /** @var Element $ce */
-        $ce = $this->hashMap->toArray()['c'];
-        $this->assertEquals("ce", $ce->getAttr1());
-    }
-
-    public function testCompareTo()
-    {
-        $arr = $this->hashMap->toArray();
-        usort($arr, function (Comparable $a, Comparable $b) {
-            return $a->compareTo($b);
-        });
-        /** @var Element $e0 */
-        $e0 = $arr[0];
-        /** @var Element $e1 */
-        $e1 = $arr[1];
-        /** @var Element $e2 */
-        $e2 = $arr[2];
-        $this->assertEquals("a", $e0->getAttr1());
-        $this->assertEquals("c", $e1->getAttr1());
-        $this->assertEquals("h", $e2->getAttr1());
     }
 
     public function testReplace()
     {
-        $this->hashMap->replace($this->numeratedArrayList->toArray());
-        $keys = array_keys($this->hashMap->toArray());
-        foreach ($keys as $key) {
-            $this->assertIsInt($key);
-            $this->assertNotEmpty($this->hashMap->get($key));
+        $array = ["x", "y", "z"];
+        $this->arrayList->replace($array);
+        foreach ($array as $key => $value) {
+            $this->assertEquals($value, $this->arrayList->get($key));
         }
     }
 
     public function testClear()
     {
-        $this->assertTrue($this->hashMap->count() > 0);
-        $this->assertEquals(0, $this->hashMap->clear()->count());
+        $this->assertTrue($this->arrayList->count() > 0);
+        $this->assertEquals(0, $this->arrayList->clear()->count());
     }
 
     public function testSetArray()
     {
-        $this->hashMap->setArray($this->numeratedArrayList->toArray());
-        $keys = array_keys($this->hashMap->toArray());
+        $this->arrayList->setArray([1,2,3,4,5,6]);
+        $keys = array_keys($this->arrayList->toArray());
         foreach ($keys as $key) {
             $this->assertIsInt($key);
-            $this->assertNotEmpty($this->hashMap->get($key));
+            $this->assertNotEmpty($this->arrayList->get($key));
+            $this->assertTrue($this->arrayList->get($key) === $key + 1);
         }
     }
 
     public function testShuffle()
     {
-        $this->numeratedArrayList
-            ->append(new Element("x", "xx"))
-            ->append(new Element("y", "yy"))
-            ->append(new Element("z", "zz"));
+        $this->arrayList
+            ->addAll([
+                new Element("x", "xx"),
+                new Element("y", "yy"),
+                new Element("z", "zz")
+            ]);
 
-        Collections::sort($this->numeratedArrayList, new class extends Comparator{
+        Collections::sort($this->arrayList, new class extends Comparator{
             public function compare(Comparable $a, Comparable $b): int {
                 return $a->compareTo($b);
             }
         });
         $lte = false;
-        for ($i = 0; $i < $this->numeratedArrayList->count() - 1; ++$i) {
+        for ($i = 0; $i < $this->arrayList->count() - 1; ++$i) {
             /** @var Element $elemI */
-            $elemI = $this->numeratedArrayList->get($i);
+            $elemI = $this->arrayList->get($i);
             /** @var Element $elemtI1 */
-            $elemtI1 = $this->numeratedArrayList->get($i + 1);
+            $elemtI1 = $this->arrayList->get($i + 1);
             $lte = ($elemI->getAttr1() <= $elemtI1->getAttr1());
             if (!$lte) {
                 break;
@@ -160,9 +115,9 @@ class ArrayListTest extends TestCase
         //each element on position $i is smaller than or equal to the element on position $i+1
         $this->assertTrue($lte);
 
-        $arr1 = $this->numeratedArrayList->toArray();
-        $this->numeratedArrayList->shuffle();
-        $arr2 = $this->numeratedArrayList->toArray(); //shuffled array
+        $arr1 = $this->arrayList->toArray();
+        $this->arrayList->shuffle();
+        $arr2 = $this->arrayList->toArray(); //shuffled array
 
         $equal = false;
         // at least one element has another position as before
@@ -179,118 +134,47 @@ class ArrayListTest extends TestCase
         $this->assertFalse($equal);
     }
 
-
-    public function testHasKey()
-    {
-        $this->assertTrue($this->numeratedArrayList->hasKey(0));
-        $this->assertTrue($this->hashMap->hasKey("c"));
-    }
-
-    public function testHasValue()
+    public function testContains()
     {
         $list = new ArrayList("a", "b", "c");
 
-        $this->assertTrue($list->hasElement("a"));
+        $this->assertTrue($list->contains("a"));
     }
 
     /**
      * @throws Exception
      */
-    public function testGetIterator()
+    public function testIterator()
     {
-        $it = $this->numeratedArrayList->getIterator();
-
-        foreach ($it as $key => $e) {
+        foreach ($this->arrayList as $key => $item) {
             $this->assertTrue(is_int($key));
-            $this->assertInstanceOf("Seboettg\\Collection\\Test\\Element", $e);
+            $this->assertInstanceOf(Element::class, $item);
         }
     }
 
     public function testRemove()
     {
-        $list = new ArrayList([
-            "a",
-            "b",
-            "c"
-        ]);
-
-        $list->append("d");
-        $this->assertTrue($list->hasElement("d"));
+        $list = listOf("a", "b", "c");
+        $list->add("d");
+        $this->assertTrue($list->contains("d"));
         $list->remove(0);
-        $this->assertFalse($list->hasElement("a"));
+        $this->assertFalse($list->contains("a"));
     }
 
-    public function testOffsetGet()
-    {
-        $this->assertNotEmpty($this->numeratedArrayList[0]);
-        $this->assertEmpty($this->numeratedArrayList[333]);
-    }
-
-    public function testOffsetSet()
-    {
-        $pos = $this->numeratedArrayList->count();
-        $this->numeratedArrayList[$pos] = new Element($pos, $pos . $pos);
-        $arr = $this->numeratedArrayList->toArray();
-        /** @var Element $elem */
-        $elem = $arr[$pos];
-        $this->assertNotEmpty($elem);
-        $this->assertEquals($pos, $elem->getAttr1());
-    }
-
-    public function testOffestExist()
-    {
-        $this->assertTrue(isset($this->hashMap['a']));
-        $this->assertFalse(isset($this->numeratedArrayList[111]));
-    }
-
-    public function testOffsetUnset()
-    {
-        $list = (new ArrayList())->setArray(['a' => 'aa', 'b' => 'bb']);
-        unset($list['a']);
-        $this->assertFalse($list->hasKey('a'));
-        $this->assertTrue($list->hasKey('b'));
-    }
-
-    public function testAdd()
-    {
-        $list = (new ArrayList())->setArray(['a' => 'aa', 'b' => 'bb', 'c' => 'cc']);
-        $list->add('d', 'dd');
-        $this->assertEquals('dd', $list->get('d'));
-        $list->add('d', 'ddd');
-
-        $dl = $list->get('d');
-        $this->assertTrue(is_array($dl));
-        $this->assertEquals('dd', $dl[0]);
-        $this->assertEquals('ddd', $dl[1]);
-    }
 
     public function testFirst()
     {
-        $this->assertEquals("a", $this->numeratedArrayList->first()->getAttr1());
-        $this->assertEquals("d", $this->numeratedArrayList->last()->getAttr1());
+        $this->assertEquals("a", $this->arrayList->first()->getAttr1());
+        $this->assertEquals("d", $this->arrayList->last()->getAttr1());
     }
 
     public function testFilter()
     {
-        // filter elements that containing values with attr1 'c' or 'h'
-        $arrayList = $this->hashMap->filter(function (Element $elem) {
-            return $elem->getAttr1() === 'c' || $elem->getAttr1() === 'h';
-        });
-
-        $this->assertTrue($arrayList->hasKey('c'));
-        $this->assertTrue($arrayList->hasKey('h'));
-        $this->assertFalse($arrayList->hasKey('a'));
-        $this->assertEquals('c', $arrayList->get('c')->getAttr1());
-        $this->assertEquals('h', $arrayList->get('h')->getAttr1());
-    }
-
-    public function testFilterByKeys()
-    {
-        $arrayList = $this->numeratedArrayList->filterByKeys([0, 3]);
-        $this->assertFalse($arrayList->hasKey(1));
-        $this->assertEquals(2, $arrayList->count());
-        $this->assertEquals("a", $arrayList->current()->getAttr1());
-        $this->assertEquals("k", $arrayList->next()->getAttr1());
+        $this->assertEquals(
+            listOf("a", "c", "e", "g", "i"),
+            listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
+                ->filter(fn ($letter) => ord($letter) % 2 !== 0)
+        );
     }
 
     public function testMap()
@@ -300,17 +184,17 @@ class ArrayListTest extends TestCase
         };
         $list = new ArrayList(1, 2, 3, 4, 5);
         $cubicList = $list->map($cubic);
-        $this->assertEquals(new ArrayList(1, 8, 27, 64, 125), $cubicList);
+        $this->assertEquals(listOf(1, 8, 27, 64, 125), $cubicList);
 
         $list = new ArrayList('a', 'b', 'c');
-        $toUpper = $list->map(function($item) {return ucfirst($item);});
-        $this->assertEquals(new ArrayList('A', 'B', 'C'), $toUpper);
+        $toUpper = $list->map(function($item) { return ucfirst($item); });
+        $this->assertEquals(listOf('A', 'B', 'C'), $toUpper);
     }
 
     public function testMapNotNull()
     {
         $list = new ArrayList(1, 2, 3, 4, 5);
-        $this->assertEquals(new ArrayList(1, 3, 5), $list->mapNotNull(function($item) {
+        $this->assertEquals(listOf(1, 3, 5), $list->mapNotNull(function($item) {
             return $item % 2 !== 0 ? $item : null;
         }));
     }
@@ -323,17 +207,6 @@ class ArrayListTest extends TestCase
         $this->assertEquals(['a', 'b', 'c'], $list->flatten()->toArray());
     }
 
-    public function testMerge()
-    {
-        $array = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-        $abc = array_slice($array, 0, 3);
-        $defgh = array_slice($array, 3);
-        $first = new ArrayList(...$abc);
-        $second = new ArrayList(...$defgh);
-        $first->merge($second);
-        $this->assertEquals(count($array), $first->count());
-        $this->assertEquals($first->toArray(), $array);
-    }
 
     public function testCollect()
     {
@@ -352,109 +225,43 @@ class ArrayListTest extends TestCase
     }
 
     /**
-     * @throws ArrayList\NotConvertibleToStringException
+     * @throws \Seboettg\Collection\Exception\NotConvertibleToStringException
      */
-    public function testCollectToString()
+    public function testJoinToString()
     {
         $arrayList = new ArrayList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h');
-        $result = $arrayList->collectToString(", ");
+        $result = $arrayList->joinToString(", ");
         $this->assertEquals("a, b, c, d, e, f, g, h", $result);
     }
 
     /**
-     * @throws ArrayList\NotConvertibleToStringException
+     * @throws \Seboettg\Collection\Exception\NotConvertibleToStringException
      */
-    public function testCollectToStringWithDoubleValues()
+    public function testJoinToStringWithDoubleValues()
     {
         $arrayList = new ArrayList(1.0, 1.1, 1.2, 1.3);
-        $result = $arrayList->collectToString("; ");
+        $result = $arrayList->joinToString("; ");
         $this->assertEquals("1.0; 1.1; 1.2; 1.3", $result);
     }
 
     /**
-     * @throws ArrayList\NotConvertibleToStringException
      */
-    public function testCollectToStringWithToStringObjects()
+    public function testJoinToStringWithToStringObjects()
     {
-        $arrayList = new ArrayList(new StringableObject(2), new StringableObject(3.1), new StringableObject(true));
-        $result = $arrayList->collectToString("; ");
+        $arrayList = listOf(new StringableObject(2), new StringableObject(3.1), new StringableObject(true));
+        $result = $arrayList->joinToString("; ");
         $this->assertEquals("2; 3.1; true", $result);
     }
 
     public function testShouldThrowExceptionWhenCollectToStringIsCalledOnListWithNotStringableObjects()
     {
         $arrayList = new ArrayList(new Element("0", "a"), new Element("1", "b"), new Element("2", "c"));
-        $this->expectException(ArrayList\NotConvertibleToStringException::class);
+        $this->expectException(NotConvertibleToStringException::class);
         $arrayList->collectToString("; ");
     }
 }
 
-class Element implements Comparable
-{
 
-    /**
-     * @var string
-     */
-    private $attr1;
-
-    /**
-     * @var string
-     */
-    private $attr2;
-
-    public function __construct(string $attr1, string $attr2 = "")
-    {
-        $this->attr1 = $attr1;
-        $this->attr2 = $attr2;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAttr1(): string
-    {
-        return $this->attr1;
-    }
-
-    /**
-     * @param string $attr1
-     */
-    public function setAttr1(string $attr1)
-    {
-        $this->attr1 = $attr1;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttr2(): string
-    {
-        return $this->attr2;
-    }
-
-    /**
-     * @param string $attr2
-     */
-    public function setAttr2(string $attr2)
-    {
-        $this->attr2 = $attr2;
-    }
-
-    /**
-     * Compares this object with the specified object for order. Returns a negative integer, zero, or a positive
-     * integer as this object is less than, equal to, or greater than the specified object.
-     *
-     * The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
-     *
-     * @param Comparable $b
-     * @return int
-     */
-    public function compareTo(Comparable $b): int
-    {
-        /** @var Element $b */
-        return strcmp($this->attr1, $b->getAttr1());
-    }
-}
 
 class StringableObject {
     private $value;

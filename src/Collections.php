@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection;
 
-use Seboettg\Collection\ArrayList\ArrayListInterface;
+use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Comparable\Comparator;
 
 /**
@@ -26,11 +26,11 @@ class Collections
      * Sorts the specified list according to the order induced by the specified comparator. All elements in the list
      * must be mutually comparable.
      *
-     * @param ArrayListInterface $list
+     * @param ListInterface $list
      * @param Comparator $comparator
-     * @return ArrayListInterface
+     * @return ListInterface
      */
-    public static function sort(ArrayListInterface $list, Comparator $comparator): ArrayListInterface
+    public static function sort(ListInterface $list, Comparator $comparator): ListInterface
     {
         $array = $list->toArray();
         usort($array, [$comparator, "compare"]);

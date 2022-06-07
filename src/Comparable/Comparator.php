@@ -11,32 +11,23 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Comparable;
 
-/**
- * Abstract class Comparator. When extending this class the compare function must be implemented. compare() is a
- * comparison function, which imposes a total ordering on some collection of objects. Comparators can be passed to a
- * sort method to allow precise control over the sort order.
- *
- * @package Seboettg\Collection
- *
- * @author Sebastian Böttger <seboettg@gmail.de>
- */
 abstract class Comparator
 {
 
     /**
      * static constant for sorting order ascending
      */
-    const ORDER_ASC = "ASC";
+    public const ORDER_ASC = "ASC";
 
     /**
      * static constant for sorting order descending
      */
-    const ORDER_DESC = "DESC";
+    public const ORDER_DESC = "DESC";
 
     /**
      * static constant for a custom sorting order
      */
-    const ORDER_CUSTOM = "CUSTOM";
+    public const ORDER_CUSTOM = "CUSTOM";
 
     /**
      * defines the order (ascending|descending) for a comparison
@@ -56,7 +47,7 @@ abstract class Comparator
      * @param string $sortingOrder defines the order (ascending|descending) for a comparison
      * @param mixed $customOrder
      */
-    public function __construct($sortingOrder = self::ORDER_ASC, $customOrder = null)
+    public function __construct(string $sortingOrder = self::ORDER_ASC, $customOrder = null)
     {
         $this->sortingOrder = $sortingOrder;
         $this->customOrder = $customOrder;

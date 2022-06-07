@@ -12,22 +12,23 @@
 namespace Seboettg\Collection\Test;
 
 use PHPUnit\Framework\TestCase;
-use Seboettg\Collection\ArrayList;
+use Seboettg\Collection\Lists;
 use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Comparable\Comparator;
+use function Seboettg\Collection\Lists\listOf;
 
 class CollectionsTest extends TestCase
 {
 
     /**
-     * @var ArrayList
+     * @var Lists\ListInterface
      */
-    private $numeratedArrayList;
+    private Lists\ListInterface $numeratedArrayList;
 
     public function setUp(): void
     {
-        $this->numeratedArrayList = new ArrayList(
+        $this->numeratedArrayList = listOf(
             new Element("a", "aa"),
             new Element("b", "bb"),
             new Element("c", "cc"),
@@ -42,7 +43,7 @@ class CollectionsTest extends TestCase
         Collections::sort($this->numeratedArrayList, new MyAscendingComparator());
         $arr = $this->numeratedArrayList;
         for ($i = 0; $i < $arr->count() - 1; ++$i) {
-            $lte = (ord($arr[$i]->getAttr1()) <= ord($arr[$i++]->getAttr1()));
+            $lte = (ord($arr->get($i)->getAttr1()) <= ord($arr->get($i + 1)->getAttr1()));
             if (!$lte) {
                 break;
             }

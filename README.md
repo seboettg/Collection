@@ -63,23 +63,23 @@ composer.phar update
 ### Simple Usage ###
 
 Initialize ArrayList
+
 ```php
 <?php
-use Seboettg\Collection\ArrayList;
-$list = new ArrayList("a", "c", "h", "k", "j");
-$map = new ArrayList();
-$map->setArray([
-    "c" => "cc",
-    "b" => "bb",
-    "a" => "aa"
-]);
+use Seboettg\Collection\Lists;
+use function Seboettg\Collection\Lists\listOf;
+use function Seboettg\Collection\Map\emptyMap;
+use function Seboettg\Collection\Map\pair;
+$list = listOf("a", "c", "h", "k", "j");
+$map = mapOf(pair("c", "cc"), pair("b", "bb"), pair("a", "aa"))
 ```
 
 Get elements
 
 ```php
 
-for ($i = 0; $i < $list->count(); ++$i) {
+for ($i = 0; $i < $list->count(); ++$i)
+{
     echo $list->get($i)." ";
 }
 ```
@@ -88,19 +88,11 @@ This will output:
 a c h k j 
 ```
 
-ArrayList implements the ArrayAccess interface, so you can also access elements in an instance of ArrayList in exactly the same way as you access an element in arrays:
+Iterate a Map using foreach
 
 ```php
-
-for ($i = 0; $i < $list->count(); ++$i) {
-    echo $list[$i]." ";
-}
-```
-
-Iterate ArrayList using foreach
-
-```php
-foreach ($map as $key => $value) {
+foreach ($map as $key => $value) 
+{
     echo "[".$key."] => ".$value."\n";
 }
 ```
@@ -149,10 +141,11 @@ $list->clear(); //removes all elements of the list
 
 #### Inherit from ArrayList ####
 Inherit from ArrayList to extend your class with the whole functionality from ArrayList:
+
 ```php
 <?php 
 namespace Vendor\Project;
-use Seboettg\Collection\ArrayList;
+use Seboettg\Collection\Lists;
 class MyCustomList extends ArrayList {
     
     protected $myCustomProperty;
@@ -165,13 +158,14 @@ class MyCustomList extends ArrayList {
 
 ``` 
 Or implement ArrayListInterface and use the ArrayListTrait (which implements all functions that are required by the interface) in case of that your custom class inherits already from another class
+
 ```php
 <?php 
 namespace Vendor\Project;
-use Seboettg\Collection\ArrayList\ArrayListInterface;
-use Seboettg\Collection\ArrayList\ArrayListTrait;
+use Seboettg\Collection\Lists\ListInterface;
+use Seboettg\Collection\Lists\ArrayListTrait;
 
-class MyCustomList extends MyOtherCustomClass implements ArrayListInterface {
+class MyCustomList extends MyOtherCustomClass implements ListInterface {
     
     use ArrayListTrait;
     
@@ -240,7 +234,7 @@ Sort your list
 
 ```php
 <?php
-use Seboettg\Collection\ArrayList;
+use Seboettg\Collection\Lists;
 use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparator;
 use Vendor\App\Util\Attribute1Comparator;
@@ -259,12 +253,11 @@ Collections::sort($list, new Attribute1Comparator(Comparator::ORDER_ASC));
 
 #### sort your list using a custom order ####
 
-
 ```php
 <?php
 use Seboettg\Collection\Comparable\Comparator;
 use Seboettg\Collection\Comparable\Comparable;
-use Seboettg\Collection\ArrayList;
+use Seboettg\Collection\Lists;
 use Seboettg\Collection\Collections;
 use Vendor\App\Model\Element;
 

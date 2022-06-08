@@ -18,6 +18,14 @@ use Seboettg\Collection\Lists\ListInterface;
 interface MapInterface extends Countable, ArrayAccess
 {
     /**
+     * Overrides internal array with given array.
+     *
+     * @param array $array
+     * @return void
+     */
+    public function setArray(array $array): void;
+
+    /**
      * Returns a list containing all entries of this map as key-value pairs
      *
      * @return ListInterface

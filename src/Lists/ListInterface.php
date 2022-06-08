@@ -13,7 +13,7 @@ namespace Seboettg\Collection\Lists;
 
 use Countable;
 use Iterator;
-use IteratorAggregate;
+use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
 use Seboettg\Collection\CollectionInterface;
 use Seboettg\Collection\Map\MapInterface;
 use Traversable;
@@ -37,15 +37,15 @@ interface ListInterface extends CollectionInterface, Traversable, Countable, ToA
      *
      * @param int $key
      * @param $element
-     * @return ListInterface
+     * @return void
      */
-    public function set(int $key, $element): ListInterface;
+    public function set(int $key, $element): void;
 
     /**
      * @param array $array
-     * @return ListInterface
+     * @return void
      */
-    public function replace(array $array): ListInterface;
+    public function replace(array $array): void;
 
     /**
      * Appends the passed element to the end of this list.
@@ -94,16 +94,15 @@ interface ListInterface extends CollectionInterface, Traversable, Countable, ToA
     /**
      * alias of replace function
      * @param array $array
-     * @return ListInterface
+     * @return void
      */
-    public function setArray(array $array): ListInterface;
+    public function setArray(array $array): void;
 
     /**
      * flush array list
      *
-     * @return ListInterface
      */
-    public function clear(): ListInterface;
+    public function clear(): void;
 
     /**
      * Shuffles this list (randomizes the order of the elements in).

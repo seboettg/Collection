@@ -32,11 +32,10 @@ trait ArrayListTrait
      *
      * @return ListInterface|ArrayListTrait
      */
-    public function clear(): ListInterface
+    public function clear(): void
     {
         unset($this->array);
         $this->array = [];
-        return $this;
     }
 
     /**
@@ -50,12 +49,11 @@ trait ArrayListTrait
     /**
      * @param $key
      * @param $element
-     * @return ListInterface|ArrayListTrait
+     * @return void
      */
-    public function set($key, $element): ListInterface
+    public function set($key, $element): void
     {
         $this->array[$key] = $element;
-        return $this;
     }
 
     /**
@@ -159,21 +157,18 @@ trait ArrayListTrait
 
     /**
      * @param array $array
-     * @return ListInterface|ArrayListTrait
      */
-    public function setArray(array $array): ListInterface
+    public function setArray(array $array): void
     {
-        return $this->replace($array);
+        $this->replace($array);
     }
 
     /**
      * @param array $data
-     * @return ListInterface|ArrayListTrait
      */
-    public function replace(array $data): ListInterface
+    public function replace(array $data): void
     {
         $this->array = $data;
-        return $this;
     }
 
     /**
@@ -184,7 +179,9 @@ trait ArrayListTrait
     public function map(callable $mapFunction): ListInterface
     {
         $newInstance = emptyList();
-        $newInstance->setArray(array_map($mapFunction, $this->array));
+        foreach ($this as $value) {
+            $newInstance->add($mapFunction($value));
+        }
         return $newInstance;
     }
 
@@ -369,7 +366,7 @@ trait ArrayListTrait
         $listOfChunks = emptyList();
         $arrayChunks = array_chunk($this->array, $size);
         foreach ($arrayChunks as $arrayChunk) {
-            $listOfChunks->addAll($arrayChunk);
+            $listOfChunks->add(listOf(...$arrayChunk));
         }
         return $listOfChunks;
     }

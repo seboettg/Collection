@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Seboettg\Collection\Map;
 
 use Seboettg\Collection\Lists;
+use Seboettg\Collection\Lists\ArrayListTrait;
 use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Map;
 use Seboettg\Collection\NativePhp\ArrayAccessTrait;
@@ -85,6 +86,15 @@ trait MapTrait
     public function contains($key): bool
     {
         return array_key_exists($key, $this->array);
+    }
+
+    /**
+     * @inheritDoc
+     * @param array $array
+     */
+    public function setArray(array $array): void
+    {
+        $this->array = $array;
     }
 
     /**

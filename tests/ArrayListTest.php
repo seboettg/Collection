@@ -73,7 +73,8 @@ class ArrayListTest extends TestCase
     public function testClear()
     {
         $this->assertTrue($this->arrayList->count() > 0);
-        $this->assertEquals(0, $this->arrayList->clear()->count());
+        $this->arrayList->clear();
+        $this->assertEquals(0, $this->arrayList->count());
     }
 
     public function testSetArray()
@@ -224,9 +225,6 @@ class ArrayListTest extends TestCase
         $this->assertTrue('h' == $stack->pop());
     }
 
-    /**
-     * @throws \Seboettg\Collection\Exception\NotConvertibleToStringException
-     */
     public function testJoinToString()
     {
         $arrayList = new ArrayList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h');
@@ -234,9 +232,6 @@ class ArrayListTest extends TestCase
         $this->assertEquals("a, b, c, d, e, f, g, h", $result);
     }
 
-    /**
-     * @throws \Seboettg\Collection\Exception\NotConvertibleToStringException
-     */
     public function testJoinToStringWithDoubleValues()
     {
         $arrayList = new ArrayList(1.0, 1.1, 1.2, 1.3);

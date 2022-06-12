@@ -148,7 +148,7 @@ trait ArrayListTrait
     public function filter(?callable $predicate = null, bool $preserveKeys = false): ListInterface
     {
         $list = emptyList();
-        $filtered = array_filter($this->array, $predicate);
+        $filtered = $predicate == null ? array_filter($this->array) : array_filter($this->array, $predicate);
         $list->setArray(
             $preserveKeys ? $filtered : array_values($filtered)
         );

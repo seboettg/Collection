@@ -199,7 +199,7 @@ class ArrayListTest extends TestCase
 
     public function testMapNotNull()
     {
-        $list = new ArrayList(1, 2, 3, 4, 5);
+        $list = listOf(1, 2, 3, 4, 5);
         $this->assertEquals(
             listOf(1, 3, 5),
             $list->mapNotNull(fn($item) => $item % 2 !== 0 ? $item : null)

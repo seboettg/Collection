@@ -1,0 +1,215 @@
+<?php
+declare(strict_types=1);
+/*
+ * Copyright (C) 2022 Sebastian Böttger <seboettg@gmail.com>
+ * You may use, distribute and modify this code under the
+ * terms of the MIT license.
+ *
+ * You should have received a copy of the MIT license with
+ * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
+ */
+namespace Seboettg\Collection\Test;
+
+use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
+use Seboettg\Collection\Map;
+use PHPUnit\Framework\TestCase;
+use Seboettg\Collection\Map\Pair;
+use stdClass;
+use function Seboettg\Collection\Lists\listOf;
+use function Seboettg\Collection\Map\mapOf;
+use function Seboettg\Collection\Map\pair;
+use function Seboettg\Collection\Map\emptyMap;
+
+class MapTest extends TestCase
+{
+
+    public function testGetEntriesShouldReturnAListOfPairs()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->assertEquals(
+            listOf(new Pair("a", ["a"]), new Pair("b", ["b"]), new Pair("c", ["c"])),
+            $map->getEntries()
+        );
+    }
+
+    public function testGetKeysShouldReturnAListOfKeysOfTypeScalar()
+    {
+        $keys = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]))->getKeys();
+        $keys->forEach(fn($key) => $this->assertIsScalar($key));
+        $this->assertEquals(
+            listOf("a", "b", "c"),
+            $keys
+        );
+    }
+
+    public function testValuesShouldReturnAListOfValues()
+    {
+        $values = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]))->values();
+        $values->forEach(fn($value) => $this->assertIsArray($value));
+        $this->assertEquals(
+            listOf(["a"], ["b"], ["c"]),
+            $values
+        );
+    }
+
+    public function testCountShouldReturnTheNumberOfElementsInMap()
+    {
+        $this->assertEquals(
+            3,
+            mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]))->count()
+        );
+    }
+
+    public function testSizeShouldReturnSameAsCount()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->assertEquals(
+            $map->count(),
+            $map->size()
+        );
+    }
+
+    public function testContainsShouldReturnTrueIfKeyExistsInMap()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->assertTrue($map->contains("a"));
+    }
+
+    public function testContainsShouldReturnFalseIfKeyDoesNotExistInMap()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->assertFalse($map->contains("d"));
+    }
+
+    public function testContainsShouldThrowExceptionIfGivenKeyIsNotAScalar()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->expectException(TypeIsNotAScalarException::class);
+        $map->contains(["any"]);
+
+    }
+
+    public function testContainsKeyShouldBehaveAsContainsWhenKeyIsNotAScalar()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->expectException(TypeIsNotAScalarException::class);
+        $map->contains(new stdClass());
+    }
+
+    public function testContainsKeyShouldBehaveAsContains()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->assertTrue($map->containsKey("a"));
+
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->assertFalse($map->containsKey("d"));
+    }
+
+    public function testIsEmptyShouldReturnTrueWhenMapIsEmpty()
+    {
+        $this->assertTrue(emptyMap()->isEmpty());
+    }
+
+    public function testIsEmptyShouldReturnFalseWhenMapIsNotEmpty()
+    {
+        $this->assertFalse(mapOf(pair("a", ["a"]))->isEmpty());
+    }
+
+    public function testGetShouldReturnAssociatedValueOfKey()
+    {
+        $this->assertEquals(
+            ["a"],
+            mapOf(pair("a", ["a"]), pair("b", ["b"]))->get("a")
+        );
+    }
+
+    public function testGetShouldReturnNullIfKeyDoesNotExist()
+    {
+        $this->assertEquals(
+            null,
+            mapOf(pair("a", ["a"]), pair("b", ["b"]))->get("c")
+        );
+    }
+
+    public function testPutShouldAddAnotherKeyValueAssociation()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $map->put("d", ["d"]);
+        $this->assertEquals(4, $map->count());
+        $this->assertTrue($map->contains("d"));
+        $this->assertEquals(["d"], $map->get("d"));
+    }
+
+    public function testPutShouldThrowExceptionIfKeyNotAScalar()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $this->expectException(TypeIsNotAScalarException::class);
+        $map->put(["d"], "d");
+    }
+
+    public function testPutShouldAllowNullValues()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $map->put("d", null);
+        $this->assertEquals(null, $map->get("d"));
+    }
+
+    public function testPutAllShouldAddEntriesOfTheGivenMap()
+    {
+        $map1 = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $map2 = mapOf(pair("d", ["d"]), pair("e", ["e"]));
+        $map1->putAll($map2);
+        $this->assertEquals(
+            5,
+            $map1->count()
+        );
+        for ($i = 97; $i < 102; ++$i) {
+            $this->assertEquals([chr($i)], $map1->get(chr($i)));
+        }
+
+        $map = emptyMap();
+        $map->putAll(listOf(pair("a", ["a"]), pair("b", ["b"]))->toMap());
+        $this->assertEquals(2, $map->count());
+        $this->assertEquals(
+            mapOf(pair("a", ["a"]), pair("b", ["b"])),
+            $map
+        );
+    }
+
+    public function testRemoveShouldRemoveAnEntryFromMap()
+    {
+        $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
+        $map->remove("c");
+
+        $this->assertEquals(
+            mapOf(pair("a", ["a"]), pair("b", ["b"])),
+            $map
+        );
+    }
+
+    public function testAllShouldReturnTrueIfAllEntriesMatchTheGivenPredicateOtherwiseFalse()
+    {
+        $this->assertTrue(
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->all(fn (Pair $pair): bool => $pair->getValue() > 0)
+        );
+
+        $this->assertFalse(
+            mapOf(pair("a", -1), pair("b", 0), pair("c", 1))->all(fn (Pair $pair): bool => $pair->getValue() > 0)
+        );
+    }
+
+    public function testAnyShouldReturnTrueIfAnyOfTheEntriesMatchTheGivenPredicateOtherwiseFalse()
+    {
+        $this->assertTrue(
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->any(fn (Pair $pair): bool => $pair->getValue() > 0)
+        );
+
+        $this->assertTrue(
+            mapOf(pair("a", -1), pair("b", 0), pair("c", 1))->any(fn (Pair $pair): bool => $pair->getValue() > 0)
+        );
+
+        $this->assertFalse(
+            mapOf(pair("a", -2), pair("b", -1), pair("c", 0))->any(fn (Pair $pair): bool => $pair->getValue() > 0)
+        );
+    }
+}

@@ -192,8 +192,7 @@ trait ArrayListTrait
      */
     public function mapNotNull(callable $mapFunction): ListInterface
     {
-        $newInstance = emptyList();
-        $newInstance->setArray(array_values(array_map($mapFunction, $this->array)));
+        $newInstance = $this->map($mapFunction);
         return $newInstance->filter();
     }
 
@@ -478,5 +477,19 @@ trait ArrayListTrait
     public function isEmpty(): bool
     {
         return $this->count() === 0;
+    }
+
+    public function toMap(): MapInterface
+    {
+        $result = emptyMap();
+        foreach ($this->array as $pair) {
+            assertType(
+                $pair,
+                Pair::class,
+                sprintf("Each item of this list must be of type %s.", Pair::class)
+            );
+            $result[$pair->getKey()] = $pair->getValue();
+        }
+        return $result;
     }
 }

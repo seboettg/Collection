@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2016 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -10,6 +11,7 @@
 
 namespace Seboettg\Collection\Test;
 
+use DateTime;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
@@ -19,9 +21,12 @@ use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Comparable\Comparator;
 use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Stack;
+use stdClass;
 use function Seboettg\Collection\Lists\emptyList;
 use function Seboettg\Collection\Lists\listOf;
 use function Seboettg\Collection\Lists\strval;
+use function Seboettg\Collection\Map\mapOf;
+use function Seboettg\Collection\Map\pair;
 
 class ArrayListTest extends TestCase
 {
@@ -195,9 +200,10 @@ class ArrayListTest extends TestCase
     public function testMapNotNull()
     {
         $list = new ArrayList(1, 2, 3, 4, 5);
-        $this->assertEquals(listOf(1, 3, 5), $list->mapNotNull(function($item) {
-            return $item % 2 !== 0 ? $item : null;
-        }));
+        $this->assertEquals(
+            listOf(1, 3, 5),
+            $list->mapNotNull(fn($item) => $item % 2 !== 0 ? $item : null)
+        );
     }
 
     public function testFlatten()
@@ -224,6 +230,80 @@ class ArrayListTest extends TestCase
         $this->assertEquals(8, $stack->count());
         $this->assertTrue('h' == $stack->pop());
     }
+
+    public function testAssociateBy()
+    {
+        $customers = '[
+            {
+                "id": "A001",
+                "lastname": "Doe",
+                "firstname": "John",
+                "createDate": "2022-06-10 09:21:12"
+            },
+            {
+                "id": "A002",
+                "lastname": "Doe",
+                "firstname": "Jane",
+                "createDate": "2022-06-10 09:21:13"
+            },
+            {
+                "id": "A004",
+                "lastname": "Mustermann",
+                "firstname": "Erika",
+                "createDate": "2022-06-11 08:21:13"
+            }
+        ]';
+        $customerArray = json_decode($customers);
+        $customerList = listOf(...$customerArray);
+        $customerMap = $customerList
+            ->filter(fn ($customer) => strpos($customer->lastname, "Mustermann") === false)
+            ->map(function ($customer) {
+                $customer->createDate = DateTime::createFromFormat("Y-m-d H:i:s", $customer->createDate);
+                return $customer;
+            })
+            ->associateBy(fn ($customer) => $customer->id);
+        $this->assertEquals(
+            mapOf(
+                pair("A001", stdclass(["id" => "A001", "lastname" => "Doe", "firstname" => "John", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-10 09:21:12")])),
+                pair("A002", stdclass(["id" => "A002", "lastname" => "Doe", "firstname" => "Jane", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-10 09:21:13")])),
+            ),
+            $customerMap
+        );
+    }
+
+    public function testAssociateWith()
+    {
+
+        $listOfIds = listOf("A001", "A002", "A004");
+
+        $map = [
+            "A001" => \Seboettg\Collection\Test\stdclass(["id" => "A001", "lastname" => "Doe", "firstname" => "John", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-10 09:21:12")]),
+            "A002" => \Seboettg\Collection\Test\stdclass(["id" => "A002", "lastname" => "Doe", "firstname" => "Jane", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-10 09:21:13")]),
+            "A004" => \Seboettg\Collection\Test\stdclass(["id" => "A002", "lastname" => "Mustermann", "firstname" => "Erika", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-11 08:21:13")]),
+        ];
+
+        $customerRepository = $this->getMockBuilder(CustomerRepository::class)
+            ->onlyMethods(["getById"])
+            ->getMock();
+        $customerRepository
+            ->expects(self::exactly(3))
+            ->method("getById")
+            ->willReturnCallback(fn ($id) => $map[$id]);
+
+        $customerMap = $listOfIds->associateWith(function ($customerId) use ($customerRepository) {
+            return $customerRepository->getById($customerId);
+        });
+
+        $this->assertEquals(
+            mapOf(
+                pair("A001", $map["A001"]),
+                pair("A002", $map["A002"]),
+                pair("A004", $map["A004"]),
+            ),
+            $customerMap
+        );
+    }
+
 
     public function testJoinToString()
     {
@@ -276,4 +356,18 @@ class StringableObject {
     public function __toString(): string {
         return $this->toString();
     }
+}
+
+
+function stdclass($array): stdClass
+{
+    $object = new stdClass();
+    foreach ($array as $key => $value) {
+        $object->{$key} = $value;
+    }
+    return $object;
+}
+
+interface CustomerRepository {
+    public function getById(string $id): ?stdClass;
 }

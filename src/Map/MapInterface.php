@@ -13,9 +13,10 @@ namespace Seboettg\Collection\Map;
 
 use ArrayAccess;
 use Countable;
+use IteratorAggregate;
 use Seboettg\Collection\Lists\ListInterface;
 
-interface MapInterface extends Countable, ArrayAccess
+interface MapInterface extends Countable, ArrayAccess, IteratorAggregate
 {
     /**
      * Overrides internal array with given array.
@@ -139,7 +140,10 @@ interface MapInterface extends Countable, ArrayAccess
     /**
      * Returns a new Map containing all entries matching the given predicate.
      *
-     * @param callable|null $predicate Returns a new map containing all key-value pairs matching the given predicate.
+     * @param callable|null $predicate <code>f(pair:Pair) -> bool</code> OR <code>f(key: scalar, value:mixed) -> bool</code>
+     *                                 Returns true if the given key-value Pair (or given key and value)
+     *                                 are matching the given predicate.
+     *
      *                                 If the predicate is null, all entries with null values will be removed from the
      *                                 new list.
      * @return MapInterface

@@ -11,11 +11,18 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Map;
 
+use ArrayIterator;
+use Iterator;
+use ReflectionException;
+use ReflectionFunction;
+use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
 use Seboettg\Collection\Lists;
 use Seboettg\Collection\Lists\ArrayListTrait;
 use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Map;
 use Seboettg\Collection\NativePhp\ArrayAccessTrait;
+use function Seboettg\Collection\Assert\assertScalar;
+use function Seboettg\Collection\Assert\assertValidCallable;
 use function Seboettg\Collection\Lists\emptyList;
 use function Seboettg\Collection\Lists\listOf;
 
@@ -85,6 +92,7 @@ trait MapTrait
      */
     public function contains($key): bool
     {
+        assertScalar($key, "Key must be a scalar value");
         return array_key_exists($key, $this->array);
     }
 
@@ -143,6 +151,7 @@ trait MapTrait
      */
     public function put($key, $value): void
     {
+        assertScalar($key, "Key must be a scalar value");
         $this->array[$key] = $value;
     }
 
@@ -194,9 +203,34 @@ trait MapTrait
      */
     public function filter(callable $predicate = null): MapInterface
     {
-        $newInstance = emptyMap();
-        $newInstance->array = array_filter($this->array, $predicate);
-        return $newInstance;
+        $map = emptyMap();
+        if ($predicate !== null) {
+            try {
+                $reflected = new ReflectionFunction($predicate);
+                if (count($reflected->getParameters()) === 1) {
+                    assertValidCallable($predicate, [Pair::class]);
+                    foreach ($this->array as $key => $value) {
+                        if ($predicate(pair($key, $value)) === true) {
+                            $map->put($key, $value);
+                        }
+                    }
+                } else {
+                    if (count($reflected->getParameters()) === 2) {
+                        assertValidCallable($predicate, ["scalar", "mixed"]);
+                    }
+                    foreach ($this->array as $key => $value) {
+                        if ($predicate($key, $value) === true) {
+                            $map->put($key, $value);
+                        }
+                    }
+                }
+            } catch (ReflectionException $ex) {
+                throw new NotApplicableCallableException("Invalid callback.");
+            }
+        } else {
+            $map->array = array_filter($this->array, $predicate);
+        }
+        return $map;
     }
 
     /**
@@ -309,5 +343,11 @@ trait MapTrait
         $newInstance = emptyMap();
         $newInstance->array = $this->array;
         return $newInstance;
+    }
+
+
+    public function getIterator(): Iterator
+    {
+        return new ArrayIterator($this->array);
     }
 }

@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Assert;
 
+use ReflectionException;
+use ReflectionFunction;
+use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
 use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
 use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
 use Seboettg\Collection\Assert\Exception\WrongTypeException;
@@ -39,6 +42,46 @@ final class Functions
     {
         return is_object($value) && method_exists($value, "__toString");
     }
+
+    public static function assertValidCallable(callable $callable, array $parameters)
+    {
+        $reflected = new ReflectionFunction($callable);
+        if (count($reflected->getParameters()) !== count($parameters)) {
+            throw new NotApplicableCallableException(
+                "The number of parameters of the given callable does not match the expected number."
+            );
+        }
+        for ($i = 0; $i < count($reflected->getParameters()); ++$i) {
+            $reflectedParamType = $reflected->getParameters()[$i]->getType()->getName();
+            $expectedParam = $parameters[$i];
+            switch ($expectedParam) {
+                case "scalar":
+                    if (!in_array($reflectedParamType, ["int", "string", "bool", "float"])) {
+                        self::throwNotApplicableCallableException($i, "scalar", $reflectedParamType);
+                    }
+                    break;
+                case "mixed":
+                    //ignore, since every type is allowed
+                    break;
+                default:
+                    if ($reflectedParamType !== $expectedParam) {
+                        self::throwNotApplicableCallableException($i, $expectedParam, $reflectedParamType);
+                    }
+            }
+        }
+    }
+
+    private static function throwNotApplicableCallableException($paramNumber, $expectedType, $actualType)
+    {
+        throw new NotApplicableCallableException(
+            sprintf(
+                "Parameter %d of type %s does not match the expected type of %s",
+                $paramNumber,
+                $actualType,
+                $expectedType
+            )
+        );
+    }
 }
 
 /**
@@ -70,4 +113,10 @@ function assertType($value, string $fqcn, string $message): void
 function assertStringable($value, string $message): void
 {
     Functions::assertStringable($value, $message);
+}
+
+
+function assertValidCallable(callable $callable, array $parameters)
+{
+    Functions::assertValidCallable($callable, $parameters);
 }

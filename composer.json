@@ -40,6 +40,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "8.5.*",
-        "php-coveralls/php-coveralls": "^1"
+        "php-coveralls/php-coveralls": "^1",
+        "ext-json": "*"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit -c phpunit.xml"
     }
 }

@@ -30,7 +30,7 @@ final class Functions
      * @param array<Pair> ...$pairs
      * @return MapInterface
      */
-    public final static function mapOf(array ...$pairs): MapInterface
+    public final static function mapOf(...$pairs): MapInterface
     {
         $map = emptyMap();
         foreach ($pairs as $pair) {
@@ -61,9 +61,9 @@ function emptyMap(): MapInterface
  * @param array<Pair> ...$pairs
  * @return MapInterface
  */
-function mapOf(array ...$pairs): MapInterface
+function mapOf(...$pairs): MapInterface
 {
-    return Functions::mapOf($pairs);
+    return Functions::mapOf(...$pairs);
 }
 
 

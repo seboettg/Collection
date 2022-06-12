@@ -22,3 +22,4 @@ class Map implements MapInterface
      */
     protected $array;
 }
+

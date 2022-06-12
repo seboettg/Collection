@@ -325,4 +325,13 @@ interface ListInterface extends CollectionInterface, Traversable, Countable, ToA
      * @return bool
      */
     public function isEmpty(): bool;
+
+    /**
+     * If each item of this list is of type Seboettg\Collection\Map\Pair, toMap() returns a Map with
+     * key-value associations of the pair objects. If any of the items not of type Pair a WrongTypeException will
+     * be thrown.
+     *
+     * @return MapInterface
+     */
+    public function toMap(): MapInterface;
 }

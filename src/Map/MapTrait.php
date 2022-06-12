@@ -241,7 +241,7 @@ trait MapTrait
      */
     public function getOrElse($key, callable $default)
     {
-        return $this[$key] ?? $default();
+        return $this[$key] ?? $default($this);
     }
 
     /**
@@ -252,7 +252,9 @@ trait MapTrait
     public function map(callable $transform): ListInterface
     {
         $list = emptyList();
-        $list->array = array_map($transform, $this->array);
+        foreach ($this->array as $key => $value) {
+            $list->add($transform(pair($key, $value)));
+        }
         return $list;
     }
 
@@ -263,13 +265,7 @@ trait MapTrait
      */
     public function mapNotNull(callable $transform): ListInterface
     {
-        $newInstance = emptyList();
-        $newInstance->setArray(array_values(
-            array_filter(array_map($transform, $this->array), function ($item) {
-                return $item !== null;
-            })
-        ));
-        return $newInstance;
+        return $this->map($transform)->filter(fn($item) => $item !== null);
     }
 
     /**

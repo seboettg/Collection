@@ -164,8 +164,8 @@ interface MapInterface extends Countable, ArrayAccess, IteratorAggregate
      * Returns a list containing the results of applying the given transform function to each entry in
      * the original map.
      *
-     * @param callable $transform f(T) -> ArrayList<R>
-     * @return ListInterface
+     * @param callable $transform f(pair: Pair) -> mixed
+     * @return ListInterface<mixed>
      */
     public function map(callable $transform): ListInterface;
 
@@ -173,8 +173,8 @@ interface MapInterface extends Countable, ArrayAccess, IteratorAggregate
      * Returns a list containing only the non-null results of applying the given transform function
      * to each entry in the original map.
      *
-     * @param callable $transform f(T) -> ArrayList<R>
-     * @return ListInterface
+     * @param callable $transform f(pair: Pair) -> mixed
+     * @return ListInterface<mixed>
      */
     public function mapNotNull(callable $transform): ListInterface;
 

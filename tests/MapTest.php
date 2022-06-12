@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace Seboettg\Collection\Test;
 
 use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
-use Seboettg\Collection\Map;
 use PHPUnit\Framework\TestCase;
+use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Map\Pair;
 use stdClass;
 use function Seboettg\Collection\Lists\listOf;
@@ -211,5 +211,82 @@ class MapTest extends TestCase
         $this->assertFalse(
             mapOf(pair("a", -2), pair("b", -1), pair("c", 0))->any(fn (Pair $pair): bool => $pair->getValue() > 0)
         );
+    }
+
+    public function testFilterShouldHandleCallableWithPairParameter()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3));
+        $this->assertEquals(3, $map->count());
+
+        $this->assertEquals(
+            1,
+            $map->filter(fn(Pair $pair): bool => $pair->getKey() === "c")
+                ->count()
+        );
+    }
+
+    public function testFilterShouldHandleCallableWithKeyValueParameters()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3));
+        $this->assertEquals(3, $map->count());
+
+        $this->assertEquals(
+            1,
+            $map->filter(fn($key, $_): bool => $key === "c")
+                ->count()
+        );
+    }
+
+    public function testFilterShouldHandleCallableWithTypedKeyValueParameters()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3));
+        $this->assertEquals(3, $map->count());
+
+        $this->assertEquals(
+            1,
+            $map->filter(fn(string $key, int $_): bool => $key === "c")
+                ->count()
+        );
+    }
+
+    public function testGetOrElseShouldReturnValueIfKeyExists()
+    {
+        $this->assertEquals(
+            1,
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->getOrElse("a", fn() => null)
+        );
+    }
+
+    public function testGetOrElseShouldReturnResultOfDefaultValueCallable()
+    {
+        $this->assertEquals(
+            2,
+            mapOf(pair("b", 2), pair("c", 3))->getOrElse("a", fn($self) => $self["b"])
+        );
+    }
+
+    public function testMapShouldApplyMappingCallableForEachEntryAndReturnResultAsList()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3));
+
+        $result = $map->map(fn (Pair $pair) => new TestObject($pair->getKey(), $pair->getValue()));
+        $this->assertInstanceOf(ListInterface::class, $result);
+        $this->assertCount(3, $result);
+        foreach ($result as $item) {
+            $this->assertInstanceOf(TestObject::class, $item);
+        }
+    }
+
+    public function testMapNotNullShouldApplyMappingCallableForEachEntryAndReturnResultAsListWithoutNullValues()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3));
+        $result = $map->mapNotNull(
+            fn (Pair $pair) => $pair->getKey() !== "b" ? new TestObject($pair->getKey(), $pair->getValue()) : null
+        );
+        $this->assertInstanceOf(ListInterface::class, $result);
+        $this->assertCount(2, $result);
+        foreach ($result as $item) {
+            $this->assertInstanceOf(TestObject::class, $item);
+        }
     }
 }

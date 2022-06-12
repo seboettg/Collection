@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Assert;
 
-use ReflectionException;
 use ReflectionFunction;
 use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
 use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
@@ -52,11 +51,11 @@ final class Functions
             );
         }
         for ($i = 0; $i < count($reflected->getParameters()); ++$i) {
-            $reflectedParamType = $reflected->getParameters()[$i]->getType()->getName();
+            $reflectedParamType = $reflected->getParameters()[$i]->getType();
             $expectedParam = $parameters[$i];
             switch ($expectedParam) {
                 case "scalar":
-                    if (!in_array($reflectedParamType, ["int", "string", "bool", "float"])) {
+                    if (!in_array($reflectedParamType, ["int", "string", "bool", "float", null])) {
                         self::throwNotApplicableCallableException($i, "scalar", $reflectedParamType);
                     }
                     break;
@@ -64,7 +63,7 @@ final class Functions
                     //ignore, since every type is allowed
                     break;
                 default:
-                    if ($reflectedParamType !== $expectedParam) {
+                    if ($reflectedParamType->getName() !== $expectedParam) {
                         self::throwNotApplicableCallableException($i, $expectedParam, $reflectedParamType);
                     }
             }

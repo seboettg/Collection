@@ -43,6 +43,11 @@ final class Functions
         return $map;
     }
 
+    /**
+     * @param scalar $key
+     * @param mixed $value
+     * @return Pair
+     */
     public final static function pair($key, $value): Pair
     {
         return new Pair($key, $value);
@@ -66,7 +71,11 @@ function mapOf(...$pairs): MapInterface
     return Functions::mapOf(...$pairs);
 }
 
-
+/**
+ * @param scalar $key
+ * @param mixed $value
+ * @return Pair
+ */
 function pair($key, $value): Pair
 {
     return Functions::pair($key, $value);

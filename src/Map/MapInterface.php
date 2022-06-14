@@ -15,8 +15,9 @@ use ArrayAccess;
 use Countable;
 use IteratorAggregate;
 use Seboettg\Collection\Lists\ListInterface;
+use Seboettg\Collection\Lists\ToArrayInterface;
 
-interface MapInterface extends Countable, ArrayAccess, IteratorAggregate
+interface MapInterface extends Countable, ArrayAccess, IteratorAggregate, ToArrayInterface
 {
     /**
      * Overrides internal array with given array.

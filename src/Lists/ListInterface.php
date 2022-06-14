@@ -15,14 +15,15 @@ use Countable;
 use Iterator;
 use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
 use Seboettg\Collection\CollectionInterface;
-use Seboettg\Collection\Map\MapInterface;
+use Seboettg\Collection\Lists\MapFeatures\MapFeaturesInterface;
 use Traversable;
 
 /**
  * Interface ArrayListInterface
  * @package Seboettg\Collection\ArrayList
  */
-interface ListInterface extends CollectionInterface, Traversable, Countable, ToArrayInterface, Iterator
+interface ListInterface
+    extends CollectionInterface, Traversable, Countable, ToArrayInterface, Iterator, MapFeaturesInterface
 {
 
     /**
@@ -187,16 +188,6 @@ interface ListInterface extends CollectionInterface, Traversable, Countable, ToA
     public function joinToString(string $delimiter, string $prefix = null, string $suffix = null): string;
 
     /**
-     * Groups elements of the original array by the key returned by the given keySelector function
-     * applied to each element and returns a map where each group key is associated with a list of
-     * corresponding elements.
-     *
-     * @param callable $keySelector f(value: mixed) -> scalar – expects the actual value and returns a key
-     * @return MapInterface
-     */
-    public function groupBy(callable $keySelector): MapInterface;
-
-    /**
      * Returns a list containing all elements that are contained by both this collection and the specified collection.
      *
      * @param ListInterface $other
@@ -287,35 +278,6 @@ interface ListInterface extends CollectionInterface, Traversable, Countable, ToA
     public function subList(int $fromIndex, int $toIndex): ListInterface;
 
     /**
-     * Returns a Map containing key-value pairs provided by transform function applied to elements of the given array.
-     * If any of two pairs would have the same key the last one gets added to the map.
-     *
-     * @param callable $transform f(item: mixed) -> Pair<scalar, mixed>
-     * @return MapInterface
-     */
-    public function associate(callable $transform): MapInterface;
-
-    /**
-     * Returns a Map containing the elements from the given collection indexed by the key returned from keySelector
-     * function applied to each element.
-     *
-     * @param callable $keySelector f(value: mixed) -> scalar
-     * @return MapInterface
-     */
-    public function associateBy(callable $keySelector): MapInterface;
-
-    /**
-     * Returns a Map where keys are elements from the given collection and values are produced by
-     * the valueSelector function applied to each element.
-     *
-     * List must only contain scalar values
-     *
-     * @param callable $valueSelector
-     * @return MapInterface
-     */
-    public function associateWith(callable $valueSelector): MapInterface;
-
-    /**
      * @param callable $match
      * @return mixed|null
      */
@@ -325,13 +287,4 @@ interface ListInterface extends CollectionInterface, Traversable, Countable, ToA
      * @return bool
      */
     public function isEmpty(): bool;
-
-    /**
-     * If each item of this list is of type Seboettg\Collection\Map\Pair, toMap() returns a Map with
-     * key-value associations of the pair objects. If any of the items not of type Pair a WrongTypeException will
-     * be thrown.
-     *
-     * @return MapInterface
-     */
-    public function toMap(): MapInterface;
 }

@@ -16,10 +16,7 @@ use Iterator;
 use ReflectionException;
 use ReflectionFunction;
 use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
-use Seboettg\Collection\Lists;
-use Seboettg\Collection\Lists\ArrayListTrait;
 use Seboettg\Collection\Lists\ListInterface;
-use Seboettg\Collection\Map;
 use Seboettg\Collection\NativePhp\ArrayAccessTrait;
 use function Seboettg\Collection\Assert\assertScalar;
 use function Seboettg\Collection\Assert\assertType;
@@ -357,5 +354,13 @@ trait MapTrait
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->array);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toArray(): array
+    {
+        return $this->array;
     }
 }

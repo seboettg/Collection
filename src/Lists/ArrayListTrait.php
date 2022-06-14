@@ -11,14 +11,9 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Lists;
 
-use Seboettg\Collection\Map\MapInterface;
-use Seboettg\Collection\Map\Pair;
+use Seboettg\Collection\Lists\MapFeatures\MapFeaturesTrait;
 use Seboettg\Collection\NativePhp\IteratorTrait;
-use function Seboettg\Collection\Assert\assertScalar;
 use function Seboettg\Collection\Assert\assertStringable;
-use function Seboettg\Collection\Assert\assertType;
-use function Seboettg\Collection\Map\emptyMap;
-use function Seboettg\Collection\Lists\strval;
 
 /**
  * @property array $array Base array of this data structure
@@ -26,6 +21,7 @@ use function Seboettg\Collection\Lists\strval;
 trait ArrayListTrait
 {
     use IteratorTrait;
+    use MapFeaturesTrait;
 
     /**
      * flush array list
@@ -281,21 +277,7 @@ trait ArrayListTrait
         return $newInstance;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function groupBy(callable $keySelector): MapInterface
-    {
-        $map = emptyMap();
-        foreach ($this->array as $value) {
-            $key = $keySelector($value);
-            if (!$map->contains($key) || !$map[$key] instanceof ListInterface) {
-                $map->put($key, emptyList());
-            }
-            $map->get($key)->add($value);
-        }
-        return $map;
-    }
+
 
     /**
      * @inheritDoc
@@ -410,57 +392,7 @@ trait ArrayListTrait
         return $list;
     }
 
-    /**
-     * @inheritDoc
-     * @param callable $transform f(item: mixed) -> Pair<scalar, mixed>
-     * @return MapInterface
-     */
-    public function associate(callable $transform): MapInterface
-    {
-        $map = emptyMap();
-        foreach ($this->array as $item) {
-            $pair = $transform($item);
-            assertType($pair, Pair::class, sprintf(
-                "The return value of the callable must be of type %s",
-                Pair::class
-            ));
-            assertScalar($pair->getKey(), "The key of the returned Pair of the callable must be a scalar.");
-            $map[$pair->getKey()] = $pair->getValue();
-        }
-        return $map;
-    }
 
-    /**
-     * @inheritDoc
-     * @param callable $keySelector f(value: mixed) -> scalar
-     * @return MapInterface
-     */
-    public function associateBy(callable $keySelector): MapInterface
-    {
-        $map = emptyMap();
-        foreach ($this->array as $item) {
-            $key = $keySelector($item);
-            assertScalar($key, "The return value of the callable must be a scalar.");
-            $map[$key] = $item;
-        }
-        return $map;
-    }
-
-    /**
-     * @inheritDoc
-     * @param callable $valueSelector
-     * @return MapInterface
-     */
-    public function associateWith(callable $valueSelector): MapInterface
-    {
-        $map = emptyMap();
-        foreach ($this->array as $item) {
-            assertScalar($item,
-                "All entries of the list must be scalar values in order to use \"associateWith\".");
-            $map[$item] = $valueSelector($item);
-        }
-        return $map;
-    }
 
     /**
      * Return first element of this list that matches the matchingCondition
@@ -477,19 +409,5 @@ trait ArrayListTrait
     public function isEmpty(): bool
     {
         return $this->count() === 0;
-    }
-
-    public function toMap(): MapInterface
-    {
-        $result = emptyMap();
-        foreach ($this->array as $pair) {
-            assertType(
-                $pair,
-                Pair::class,
-                sprintf("Each item of this list must be of type %s.", Pair::class)
-            );
-            $result[$pair->getKey()] = $pair->getValue();
-        }
-        return $result;
     }
 }

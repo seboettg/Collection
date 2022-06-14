@@ -15,6 +15,7 @@ use Countable;
 use Iterator;
 use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
 use Seboettg\Collection\CollectionInterface;
+use Seboettg\Collection\Lists\ListFeatures\ListAccessInterface;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesInterface;
 use Traversable;
 
@@ -22,25 +23,15 @@ use Traversable;
  * Interface ArrayListInterface
  * @package Seboettg\Collection\ArrayList
  */
-interface ListInterface
-    extends CollectionInterface, Traversable, Countable, ToArrayInterface, Iterator, MapFeaturesInterface
+interface ListInterface extends
+    CollectionInterface, ListAccessInterface, Traversable, Countable, ToArrayInterface, Iterator, MapFeaturesInterface
 {
-
     /**
-     * Returns the element of the specified index
-     * @param int $index
-     * @return mixed|null
-     */
-    public function get(int $index);
-
-    /**
-     * Inserts or replaces the element at the specified position in this list with the specified element.
-     *
-     * @param int $key
-     * @param $element
+     * alias of replace function
+     * @param array $array
      * @return void
      */
-    public function set(int $key, $element): void;
+    public function setArray(array $array): void;
 
     /**
      * @param array $array
@@ -81,25 +72,6 @@ interface ListInterface
     public function contains($element): bool;
 
     /**
-     * Returns the first element in this list
-     * @return mixed
-     */
-    public function first();
-
-    /**
-     * Returns the last element in this list
-     * @return mixed
-     */
-    public function last();
-
-    /**
-     * alias of replace function
-     * @param array $array
-     * @return void
-     */
-    public function setArray(array $array): void;
-
-    /**
      * flush array list
      *
      */
@@ -108,7 +80,6 @@ interface ListInterface
     /**
      * Shuffles this list (randomizes the order of the elements in).
      *
-     * @see http://php.net/manual/en/function.shuffle.php
      * @return ListInterface
      */
     public function shuffle(): ListInterface;
@@ -186,6 +157,12 @@ interface ListInterface
      * @throws NotConvertibleToStringException
      */
     public function joinToString(string $delimiter, string $prefix = null, string $suffix = null): string;
+
+    /**
+     * Alias for <code>count()</code>
+     * @return int
+     */
+    public function size(): int;
 
     /**
      * Returns a list containing all elements that are contained by both this collection and the specified collection.

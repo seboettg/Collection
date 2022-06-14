@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Lists;
 
+use Seboettg\Collection\Lists\ListFeatures\ListAccessTrait;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesTrait;
 use Seboettg\Collection\NativePhp\IteratorTrait;
 use function Seboettg\Collection\Assert\assertStringable;
@@ -22,6 +23,7 @@ trait ArrayListTrait
 {
     use IteratorTrait;
     use MapFeaturesTrait;
+    use ListAccessTrait;
 
     /**
      * flush array list
@@ -32,24 +34,6 @@ trait ArrayListTrait
     {
         unset($this->array);
         $this->array = [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(int $index)
-    {
-        return $this->array[$index] ?? null;
-    }
-
-    /**
-     * @param $key
-     * @param $element
-     * @return void
-     */
-    public function set($key, $element): void
-    {
-        $this->array[$key] = $element;
     }
 
     /**
@@ -93,41 +77,9 @@ trait ArrayListTrait
     }
 
     /**
-     * Returns the first element
-     * @return mixed
-     */
-    public function first()
-    {
-        if ($this->isEmpty()) {
-            return null;
-        }
-        reset($this->array);
-        return $this->array[key($this->array)];
-    }
-
-    /**
-     * Returns the last element
-     * @return mixed
-     */
-    public function last()
-    {
-        $item = end($this->array);
-        reset($this->array);
-        return $item;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function toArray(): array
-    {
-        return $this->array;
-    }
-
-    /**
-     * Shuffles this list (randomizes the order of the elements in). It uses the PHP function shuffle
+     * @inheritDoc
      * @see http://php.net/manual/en/function.shuffle.php
-     * @return ListInterface|ArrayListTrait
+     * @return ListInterface
      */
     public function shuffle(): ListInterface
     {
@@ -137,7 +89,7 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
-     * @param ?callable $predicate
+     * @param callable $predicate|null
      * @param bool $preserveKeys
      * @return ListInterface|ArrayListTrait
      */
@@ -174,11 +126,11 @@ trait ArrayListTrait
      */
     public function map(callable $mapFunction): ListInterface
     {
-        $newInstance = emptyList();
+        $list = emptyList();
         foreach ($this as $value) {
-            $newInstance->add($mapFunction($value));
+            $list->add($mapFunction($value));
         }
-        return $newInstance;
+        return $list;
     }
 
     /**
@@ -188,8 +140,8 @@ trait ArrayListTrait
      */
     public function mapNotNull(callable $mapFunction): ListInterface
     {
-        $newInstance = $this->map($mapFunction);
-        return $newInstance->filter();
+        $list = $this->map($mapFunction);
+        return $list->filter();
     }
 
     /**
@@ -253,6 +205,14 @@ trait ArrayListTrait
     public function count(): int
     {
         return count($this->array);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function size(): int
+    {
+        return $this->count();
     }
 
     /**
@@ -357,6 +317,9 @@ trait ArrayListTrait
         return listOf(...array_unique($this->array));
     }
 
+    /**
+     * @inheritDoc
+     */
     public function forEach(callable $action): void
     {
         foreach ($this->array as $element) {
@@ -392,8 +355,6 @@ trait ArrayListTrait
         return $list;
     }
 
-
-
     /**
      * Return first element of this list that matches the matchingCondition
      *
@@ -409,5 +370,13 @@ trait ArrayListTrait
     public function isEmpty(): bool
     {
         return $this->count() === 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toArray(): array
+    {
+        return $this->array;
     }
 }

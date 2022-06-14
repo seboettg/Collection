@@ -11,11 +11,8 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection;
 
-use ArrayIterator;
-use Exception;
 use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Lists\ArrayListTrait;
-use Traversable;
 
 /**
  * ArrayList is a useful wrapper class for an array, similar to Java's ArrayList

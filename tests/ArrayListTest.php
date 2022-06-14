@@ -36,7 +36,6 @@ class ArrayListTest extends TestCase
      */
     private ListInterface $arrayList;
 
-
     public function setUp(): void
     {
         $this->arrayList = new ArrayList(

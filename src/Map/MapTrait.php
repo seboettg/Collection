@@ -22,6 +22,7 @@ use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Map;
 use Seboettg\Collection\NativePhp\ArrayAccessTrait;
 use function Seboettg\Collection\Assert\assertScalar;
+use function Seboettg\Collection\Assert\assertType;
 use function Seboettg\Collection\Assert\assertValidCallable;
 use function Seboettg\Collection\Lists\emptyList;
 use function Seboettg\Collection\Lists\listOf;
@@ -284,7 +285,7 @@ trait MapTrait
         return $newInstance;
     }
 
-    private function iterableContainsKey(string $key, iterable $keys): bool
+    private function iterableContainsKey($key, iterable $keys): bool
     {
         foreach ($keys as $k) {
             if ($k === $key) {
@@ -303,8 +304,21 @@ trait MapTrait
     {
         $map = emptyMap();
         $map->array = $this->array;
-        foreach ($pairs as $pair) {
-            $map[$pair->getKey()] = $pair->getValue();
+        if ($pairs instanceof MapInterface) {
+            foreach ($pairs as $key => $value) {
+                $map[$key] = $value;
+            }
+        } else {
+            foreach ($pairs as $pair) {
+                assertType($pair, Pair::class,
+                    sprintf(
+                        "Expected object of type %s, object of type %s given",
+                        Pair::class,
+                        gettype($pair) === "object" ? get_class($pair) : gettype($pair)
+                    )
+                );
+                $map[$pair->getKey()] = $pair->getValue();
+            }
         }
         return $map;
     }
@@ -336,9 +350,7 @@ trait MapTrait
 
     public function toMap(): MapInterface
     {
-        $newInstance = emptyMap();
-        $newInstance->array = $this->array;
-        return $newInstance;
+        return mapOf(...$this->toList());
     }
 
 

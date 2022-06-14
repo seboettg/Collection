@@ -10,9 +10,12 @@ declare(strict_types=1);
  */
 namespace Seboettg\Collection\Test;
 
+use ReflectionClass;
 use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\Lists\ListInterface;
+use Seboettg\Collection\Map\MapInterface;
+use Seboettg\Collection\Map\MapTrait;
 use Seboettg\Collection\Map\Pair;
 use stdClass;
 use function Seboettg\Collection\Lists\listOf;
@@ -244,7 +247,7 @@ class MapTest extends TestCase
 
         $this->assertEquals(
             1,
-            $map->filter(fn(string $key, int $_): bool => $key === "c")
+            $map->filter(fn(string $key, $_): bool => $key === "c")
                 ->count()
         );
     }
@@ -288,5 +291,97 @@ class MapTest extends TestCase
         foreach ($result as $item) {
             $this->assertInstanceOf(TestObject::class, $item);
         }
+    }
+
+    public function testMinusShouldRemoveEntriesOfTheGivenArrayOfKeys()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5));
+        $result = $map->minus(["a", "d"]);
+        $this->assertEquals(3, $result->count());
+        $this->assertEquals(
+            mapOf(pair("b", 2), pair("c", 3), pair("e", 5)),
+            $result
+        );
+    }
+
+    public function testMinusShouldRemoveEntriesOfTheGivenListOfKeys()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5));
+        $result = $map->minus(listOf("b", "c"));
+        $this->assertEquals(3, $result->count());
+        $this->assertEquals(
+            mapOf(pair("a", 1), pair("d", 4), pair("e", 5)),
+            $result
+        );
+    }
+
+    public function testPlusShouldAddEntriesFromTheGivenListOfPairs()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2));
+        $result = $map->plus(listOf(pair("c", 3), pair("d", 4), pair("e", 5)));
+        $this->assertEquals(5, $result->count());
+        $this->assertEquals(
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5)),
+            $result
+        );
+    }
+
+    public function testPlusShouldAddEntriesFromTheGivenMap()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2));
+        $result = $map->plus(mapOf(pair("c", 3), pair("d", 4), pair("e", 5)));
+        $this->assertEquals(5, $result->count());
+        $this->assertEquals(
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5)),
+            $result
+        );
+    }
+
+    public function testForEachShouldExecuteCallableForEachElement()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5));
+        $class = new class() {
+            public int $i = 0;
+            public array $array = [];
+            public function increase() { $this->i++; }
+        };
+
+        $map->forEach(function (Pair $item) use ($class) {
+            $class->increase();
+            $class->array[$item->getKey()] = $item->getValue();
+        });
+
+        //ensure that increase was called as much as elements are in the map
+        $this->assertTrue($map->count() === $class->i);
+
+        $reflectedMap = new ReflectionClass($map);
+        $arrayOfMap = $reflectedMap->getProperty("array");
+        $arrayOfMap->setAccessible(true);
+        $this->assertEquals($arrayOfMap->getValue($map), $class->array);
+    }
+
+    public function testToListShouldReturnAListContainingEachEntryAsPair()
+    {
+        $this->assertEquals(
+            listOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5)),
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5))->toList()
+        );
+    }
+
+    public function testToMapShouldReturnANewMapContainingAllEntries() {
+        $myMap = new class() implements MapInterface {
+            private string $type = "myMap";
+            private $array = [
+                "a" => 1,
+                "b" => 2,
+                "c" => 3
+            ];
+            use MapTrait;
+        };
+
+        $newMap = $myMap->toMap();
+        $this->assertNotEquals($newMap, $myMap);
+        $this->assertEquals($newMap->getKeys(), $myMap->getKeys());
+        $this->assertEquals($newMap->values(), $myMap->values());
     }
 }

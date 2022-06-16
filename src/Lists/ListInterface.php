@@ -17,6 +17,7 @@ use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
 use Seboettg\Collection\CollectionInterface;
 use Seboettg\Collection\Lists\ListFeatures\ListAccessInterface;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesInterface;
+use Seboettg\Collection\Map\MapInterface;
 use Traversable;
 
 /**
@@ -190,13 +191,14 @@ interface ListInterface extends
     public function subtract(ListInterface $other): ListInterface;
 
     /**
-     * Splits the original collection into a tuple of lists, where first list contains elements for which
-     * predicate yielded true, while second list contains elements for which predicate yielded false.
+     * Splits the original collection into a Map of two entries, where first entry's value (key "first") is a list
+     * containing elements for which predicate yielded true, while second entry's value (key "second") is a
+     * list containing elements for which predicate yielded false.
      *
-     * @param callable $predicate
-     * @return Tuple<ListInterface, ListInterface>
+     * @param callable $predicate - f(item: mixed) -> bool
+     * @return MapInterface<string, ListInterface>
      */
-    public function partition(callable $predicate): Tuple;
+    public function partition(callable $predicate): MapInterface;
 
     /**
      * Returns true if at least one element match the given predicate.

@@ -20,6 +20,7 @@ use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Comparable\Comparator;
 use Seboettg\Collection\Lists\ListInterface;
+use Seboettg\Collection\Map\Pair;
 use Seboettg\Collection\Stack;
 use stdClass;
 use function Seboettg\Collection\Lists\emptyList;
@@ -332,6 +333,53 @@ class ArrayListTest extends TestCase
         $arrayList = new ArrayList(new Element("0", "a"), new Element("1", "b"), new Element("2", "c"));
         $this->expectException(NotConvertibleToStringException::class);
         $arrayList->collectToString("; ");
+    }
+
+    public function testPartitionShouldSplitListIntoAMapOfTwoEntries()
+    {
+        $arrayList = listOf("a", "b", "c", "d", "e", "f", "g", "h");
+        $arrayList
+            ->partition(fn ($char) => ord($char) % 2 === 0)
+            ->forEach(function (Pair $pair) {
+                switch ($pair->getKey()) {
+                    case "first":
+                        $this->assertCount(4, $pair->getValue());
+                        $this->assertEquals(listOf("b", "d", "f", "h"), $pair->getValue());
+                        break;
+                    case "second":
+                        $this->assertCount(4, $pair->getValue());
+                        $this->assertEquals(listOf("a", "c", "e", "g"), $pair->getValue());
+                        break;
+                    default:
+                        $this->fail(
+                            sprintf("Returned Map of partition should not have key %s.", $pair->getValue())
+                        );
+                }
+            });
+    }
+
+    public function testAllShouldReturnTrueIfPredicateMatchesForEachItem()
+    {
+        $arrayList = listOf("a", "b", "c", "d", "e", "f", "g", "h");
+        $this->assertTrue($arrayList->all(fn ($item) => is_string($item)));
+    }
+
+    public function testAllShouldReturnFalseIfForAtLeastOneItemPredicateDoesNotMatches()
+    {
+        $arrayList = listOf("a", "b", 1, "d", "e", "f", "g", "h");
+        $this->assertFalse($arrayList->all(fn ($item) => is_string($item)));
+    }
+
+    public function testAnyShouldReturnTrueIfPredicateMatchesForAtLeastOnItem()
+    {
+        $arrayList = listOf("a", "b", 1, "d", "e", "f", "g", "h");
+        $this->assertTrue($arrayList->any(fn ($item) => is_int($item)));
+    }
+
+    public function testAnyShouldReturnFalseIfPredicateMatchesForNoneOfTheItems()
+    {
+        $arrayList = listOf("a", "b", "c", "d", "e", "f", "g", "h");
+        $this->assertFalse($arrayList->any(fn ($item) => is_int($item)));
     }
 }
 

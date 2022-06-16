@@ -13,17 +13,20 @@ namespace Seboettg\Collection\Lists;
 
 use Seboettg\Collection\Lists\ListFeatures\ListAccessTrait;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesTrait;
+use Seboettg\Collection\Map\MapInterface;
 use Seboettg\Collection\NativePhp\IteratorTrait;
 use function Seboettg\Collection\Assert\assertStringable;
+use function Seboettg\Collection\Map\mapOf;
+use function Seboettg\Collection\Map\pair;
 
 /**
  * @property array $array Base array of this data structure
  */
 trait ArrayListTrait
 {
+    use ListAccessTrait;
     use IteratorTrait;
     use MapFeaturesTrait;
-    use ListAccessTrait;
 
     /**
      * flush array list
@@ -89,9 +92,6 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
-     * @param callable $predicate|null
-     * @param bool $preserveKeys
-     * @return ListInterface|ArrayListTrait
      */
     public function filter(?callable $predicate = null, bool $preserveKeys = false): ListInterface
     {
@@ -169,10 +169,6 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
-     * @param string $delimiter
-     * @param string $prefix
-     * @param string $suffix
-     * @return string
      */
     public function joinToString(string $delimiter, string $prefix = null, string $suffix = null): string
     {
@@ -217,8 +213,6 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
-     * @param iterable<scalar> $keys
-     * @param iterable
      */
     public function minus(iterable $values): ListInterface
     {
@@ -237,8 +231,6 @@ trait ArrayListTrait
         return $newInstance;
     }
 
-
-
     /**
      * @inheritDoc
      */
@@ -251,18 +243,16 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
-     * @param callable $predicate
-     * @return Tuple<ListInterface, ListInterface>
+     * @param callable $predicate - f(item: mixed) -> bool
+     * @return MapInterface<string, ListInterface>
      */
-    public function partition(callable $predicate): Tuple
+    public function partition(callable $predicate): MapInterface
     {
-        $tuple = new Tuple(
-            emptyList(),
-            emptyList()
+        $first = listOf(...array_filter($this->array, $predicate));
+        return mapOf(
+            pair("first", $first),
+            pair("second", $this->minus($first))
         );
-        $tuple->getFirst()->append(array_filter($this->array, $predicate));
-        $tuple->getSecond()->append($this->minus($tuple->getFirst()));
-        return $tuple;
     }
 
 
@@ -291,7 +281,7 @@ trait ArrayListTrait
 
     public function any(callable $predicate): bool
     {
-        return $this->filter($predicate)->count() > 1;
+        return $this->filter($predicate)->count() > 0;
     }
 
     public function all(callable $predicate): bool

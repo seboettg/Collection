@@ -1,13 +1,23 @@
 <?php
 declare(strict_types=1);
+/*
+ * Copyright (C) 2022 Sebastian Böttger <seboettg@gmail.com>
+ * You may use, distribute and modify this code under the
+ * terms of the MIT license.
+ *
+ * You should have received a copy of the MIT license with
+ * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
+ */
 
 namespace Seboettg\Collection\Assert;
 
 use ReflectionFunction;
 use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
 use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
+use Seboettg\Collection\Assert\Exception\ObjectIsNotComparableException;
 use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
 use Seboettg\Collection\Assert\Exception\WrongTypeException;
+use Seboettg\Collection\Comparable\Comparable;
 use function is_scalar;
 use function is_object;
 use function method_exists;
@@ -81,6 +91,24 @@ final class Functions
             )
         );
     }
+
+    /**
+     * @param $object
+     * @param string $message
+     * @return void
+     */
+    public static function assertComparable($object, string $message): void {
+        if (is_scalar($object)) {
+            return;
+        }
+        if (method_exists($object , '__toString')) {
+            return;
+        }
+        if ($object instanceof Comparable) {
+            return;
+        }
+        throw new ObjectIsNotComparableException($message);
+    }
 }
 
 /**
@@ -118,4 +146,10 @@ function assertStringable($value, string $message): void
 function assertValidCallable(callable $callable, array $parameters)
 {
     Functions::assertValidCallable($callable, $parameters);
+}
+
+
+function assertComparable($object, string $message): void
+{
+    Functions::assertComparable($object, $message);
 }

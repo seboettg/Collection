@@ -203,7 +203,7 @@ interface ListInterface extends
     /**
      * Returns true if at least one element match the given predicate.
      *
-     * @param callable $predicate
+     * @param callable $predicate f(item) -> bool
      * @return bool
      */
     public function any(callable $predicate): bool;
@@ -211,7 +211,7 @@ interface ListInterface extends
     /**
      * Returns true if all element match the given predicate.
      *
-     * @param callable $predicate
+     * @param callable $predicate f(item) -> bool
      * @return bool
      */
     public function all(callable $predicate): bool;

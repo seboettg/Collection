@@ -11,10 +11,12 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Lists;
 
+use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Lists\ListFeatures\ListAccessTrait;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesTrait;
 use Seboettg\Collection\Map\MapInterface;
 use Seboettg\Collection\NativePhp\IteratorTrait;
+use function Seboettg\Collection\Assert\assertComparable;
 use function Seboettg\Collection\Assert\assertStringable;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
@@ -75,8 +77,22 @@ trait ArrayListTrait
      */
     public function contains($value): bool
     {
-        $result = in_array($value, $this->array, true);
-        return ($result !== false);
+        if ((isScalarOrStringable($value) && $this->all(fn($item) => isScalarOrStringable($item)))) {
+            return in_array($value, $this->array, true) !== false;
+        }
+        if (isComparable($value) && $this->all(fn($item) => isComparable($item))) {
+            $items = $this->array;
+            /** @var Comparable $value */
+            /** @var Comparable $item */
+            foreach ($items as $item) {
+                if ($item->compareTo($value) === 0) {
+                    return true;
+                }
+            }
+        } else {
+            return in_array(spl_object_hash($value), array_map(fn($item) => spl_object_hash($item), $this->array), true);
+        }
+        return false;
     }
 
     /**
@@ -304,7 +320,27 @@ trait ArrayListTrait
 
     public function distinct(): ListInterface
     {
-        return listOf(...array_unique($this->array));
+        $this->forEach(fn($item) => assertComparable($item,
+            sprintf(
+                "Each item must be of type scalar or implement \Stringable or implement %s",
+                Comparable::class
+            )
+        ));
+        $newList = emptyList();
+        if ($this->all(fn($item): bool => isScalarOrStringable($item))) {
+            return listFromArray(array_unique($this->toArray()));
+        } else {
+            if ($this->all(fn($item): bool => isComparable($item))) {
+                $values = $this->array;
+                foreach ($values as $value) {
+                    if (!$newList->contains($value)) {
+                        $newList->add($value);
+                    }
+                }
+                return $newList;
+            }
+        }
+        return $this;
     }
 
     /**

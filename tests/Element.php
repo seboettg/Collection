@@ -67,6 +67,6 @@ class Element implements Comparable
     public function compareTo(Comparable $b): int
     {
         /** @var Element $b */
-        return strcmp($this->attr1, $b->getAttr1());
+        return strcmp($this->attr1 . $this->attr2, $b->attr1 . $b->attr2);
     }
 }

@@ -193,26 +193,26 @@ class MapTest extends TestCase
     public function testAllShouldReturnTrueIfAllEntriesMatchTheGivenPredicateOtherwiseFalse()
     {
         $this->assertTrue(
-            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->all(fn (Pair $pair): bool => $pair->getValue() > 0)
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->all(fn(Pair $pair): bool => $pair->getValue() > 0)
         );
 
         $this->assertFalse(
-            mapOf(pair("a", -1), pair("b", 0), pair("c", 1))->all(fn (Pair $pair): bool => $pair->getValue() > 0)
+            mapOf(pair("a", -1), pair("b", 0), pair("c", 1))->all(fn(Pair $pair): bool => $pair->getValue() > 0)
         );
     }
 
     public function testAnyShouldReturnTrueIfAnyOfTheEntriesMatchTheGivenPredicateOtherwiseFalse()
     {
         $this->assertTrue(
-            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->any(fn (Pair $pair): bool => $pair->getValue() > 0)
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->any(fn(Pair $pair): bool => $pair->getValue() > 0)
         );
 
         $this->assertTrue(
-            mapOf(pair("a", -1), pair("b", 0), pair("c", 1))->any(fn (Pair $pair): bool => $pair->getValue() > 0)
+            mapOf(pair("a", -1), pair("b", 0), pair("c", 1))->any(fn(Pair $pair): bool => $pair->getValue() > 0)
         );
 
         $this->assertFalse(
-            mapOf(pair("a", -2), pair("b", -1), pair("c", 0))->any(fn (Pair $pair): bool => $pair->getValue() > 0)
+            mapOf(pair("a", -2), pair("b", -1), pair("c", 0))->any(fn(Pair $pair): bool => $pair->getValue() > 0)
         );
     }
 
@@ -272,7 +272,7 @@ class MapTest extends TestCase
     {
         $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3));
 
-        $result = $map->map(fn (Pair $pair) => new TestObject($pair->getKey(), $pair->getValue()));
+        $result = $map->map(fn(Pair $pair) => new TestObject($pair->getKey(), $pair->getValue()));
         $this->assertInstanceOf(ListInterface::class, $result);
         $this->assertCount(3, $result);
         foreach ($result as $item) {
@@ -284,7 +284,7 @@ class MapTest extends TestCase
     {
         $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3));
         $result = $map->mapNotNull(
-            fn (Pair $pair) => $pair->getKey() !== "b" ? new TestObject($pair->getKey(), $pair->getValue()) : null
+            fn(Pair $pair) => $pair->getKey() !== "b" ? new TestObject($pair->getKey(), $pair->getValue()) : null
         );
         $this->assertInstanceOf(ListInterface::class, $result);
         $this->assertCount(2, $result);

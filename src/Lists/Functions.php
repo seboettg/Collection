@@ -2,6 +2,9 @@
 
 namespace Seboettg\Collection\Lists;
 
+use Seboettg\Collection\Comparable\Comparable;
+use Stringable;
+
 final class Functions
 {
 
@@ -30,15 +33,36 @@ final class Functions
 
     public static final function listOf(...$elements): ListInterface
     {
+        return listFromArray($elements);
+    }
+
+    public static final function listFromArray($elements): ListInterface
+    {
         $list = emptyList();
         $list->setArray(array_values($elements));
         return $list;
+    }
+
+    public static function isScalarOrStringable($object)
+    {
+        return is_scalar($object)
+            || method_exists($object, "__toString");
+    }
+
+    public static function isComparable($object): bool
+    {
+        return $object instanceof Comparable;
     }
 }
 
 function strval($value): string
 {
     return Functions::strval($value);
+}
+
+function array_unique(array $array): array
+{
+    return Functions::array_unique($array);
 }
 
 function emptyList(): ListInterface
@@ -51,7 +75,17 @@ function listOf(...$elements): ListInterface
     return Functions::listOf(...$elements);
 }
 
-function tuple($first, $second): Tuple
+function listFromArray(array $elements): ListInterface
 {
-    return new Tuple($first, $second);
+    return Functions::listFromArray($elements);
+}
+
+function isScalarOrStringable($object): bool
+{
+    return Functions::isScalarOrStringable($object);
+}
+
+function isComparable($object): bool
+{
+    return Functions::isComparable($object);
 }

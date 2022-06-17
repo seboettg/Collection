@@ -32,87 +32,115 @@ use function Seboettg\Collection\Map\pair;
 class ArrayListTest extends TestCase
 {
 
-    /**
-     * @var ListInterface
-     */
-    private ListInterface $arrayList;
-
-    public function setUp(): void
+    public function testCurrent()
     {
-        $this->arrayList = new ArrayList(
+        $arrayList = listOf(
             new Element("a", "aa"),
             new Element("b", "bb"),
             new Element("c", "cc"),
             new Element("k", "kk"),
             new Element("d", "dd")
         );
-    }
 
-    public function testCurrent()
-    {
-        $this->assertTrue($this->arrayList->current()->getAttr2() === "aa");
+        $this->assertTrue($arrayList->current()->getAttr2() === "aa");
         $arrayList = emptyList();
         $this->assertFalse($arrayList->current());
     }
 
     public function testAdd()
     {
-        $i = $this->arrayList->count();
-        $this->arrayList->add(new Element("3", "33"));
-        $j = $this->arrayList->count();
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
+
+        $i = $arrayList->count();
+        $arrayList->add(new Element("3", "33"));
+        $j = $arrayList->count();
         $this->assertEquals($i + 1, $j);
         /** @var Element $eI */
-        $eI = $this->arrayList->toArray()[$i];
+        $eI = $arrayList->toArray()[$i];
         $this->assertEquals("3", $eI->getAttr1());
     }
 
     public function testReplace()
     {
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
         $array = ["x", "y", "z"];
-        $this->arrayList->replace($array);
+        $arrayList->replace($array);
         foreach ($array as $key => $value) {
-            $this->assertEquals($value, $this->arrayList->get($key));
+            $this->assertEquals($value, $arrayList->get($key));
         }
     }
 
     public function testClear()
     {
-        $this->assertTrue($this->arrayList->count() > 0);
-        $this->arrayList->clear();
-        $this->assertEquals(0, $this->arrayList->count());
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
+        $this->assertTrue($arrayList->count() > 0);
+        $arrayList->clear();
+        $this->assertEquals(0, $arrayList->count());
     }
 
     public function testSetArray()
     {
-        $this->arrayList->setArray([1,2,3,4,5,6]);
-        $keys = array_keys($this->arrayList->toArray());
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
+        $arrayList->setArray([1,2,3,4,5,6]);
+        $keys = array_keys($arrayList->toArray());
         foreach ($keys as $key) {
             $this->assertIsInt($key);
-            $this->assertNotEmpty($this->arrayList->get($key));
-            $this->assertTrue($this->arrayList->get($key) === $key + 1);
+            $this->assertNotEmpty($arrayList->get($key));
+            $this->assertTrue($arrayList->get($key) === $key + 1);
         }
     }
 
     public function testShuffle()
     {
-        $this->arrayList
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
+        $arrayList
             ->addAll([
                 new Element("x", "xx"),
                 new Element("y", "yy"),
                 new Element("z", "zz")
             ]);
 
-        Collections::sort($this->arrayList, new class extends Comparator{
+        Collections::sort($arrayList, new class extends Comparator{
             public function compare(Comparable $a, Comparable $b): int {
                 return $a->compareTo($b);
             }
         });
         $lte = false;
-        for ($i = 0; $i < $this->arrayList->count() - 1; ++$i) {
+        for ($i = 0; $i < $arrayList->count() - 1; ++$i) {
             /** @var Element $elemI */
-            $elemI = $this->arrayList->get($i);
+            $elemI = $arrayList->get($i);
             /** @var Element $elemtI1 */
-            $elemtI1 = $this->arrayList->get($i + 1);
+            $elemtI1 = $arrayList->get($i + 1);
             $lte = ($elemI->getAttr1() <= $elemtI1->getAttr1());
             if (!$lte) {
                 break;
@@ -121,9 +149,9 @@ class ArrayListTest extends TestCase
         //each element on position $i is smaller than or equal to the element on position $i+1
         $this->assertTrue($lte);
 
-        $arr1 = $this->arrayList->toArray();
-        $this->arrayList->shuffle();
-        $arr2 = $this->arrayList->toArray(); //shuffled array
+        $arr1 = $arrayList->toArray();
+        $arrayList->shuffle();
+        $arr2 = $arrayList->toArray(); //shuffled array
 
         $equal = false;
         // at least one element has another position as before
@@ -142,8 +170,7 @@ class ArrayListTest extends TestCase
 
     public function testContains()
     {
-        $list = new ArrayList("a", "b", "c");
-
+        $list = listOf("a", "b", "c");
         $this->assertTrue($list->contains("a"));
     }
 
@@ -152,7 +179,14 @@ class ArrayListTest extends TestCase
      */
     public function testIterator()
     {
-        foreach ($this->arrayList as $key => $item) {
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
+        foreach ($arrayList as $key => $item) {
             $this->assertTrue(is_int($key));
             $this->assertInstanceOf(Element::class, $item);
         }
@@ -170,8 +204,18 @@ class ArrayListTest extends TestCase
 
     public function testFirst()
     {
-        $this->assertEquals("a", $this->arrayList->first()->getAttr1());
-        $this->assertEquals("d", $this->arrayList->last()->getAttr1());
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
+        $this->assertEquals("a", $arrayList->first()->getAttr1());
+
+
+
+        $this->assertEquals("d", $arrayList->last()->getAttr1());
     }
 
     public function testFilter()
@@ -179,7 +223,7 @@ class ArrayListTest extends TestCase
         $this->assertEquals(
             listOf("a", "c", "e", "g", "i"),
             listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
-                ->filter(fn ($letter) => ord($letter) % 2 !== 0)
+                ->filter(fn($letter) => ord($letter) % 2 !== 0)
         );
     }
 
@@ -256,12 +300,12 @@ class ArrayListTest extends TestCase
         $customerArray = json_decode($customers);
         $customerList = listOf(...$customerArray);
         $customerMap = $customerList
-            ->filter(fn ($customer) => strpos($customer->lastname, "Mustermann") === false)
+            ->filter(fn($customer) => strpos($customer->lastname, "Mustermann") === false)
             ->map(function ($customer) {
                 $customer->createDate = DateTime::createFromFormat("Y-m-d H:i:s", $customer->createDate);
                 return $customer;
             })
-            ->associateBy(fn ($customer) => $customer->id);
+            ->associateBy(fn($customer) => $customer->id);
         $this->assertEquals(
             mapOf(
                 pair("A001", stdclass(["id" => "A001", "lastname" => "Doe", "firstname" => "John", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-10 09:21:12")])),
@@ -288,7 +332,7 @@ class ArrayListTest extends TestCase
         $customerRepository
             ->expects(self::exactly(3))
             ->method("getById")
-            ->willReturnCallback(fn ($id) => $map[$id]);
+            ->willReturnCallback(fn($id) => $map[$id]);
 
         $customerMap = $listOfIds->associateWith(function ($customerId) use ($customerRepository) {
             return $customerRepository->getById($customerId);
@@ -339,7 +383,7 @@ class ArrayListTest extends TestCase
     {
         $arrayList = listOf("a", "b", "c", "d", "e", "f", "g", "h");
         $arrayList
-            ->partition(fn ($char) => ord($char) % 2 === 0)
+            ->partition(fn($char) => ord($char) % 2 === 0)
             ->forEach(function (Pair $pair) {
                 switch ($pair->getKey()) {
                     case "first":
@@ -361,26 +405,72 @@ class ArrayListTest extends TestCase
     public function testAllShouldReturnTrueIfPredicateMatchesForEachItem()
     {
         $arrayList = listOf("a", "b", "c", "d", "e", "f", "g", "h");
-        $this->assertTrue($arrayList->all(fn ($item) => is_string($item)));
+        $this->assertTrue($arrayList->all(fn($item): bool => is_string($item)));
     }
 
     public function testAllShouldReturnFalseIfForAtLeastOneItemPredicateDoesNotMatches()
     {
         $arrayList = listOf("a", "b", 1, "d", "e", "f", "g", "h");
-        $this->assertFalse($arrayList->all(fn ($item) => is_string($item)));
+        $this->assertFalse($arrayList->all(fn($item): bool => is_string($item)));
     }
 
     public function testAnyShouldReturnTrueIfPredicateMatchesForAtLeastOnItem()
     {
         $arrayList = listOf("a", "b", 1, "d", "e", "f", "g", "h");
-        $this->assertTrue($arrayList->any(fn ($item) => is_int($item)));
+        $this->assertTrue($arrayList->any(fn($item): bool => is_int($item)));
     }
 
-    public function testAnyShouldReturnFalseIfPredicateMatchesForNoneOfTheItems()
+    public function testAnyShouldReturnFalseIfPredicateMatchesNoneOfTheItems()
     {
         $arrayList = listOf("a", "b", "c", "d", "e", "f", "g", "h");
-        $this->assertFalse($arrayList->any(fn ($item) => is_int($item)));
+        $this->assertFalse($arrayList->any(fn($item): bool => is_int($item)));
     }
+
+    public function testChunkShouldReturnAListOfLists()
+    {
+        $list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
+            "r", "s", "t", "u", "v", "w", "x", "y", "z");
+        $listOfChunks = $list->chunk(3);
+        $this->assertEquals(9, $listOfChunks->count());
+
+        //assert it is a list of list
+        $listOfChunks->forEach(fn($item) => $this->assertInstanceOf(ListInterface::class, $item));
+
+        //assert each list should count 3 items, except the last list
+        $listOfChunksWithoutLast = $listOfChunks->minus(listOf($listOfChunks->last())); //without last list (y, z)
+
+        $listOfChunksWithoutLast->forEach(fn(ListInterface $chunkList) =>
+            $this->assertCount(3, $chunkList)
+        );
+
+        //last list should count 2 items
+        $this->assertCount(2, $listOfChunks->last());
+    }
+
+    public function testDistinctShouldHaveEachElementOnlyOnce()
+    {
+        $this->assertInstanceOf(Comparable::class, new Element("a", "aa"));
+        $this->assertEquals(
+            listOf(
+                new Element("a", "aa"),
+                new Element("b", "bb"),
+                new Element("c", "cc"),
+                new Element("k", "kk"),
+                new Element("d", "dd")
+            ),
+            listOf(
+                new Element("a", "aa"),
+                new Element("b", "bb"),
+                new Element("b", "bb"),
+                new Element("c", "cc"),
+                new Element("k", "kk"),
+                new Element("d", "dd"),
+                new Element("d", "dd")
+            )->distinct()
+        );
+    }
+
+
 }
 
 

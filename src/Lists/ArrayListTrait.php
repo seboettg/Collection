@@ -340,7 +340,7 @@ trait ArrayListTrait
                 return $newList;
             }
         }
-        return $this;
+        return listFromArray($this->array);
     }
 
     /**

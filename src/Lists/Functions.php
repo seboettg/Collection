@@ -8,7 +8,7 @@ use Stringable;
 final class Functions
 {
 
-    public static final function strval($value): string
+    final public static function strval($value): string
     {
         if (is_double($value)) {
             $str = \strval($value);
@@ -23,7 +23,7 @@ final class Functions
         return "$value";
     }
 
-    public static final function emptyList(): ListInterface
+    final public static function emptyList(): ListInterface
     {
         return new class() implements ListInterface {
             private $array = [];
@@ -31,25 +31,25 @@ final class Functions
         };
     }
 
-    public static final function listOf(...$elements): ListInterface
+    final public static function listOf(...$elements): ListInterface
     {
         return listFromArray($elements);
     }
 
-    public static final function listFromArray($elements): ListInterface
+    final public static function listFromArray($elements): ListInterface
     {
         $list = emptyList();
         $list->setArray(array_values($elements));
         return $list;
     }
 
-    public static function isScalarOrStringable($object)
+    final public static function isScalarOrStringable($object): bool
     {
         return is_scalar($object)
             || method_exists($object, "__toString");
     }
 
-    public static function isComparable($object): bool
+    final public static function isComparable($object): bool
     {
         return $object instanceof Comparable;
     }
@@ -58,11 +58,6 @@ final class Functions
 function strval($value): string
 {
     return Functions::strval($value);
-}
-
-function array_unique(array $array): array
-{
-    return Functions::array_unique($array);
 }
 
 function emptyList(): ListInterface

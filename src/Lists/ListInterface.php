@@ -24,8 +24,8 @@ use Traversable;
  * Interface ArrayListInterface
  * @package Seboettg\Collection\ArrayList
  */
-interface ListInterface extends
-    CollectionInterface, ListAccessInterface, Traversable, Countable, ToArrayInterface, Iterator, MapFeaturesInterface
+interface ListInterface extends CollectionInterface,
+    ListAccessInterface, Traversable, Countable, ToArrayInterface, Iterator, MapFeaturesInterface
 {
     /**
      * alias of replace function

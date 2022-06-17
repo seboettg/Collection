@@ -101,7 +101,7 @@ final class Functions
         if (is_scalar($object)) {
             return;
         }
-        if (method_exists($object , '__toString')) {
+        if (method_exists($object, '__toString')) {
             return;
         }
         if ($object instanceof Comparable) {

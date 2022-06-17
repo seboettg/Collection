@@ -174,23 +174,6 @@ interface ListInterface extends CollectionInterface,
     public function intersect(ListInterface $other): ListInterface;
 
     /**
-     * Returns a list containing all distinct elements from both collections.
-     *
-     * @param ListInterface $other
-     * @return mixed
-     */
-    public function union(ListInterface $other): ListInterface;
-
-    /**
-     * Returns a list containing all elements that are contained by this list and not contained
-     * by the specified list.
-     *
-     * @param ListInterface $other
-     * @return ListInterface
-     */
-    public function subtract(ListInterface $other): ListInterface;
-
-    /**
      * Splits the original collection into a Map of two entries, where first entry's value (key "first") is a list
      * containing elements for which predicate yielded true, while second entry's value (key "second") is a
      * list containing elements for which predicate yielded false.

@@ -227,6 +227,28 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
+     * @param callable $predicate - f(item: mixed) -> bool
+     * @return MapInterface<string, ListInterface>
+     */
+    public function partition(callable $predicate): MapInterface
+    {
+        $first = listOf(...array_filter($this->array, $predicate));
+        return mapOf(
+            pair("first", $first),
+            pair("second", $this->minus($first))
+        );
+    }
+
+
+    public function plus(iterable $other): ListInterface
+    {
+        $list = listOf(...$this->array);
+        $list->addAll($other);
+        return $list;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function minus(iterable $values): ListInterface
     {
@@ -253,44 +275,6 @@ trait ArrayListTrait
         $newInstance = emptyList();
         $newInstance->setArray(array_intersect($this->array, $list->array));
         return $newInstance;
-    }
-
-    /**
-     * @inheritDoc
-     * @param callable $predicate - f(item: mixed) -> bool
-     * @return MapInterface<string, ListInterface>
-     */
-    public function partition(callable $predicate): MapInterface
-    {
-        $first = listOf(...array_filter($this->array, $predicate));
-        return mapOf(
-            pair("first", $first),
-            pair("second", $this->minus($first))
-        );
-    }
-
-
-    public function plus(iterable $other): ListInterface
-    {
-        $list = listOf(...$this->array);
-        $list->addAll($other);
-        return $list;
-    }
-
-    public function union(ListInterface $other): ListInterface
-    {
-        return $this->plus($other);
-    }
-
-    public function subtract(ListInterface $other): ListInterface
-    {
-        $list = emptyList();
-        foreach ($this->array as $element) {
-            if (!$other->contains($element)) {
-                $list->add($element);
-            }
-        }
-        return $list;
     }
 
     public function any(callable $predicate): bool

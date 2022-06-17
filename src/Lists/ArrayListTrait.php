@@ -63,13 +63,11 @@ trait ArrayListTrait
     }
 
     /**
-     * @param $key
-     * @return ListInterface|ArrayListTrait
+     * @inheritDoc
      */
-    public function remove($key): ListInterface
+    public function remove($key): void
     {
         unset($this->array[$key]);
-        return $this;
     }
 
     /**

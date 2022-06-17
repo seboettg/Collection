@@ -59,10 +59,10 @@ interface ListInterface extends CollectionInterface,
     /**
      * Removes the element at the specified position in this list.
      *
-     * @param $value
-     * @return ListInterface
+     * @param int $key
+     * @return void
      */
-    public function remove($value): ListInterface;
+    public function remove(int $key): void;
 
     /**
      * Returns true if the passed element already exists in this list, otherwise false.

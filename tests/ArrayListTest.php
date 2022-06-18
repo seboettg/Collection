@@ -150,18 +150,17 @@ class ArrayListTest extends TestCase
         $this->assertTrue($lte);
 
         $arr1 = $arrayList->toArray();
-        $arrayList->shuffle();
-        $arr2 = $arrayList->toArray(); //shuffled array
+        $arr2 = $arrayList->shuffle()->toArray();
 
-        $equal = false;
+        $equal = true;
         // at least one element has another position as before
         for ($i = 0; $i < count($arr1); ++$i) {
             /** @var Element $elem1 */
             $elem1 = $arr1[$i];
             /** @var Element $elem2 */
             $elem2 = $arr2[$i];
-            $equal = ($elem1->getAttr1() == $elem2->getAttr1());
-            if (!$equal) {
+            if ($elem1->getAttr1() !== $elem2->getAttr1()) {
+                $equal = false;
                 break;
             }
         }

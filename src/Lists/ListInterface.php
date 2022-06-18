@@ -79,7 +79,7 @@ interface ListInterface extends CollectionInterface,
     public function clear(): void;
 
     /**
-     * Shuffles this list (randomizes the order of the elements in).
+     * Returns a new this list containing all values but randomizes the order of the elements in.
      *
      * @return ListInterface
      */

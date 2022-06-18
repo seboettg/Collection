@@ -95,13 +95,12 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
-     * @see http://php.net/manual/en/function.shuffle.php
-     * @return ListInterface
      */
     public function shuffle(): ListInterface
     {
-        shuffle($this->array);
-        return $this;
+        $array = $this->array;
+        shuffle($array);
+        return listFromArray($array);
     }
 
     /**
@@ -252,9 +251,9 @@ trait ArrayListTrait
      */
     public function minus(iterable $values): ListInterface
     {
-        if (!$values instanceof ListInterface) {
+        if (!$values instanceof ListInterface && is_array($values)) {
             $valuesList = emptyList();
-            $valuesList->setArray(is_array($values) ?? $values->toArray());
+            $valuesList->setArray($values);
         } else {
             $valuesList = $values;
         }
@@ -272,9 +271,13 @@ trait ArrayListTrait
      */
     public function intersect(ListInterface $list): ListInterface
     {
-        $newInstance = emptyList();
-        $newInstance->setArray(array_intersect($this->array, $list->array));
-        return $newInstance;
+        $result = emptyList();
+        foreach ($list as $item) {
+            if ($this->contains($item)) {
+                $result->add($item);
+            }
+        }
+        return $result;
     }
 
     public function any(callable $predicate): bool

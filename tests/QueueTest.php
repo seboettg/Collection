@@ -27,7 +27,7 @@ class QueueTest extends TestCase
      */
     protected $queue;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->queue = new Queue();
 

@@ -25,6 +25,7 @@ class CollectionsTest extends TestCase
      */
     private $numeratedArrayList;
 
+    #[\ReturnTypeWillChange]
     public function setUp()
     {
         $this->numeratedArrayList = new ArrayList(

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2022 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the

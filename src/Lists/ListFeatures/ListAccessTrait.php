@@ -24,13 +24,13 @@ trait ListAccessTrait
     }
 
     /**
-     * @param $key
-     * @param $element
+     * @param int $index
+     * @param mixed $element
      * @return void
      */
-    public function set($key, $element): void
+    public function set(int $index, $element): void
     {
-        $this->array[$key] = $element;
+        $this->array[$index] = $element;
     }
 
     /**

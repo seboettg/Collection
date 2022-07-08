@@ -118,6 +118,28 @@ class ArrayListTest extends TestCase
         }
     }
 
+    public function testSetShouldOverwriteElementOfGivenIndex()
+    {
+        $arrayList = listOf(
+            new Element("a", "aa"), //0
+            new Element("b", "bb"), //1
+            new Element("c", "cc"), //2
+            new Element("k", "kk"), //3
+            new Element("e", "ee") //4
+        );
+        $arrayList->set(3, new Element("d", "dd"));
+        $this->assertEquals(
+            listOf(
+                new Element("a", "aa"), //0
+                new Element("b", "bb"), //1
+                new Element("c", "cc"), //2
+                new Element("d", "dd"), //3
+                new Element("e", "ee") //4
+            ),
+            $arrayList
+        );
+    }
+
     public function testShuffle()
     {
         $arrayList = listOf(
@@ -620,6 +642,127 @@ class ArrayListTest extends TestCase
                 new ComparableObject("e"),
                 new ComparableObject("f"),
             ))
+        );
+    }
+
+    public function testMinusWithArray()
+    {
+        $list = listOf(
+            new ComparableObject("a"),
+            new ComparableObject("b"),
+            new ComparableObject("c"),
+            new ComparableObject("d"),
+            new ComparableObject("e"),
+            new ComparableObject("f"),
+            new ComparableObject("g")
+        );
+        $this->assertEquals(
+            listOf(
+                new ComparableObject("a"),
+                new ComparableObject("b"),
+                new ComparableObject("c"),
+                new ComparableObject("g")
+            ),
+            $list->minus([
+                new ComparableObject("d"),
+                new ComparableObject("e"),
+                new ComparableObject("f"),
+            ])
+        );
+    }
+
+    public function testPlus()
+    {
+        $list = listOf(new ComparableObject("a"));
+        $this->assertEquals(
+            listOf(
+                new ComparableObject("a"),
+                new ComparableObject("b"),
+                new ComparableObject("c")
+            ),
+            $list->plus(listOf(
+                new ComparableObject("b"),
+                new ComparableObject("c")
+            ))
+        );
+    }
+
+    public function testPlusWithArray()
+    {
+        $list = listOf(new ComparableObject("a"));
+        $this->assertEquals(
+            listOf(
+                new ComparableObject("a"),
+                new ComparableObject("b"),
+                new ComparableObject("c")
+            ),
+            $list->plus([
+                new ComparableObject("b"),
+                new ComparableObject("c")
+            ])
+        );
+    }
+
+    public function testIsEmptyShouldReturnTrueIfListIsEmpty()
+    {
+        $this->assertTrue(emptyList()->isEmpty());
+    }
+
+    public function testIsEmptyShouldReturnFalseIfListIsNotEmpty()
+    {
+        $this->assertFalse(listOf("a")->isEmpty());
+    }
+
+    public function testSubList()
+    {
+        $subList = listOf(
+            new ComparableObject("a"),
+            new ComparableObject("b"),
+            new ComparableObject("c"),
+            new ComparableObject("d"),
+            new ComparableObject("e"),
+            new ComparableObject("f"),
+            new ComparableObject("g")
+        )->subList(1, 6);
+
+        $this->assertEquals(
+            listOf(
+                new ComparableObject("b"),
+                new ComparableObject("c"),
+                new ComparableObject("d"),
+                new ComparableObject("e"),
+                new ComparableObject("f")
+            ),
+            $subList
+        );
+    }
+
+    public function testSize()
+    {
+        $this->assertEquals(0, emptyList()->size());
+    }
+
+    public function testSearchByShouldReturnFirstMatchingElement()
+    {
+        $this->assertEquals(
+            stdclass(["id" => "A001", "lastname" => "Doe", "firstname" => "Jane"]),
+            listOf(
+                stdclass(["id" => "A001", "lastname" => "Doe", "firstname" => "Jane"]),
+                stdclass(["id" => "A002", "lastname" => "Doe", "firstname" => "John"]),
+                stdclass(["id" => "A003", "lastname" => "Mustermann", "firstname" => "Erika"]),
+            )->searchBy(fn (stdClass $item) => $item->lastname === "Doe")
+        );
+    }
+
+    public function testSearchByShouldReturnNullIfNoElementMatches()
+    {
+        $this->assertEquals(
+            null,
+            listOf(
+                stdclass(["id" => "A001", "lastname" => "Doe", "firstname" => "Jane"]),
+                stdclass(["id" => "A002", "lastname" => "Doe", "firstname" => "John"]),
+                stdclass(["id" => "A003", "lastname" => "Mustermann", "firstname" => "Erika"]),
+            )->searchBy(fn (stdClass $item) => $item->lastname === "Meyer")
         );
     }
 }

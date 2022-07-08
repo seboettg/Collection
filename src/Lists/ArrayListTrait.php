@@ -296,7 +296,7 @@ trait ArrayListTrait
      */
     public function getOrElse(int $index, callable $defaultValue)
     {
-        if ($this->array[$index] !== null) {
+        if (array_key_exists($index, $this->array)) {
             return $this->array[$index];
         }
         return $defaultValue();
@@ -320,7 +320,8 @@ trait ArrayListTrait
     }
 
     /**
-     * Return first element of this list that matches the matchingCondition
+     * Return first element of this list that matches the matchingCondition. If no element matches the condition, null
+     * will be returned.
      *
      * @param callable $matchingCondition
      * @return mixed|null
@@ -328,7 +329,9 @@ trait ArrayListTrait
     public function searchBy(callable $matchingCondition)
     {
         $list = listOf(...array_filter($this->array));
-        return $list->filter($matchingCondition)->first();
+        return $list
+            ->filter($matchingCondition)
+            ->getOrElse(0, fn() => null);
     }
 
     public function isEmpty(): bool

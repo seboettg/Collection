@@ -20,6 +20,7 @@ use function Seboettg\Collection\Assert\assertComparable;
 use function Seboettg\Collection\Assert\assertStringable;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
+use function Seboettg\Collection\Lists\in_array;
 
 /**
  * @property array $array Base array of this data structure
@@ -76,7 +77,7 @@ trait ArrayListTrait
     public function contains($value): bool
     {
         if ((isScalarOrStringable($value) && $this->all(fn($item) => isScalarOrStringable($item)))) {
-            return in_array($value, $this->array, true) !== false;
+            return in_array($value, $this->array) !== false;
         }
         if (isComparable($value) && $this->all(fn($item) => isComparable($item))) {
             $items = $this->array;
@@ -88,7 +89,11 @@ trait ArrayListTrait
                 }
             }
         } else {
-            return in_array(spl_object_hash($value), array_map(fn($item) => spl_object_hash($item), $this->array), true);
+            if ($value instanceof ListInterface && $this->all(fn($item) => $item instanceof ListInterface)) {
+                return in_array(print_r($value->toArray(), true), array_map(fn ($item) => print_r($item->toArray(), true), $this->array)) !== false;
+            } else {
+                return in_array(spl_object_hash($value), array_map(fn($item) => spl_object_hash($item), $this->array));
+            }
         }
         return false;
     }
@@ -251,8 +256,8 @@ trait ArrayListTrait
      */
     public function minus(iterable $values): ListInterface
     {
+        $valuesList = emptyList();
         if (!$values instanceof ListInterface && is_array($values)) {
-            $valuesList = emptyList();
             $valuesList->setArray($values);
         } else {
             $valuesList = $values;

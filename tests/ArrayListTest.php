@@ -26,6 +26,7 @@ use stdClass;
 use function Seboettg\Collection\Lists\emptyList;
 use function Seboettg\Collection\Lists\listOf;
 use function Seboettg\Collection\Lists\strval;
+use function Seboettg\Collection\Lists\in_array;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
 
@@ -469,6 +470,44 @@ class ArrayListTest extends TestCase
         );
     }
 
+    public function testIntersectShouldWorkWithScalarValues()
+    {
+        $this->assertEquals(
+            listOf("b", "c"),
+            listOf("a", "b", "c", "d")->intersect(listOf("b", "c", "e"))
+        );
+    }
+
+    public function testIntersectShouldWorkWithStringableValues()
+    {
+        $this->assertTrue(
+            in_array(new StringableObject("b"), [new StringableObject("b")])
+        );
+        $this->assertTrue(
+            (string) new StringableObject("b") === (string) new StringableObject("b")
+        );
+        $this->assertTrue(
+            new StringableObject("b") != new StringableObject("c")
+            && new StringableObject("b") !== new StringableObject("c")
+        );
+
+        $this->assertEquals(
+            listOf(
+                new StringableObject("b"),
+                new StringableObject("c")
+            ),
+            listOf(
+                new StringableObject("a"),
+                new StringableObject("b"),
+                new StringableObject("c"),
+                new StringableObject("d"),
+            )->intersect(listOf(
+                new StringableObject("b"),
+                new StringableObject("c"),
+                new StringableObject("e")
+            ))
+        );
+    }
 
 }
 

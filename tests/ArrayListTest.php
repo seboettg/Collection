@@ -16,10 +16,13 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\ArrayList;
 use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
+use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
+use Seboettg\Collection\Assert\Exception\WrongTypeException;
 use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Comparable\Comparator;
 use Seboettg\Collection\Lists\ListInterface;
+use Seboettg\Collection\Map\MapInterface;
 use Seboettg\Collection\Map\Pair;
 use Seboettg\Collection\Stack;
 use stdClass;
@@ -447,6 +450,44 @@ class ArrayListTest extends TestCase
         $this->assertCount(2, $listOfChunks->last());
     }
 
+    public function testChunkWithObjects()
+    {
+        $list = listOf(
+            new ComparableObject("a"),
+            new ComparableObject("b"),
+            new ComparableObject("c"),
+            new ComparableObject("d"),
+            new ComparableObject("e"),
+            new ComparableObject("f"),
+            new ComparableObject("g"),
+            new ComparableObject("h"),
+            new ComparableObject("i"),
+            new ComparableObject("j"),
+            new ComparableObject("k"),
+            new ComparableObject("l"),
+            new ComparableObject("m"),
+            new ComparableObject("n"),
+            new ComparableObject("o"),
+            new ComparableObject("p"),
+            new ComparableObject("q"),
+            new ComparableObject("r"),
+            new ComparableObject("s"),
+            new ComparableObject("t"),
+            new ComparableObject("u"),
+            new ComparableObject("v"),
+            new ComparableObject("w"),
+            new ComparableObject("x"),
+            new ComparableObject("y"),
+            new ComparableObject("z")
+        );
+        $listOfChunks = $list->chunk(3);
+        $this->assertEquals(9, $listOfChunks->count());
+        $listOfChunks->forEach(fn($item) => $this->assertInstanceOf(ListInterface::class, $item));
+        $listOfChunks
+            ->get(0)
+            ->forEach(fn ($item) => $this->assertInstanceOf(ComparableObject::class, $item));
+    }
+
     public function testDistinctShouldHaveEachElementOnlyOnce()
     {
         $this->assertInstanceOf(Comparable::class, new Element("a", "aa"));
@@ -509,6 +550,78 @@ class ArrayListTest extends TestCase
         );
     }
 
+    public function testGroupByShouldGroupItemsInAMapByKeySelectorFunction()
+    {
+        $list = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+        $groupedMap = $list->groupBy(fn (int $number) => chr(97 + (int)floor($number / 3)));
+        $this->assertInstanceOf(MapInterface::class, $groupedMap);
+        $this->assertCount(5, $groupedMap);
+        $i = 0;
+        foreach ($groupedMap as $key => $value) {
+            $this->assertEquals(chr(97 + $i), $key);
+            $this->assertInstanceOf(ListInterface::class, $value);
+            ++$i;
+        }
+    }
+
+    public function testAssociateShouldCreateAMapAndAssociateEachItemByTransformFunctionWithAKey()
+    {
+        $this->assertEquals(
+            listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"),
+            listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+            ->associate(fn (int $item) => pair(chr(97 + $item), $item))
+            ->getKeys()
+        );
+    }
+
+    public function testAssociateShouldThrowExceptionIfReturnTypeOfTransformFunctionIsNotAPair()
+    {
+        $this->expectException(WrongTypeException::class);
+        $this->assertEquals(
+            listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"),
+            listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+                ->associate(fn (int $item) => chr(97 + $item))
+                ->getKeys()
+        );
+    }
+
+    public function testAssociateShouldThrowExceptionIfTypeOfKeysAreNotScalar()
+    {
+        $this->expectException(TypeIsNotAScalarException::class);
+        $this->assertEquals(
+            listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"),
+            listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+                ->associate(fn (int $item) => pair(new StringableObject(chr(97 + $item)), $item))
+                ->getKeys()
+        );
+    }
+
+    public function testMinus()
+    {
+        $list = listOf(
+            new ComparableObject("a"),
+            new ComparableObject("b"),
+            new ComparableObject("c"),
+            new ComparableObject("d"),
+            new ComparableObject("e"),
+            new ComparableObject("f"),
+            new ComparableObject("g")
+        );
+
+        $this->assertEquals(
+            listOf(
+                new ComparableObject("a"),
+                new ComparableObject("b"),
+                new ComparableObject("c"),
+                new ComparableObject("g")
+            ),
+            $list->minus(listOf(
+                new ComparableObject("d"),
+                new ComparableObject("e"),
+                new ComparableObject("f"),
+            ))
+        );
+    }
 }
 
 
@@ -533,6 +646,24 @@ class StringableObject {
     }
 }
 
+
+class ComparableObject implements Comparable {
+    private string $value;
+    public function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    public function compareTo(Comparable $b): int
+    {
+        return strcasecmp($this->value, $b->getValue());
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+}
 
 function stdclass($array): stdClass
 {

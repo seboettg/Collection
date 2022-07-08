@@ -191,7 +191,10 @@ trait ArrayListTrait
     public function joinToString(string $delimiter, string $prefix = null, string $suffix = null): string
     {
         $result = implode($delimiter, $this->map(function ($item) {
-            assertStringable($item, "Elements in list must be convertible to string in order to use joinToString.");
+            assertStringable(
+                $item,
+                "All elements in the list must be convertible to string in order to use joinToString."
+            );
             return strval($item);
         })->toArray());
         if ($prefix !== null) {

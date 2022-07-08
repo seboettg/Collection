@@ -11,13 +11,12 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Map;
 
-use ArrayIterator;
-use Iterator;
 use ReflectionException;
 use ReflectionFunction;
 use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
 use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\NativePhp\ArrayAccessTrait;
+use Seboettg\Collection\NativePhp\ArrayIteratorTrait;
 use function Seboettg\Collection\Assert\assertScalar;
 use function Seboettg\Collection\Assert\assertType;
 use function Seboettg\Collection\Assert\assertValidCallable;
@@ -29,7 +28,7 @@ use function Seboettg\Collection\Lists\listOf;
  */
 trait MapTrait
 {
-    use ArrayAccessTrait;
+    use ArrayAccessTrait, ArrayIteratorTrait;
 
     /**
      * @inheritDoc
@@ -348,12 +347,6 @@ trait MapTrait
     public function toMap(): MapInterface
     {
         return mapOf(...$this->toList());
-    }
-
-
-    public function getIterator(): Iterator
-    {
-        return new ArrayIterator($this->array);
     }
 
     /**

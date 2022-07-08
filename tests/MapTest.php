@@ -384,4 +384,14 @@ class MapTest extends TestCase
         $this->assertEquals($newMap->getKeys(), $myMap->getKeys());
         $this->assertEquals($newMap->values(), $myMap->values());
     }
+
+    public function testUnsetOnMap()
+    {
+        $map = mapOf(pair(1, "a"), pair(2, "b"), pair(3, "c"));
+        unset($map[2]);
+        $this->assertEquals(
+            mapOf(pair(1, "a"), pair(3, "c")),
+            $map
+        );
+    }
 }

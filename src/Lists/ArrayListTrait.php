@@ -13,6 +13,7 @@ namespace Seboettg\Collection\Lists;
 
 use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Lists\ListFeatures\ListAccessTrait;
+use Seboettg\Collection\Lists\ListFeatures\ListOperationsTrait;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesTrait;
 use Seboettg\Collection\Map\MapInterface;
 use Seboettg\Collection\NativePhp\IteratorTrait;
@@ -20,16 +21,16 @@ use function Seboettg\Collection\Assert\assertComparable;
 use function Seboettg\Collection\Assert\assertStringable;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
-use function Seboettg\Collection\Lists\in_array;
 
 /**
  * @property array $array Base array of this data structure
  */
 trait ArrayListTrait
 {
-    use ListAccessTrait;
-    use IteratorTrait;
-    use MapFeaturesTrait;
+    use ListAccessTrait,
+        IteratorTrait,
+        ListOperationsTrait,
+        MapFeaturesTrait;
 
     /**
      * flush array list
@@ -230,62 +231,6 @@ trait ArrayListTrait
     public function size(): int
     {
         return $this->count();
-    }
-
-    /**
-     * @inheritDoc
-     * @param callable $predicate - f(item: mixed) -> bool
-     * @return MapInterface<string, ListInterface>
-     */
-    public function partition(callable $predicate): MapInterface
-    {
-        $first = listOf(...array_filter($this->array, $predicate));
-        return mapOf(
-            pair("first", $first),
-            pair("second", $this->minus($first))
-        );
-    }
-
-
-    public function plus(iterable $other): ListInterface
-    {
-        $list = listOf(...$this->array);
-        $list->addAll($other);
-        return $list;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function minus(iterable $values): ListInterface
-    {
-        $valuesList = emptyList();
-        if (!$values instanceof ListInterface && is_array($values)) {
-            $valuesList->setArray($values);
-        } else {
-            $valuesList = $values;
-        }
-        $newInstance = emptyList();
-        foreach ($this->array as $value) {
-            if (!$valuesList->contains($value)) {
-                $newInstance->add($value);
-            }
-        }
-        return $newInstance;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function intersect(ListInterface $list): ListInterface
-    {
-        $result = emptyList();
-        foreach ($list as $item) {
-            if ($this->contains($item)) {
-                $result->add($item);
-            }
-        }
-        return $result;
     }
 
     public function any(callable $predicate): bool

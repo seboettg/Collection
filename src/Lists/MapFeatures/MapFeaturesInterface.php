@@ -11,10 +11,21 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Lists\MapFeatures;
 
+use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Map\MapInterface;
 
 interface MapFeaturesInterface
 {
+
+    /**
+     * Splits the original collection into a Map of two entries, where first entry's value (key "first") is a list
+     * containing elements for which predicate yielded true, while second entry's value (key "second") is a
+     * list containing elements for which predicate yielded false.
+     *
+     * @param callable $predicate - f(item: mixed) -> bool
+     * @return MapInterface<string, ListInterface>
+     */
+    public function partition(callable $predicate): MapInterface;
 
     /**
      * Groups elements of the original array by the key returned by the given keySelector function

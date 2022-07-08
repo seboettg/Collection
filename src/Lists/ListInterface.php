@@ -16,6 +16,7 @@ use Iterator;
 use Seboettg\Collection\Assert\Exception\NotConvertibleToStringException;
 use Seboettg\Collection\CollectionInterface;
 use Seboettg\Collection\Lists\ListFeatures\ListAccessInterface;
+use Seboettg\Collection\Lists\ListFeatures\ListOperationsInterface;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesInterface;
 use Seboettg\Collection\Map\MapInterface;
 use Traversable;
@@ -24,8 +25,8 @@ use Traversable;
  * Interface ArrayListInterface
  * @package Seboettg\Collection\ArrayList
  */
-interface ListInterface extends CollectionInterface,
-    ListAccessInterface, Traversable, Countable, ToArrayInterface, Iterator, MapFeaturesInterface
+interface ListInterface extends CollectionInterface, ListAccessInterface, Traversable, Countable, ToArrayInterface,
+    Iterator, ListOperationsInterface, MapFeaturesInterface
 {
     /**
      * alias of replace function
@@ -95,24 +96,6 @@ interface ListInterface extends CollectionInterface,
     public function filter(?callable $predicate = null, bool $preserveKeys = false): ListInterface;
 
     /**
-     * Returns a list containing all elements of the original collection except the elements contained
-     * in the given iterable set.
-     *
-     * @param iterable $elements
-     * @return ListInterface
-     */
-    public function minus(iterable $elements): ListInterface;
-
-    /**
-     * Returns a list containing all elements of the original collection and then all elements of
-     * the given elements.
-     *
-     * @param iterable $elements
-     * @return ListInterface
-     */
-    public function plus(iterable $elements): ListInterface;
-
-    /**
      * returns a new ArrayList containing all the elements of this ArrayList after applying the callback function to each one.
      * @param callable $mapFunction
      * @return ListInterface
@@ -164,24 +147,6 @@ interface ListInterface extends CollectionInterface,
      * @return int
      */
     public function size(): int;
-
-    /**
-     * Returns a list containing all elements that are contained by both this collection and the specified collection.
-     *
-     * @param ListInterface $other
-     * @return ListInterface
-     */
-    public function intersect(ListInterface $other): ListInterface;
-
-    /**
-     * Splits the original collection into a Map of two entries, where first entry's value (key "first") is a list
-     * containing elements for which predicate yielded true, while second entry's value (key "second") is a
-     * list containing elements for which predicate yielded false.
-     *
-     * @param callable $predicate - f(item: mixed) -> bool
-     * @return MapInterface<string, ListInterface>
-     */
-    public function partition(callable $predicate): MapInterface;
 
     /**
      * Returns true if at least one element match the given predicate.

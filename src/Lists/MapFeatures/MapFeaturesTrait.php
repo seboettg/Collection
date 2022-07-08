@@ -17,13 +17,31 @@ use Seboettg\Collection\Map\Pair;
 use function Seboettg\Collection\Assert\assertScalar;
 use function Seboettg\Collection\Assert\assertType;
 use function Seboettg\Collection\Lists\emptyList;
+use function Seboettg\Collection\Lists\listOf;
 use function Seboettg\Collection\Map\emptyMap;
+use function Seboettg\Collection\Map\mapOf;
+use function Seboettg\Collection\Map\pair;
 
 /**
  * @property array $array Base array of this data structure
  */
 trait MapFeaturesTrait
 {
+
+    /**
+     * @inheritDoc
+     * @param callable $predicate - f(item: mixed) -> bool
+     * @return MapInterface<string, ListInterface>
+     */
+    public function partition(callable $predicate): MapInterface
+    {
+        $first = listOf(...array_filter($this->array, $predicate));
+        return mapOf(
+            pair("first", $first),
+            pair("second", $this->minus($first))
+        );
+    }
+
     /**
      * @inheritDoc
      */

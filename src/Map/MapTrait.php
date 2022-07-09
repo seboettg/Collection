@@ -240,7 +240,7 @@ trait MapTrait
                 throw new NotApplicableCallableException("Invalid callable passed.");
             }
         } else {
-            $map->array = array_filter($this->array, $predicate);
+            $map->array = array_filter($this->array);
         }
         return $map;
     }

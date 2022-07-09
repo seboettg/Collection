@@ -18,6 +18,8 @@ use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Map\MapInterface;
 use Seboettg\Collection\Map\MapTrait;
 use Seboettg\Collection\Map\Pair;
+use Seboettg\Collection\Test\Common\ComparableObject;
+use Seboettg\Collection\Test\Common\StringableObject;
 use stdClass;
 use function Seboettg\Collection\Lists\listOf;
 use function Seboettg\Collection\Map\mapOf;
@@ -422,5 +424,43 @@ class MapTest extends TestCase
             ["a" => 1, "b" => 2, "c" => 3],
             mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->toArray()
         );
+    }
+
+    public function testSetArray()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2));
+        $map->setArray(["b" => 2]);
+        $this->assertEquals(
+            2,
+            $map["b"]
+        );
+    }
+
+    public function testContainsValueShouldWorkWithScalars()
+    {
+        $map = mapOf(pair("a", 1), pair("b", 2));
+        $this->assertTrue($map->containsValue(2));
+        $this->assertFalse($map->containsValue(3));
+    }
+
+    public function testContainsValueShouldWorkWithStringable()
+    {
+        $map = mapOf(pair(1, new StringableObject("a")), pair(2, new StringableObject("b")));
+        $this->assertTrue($map->containsValue(new StringableObject("b")));
+        $this->assertFalse($map->containsValue(new StringableObject("c")));
+    }
+
+    public function testContainsValueShouldWorkWithComparable()
+    {
+        $map = mapOf(pair(1, new ComparableObject("a")), pair(2, new ComparableObject("b")));
+        $this->assertTrue($map->containsValue(new ComparableObject("b")));
+        $this->assertFalse($map->containsValue(new ComparableObject("c")));
+    }
+
+    public function testContainsValueShouldWorkWithAnyType()
+    {
+        $map = mapOf(pair(1, new Element("a", "aa")), pair(2, new Element("b", "bb")));
+        $this->assertTrue($map->containsValue(new Element("b", "bb")));
+        $this->assertFalse($map->containsValue(new Element("b", "bc")));
     }
 }

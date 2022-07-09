@@ -25,12 +25,13 @@ use Seboettg\Collection\Lists\ListInterface;
 use Seboettg\Collection\Map\MapInterface;
 use Seboettg\Collection\Map\Pair;
 use Seboettg\Collection\Stack;
+use Seboettg\Collection\Test\Common\ComparableObject;
+use Seboettg\Collection\Test\Common\StringableObject;
 use stdClass;
 use function Seboettg\Collection\Lists\emptyList;
 use function Seboettg\Collection\Lists\listOf;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
-use function Seboettg\Collection\Common\strval;
 
 class ArrayListTest extends TestCase
 {
@@ -763,47 +764,6 @@ class ArrayListTest extends TestCase
                 stdclass(["id" => "A003", "lastname" => "Mustermann", "firstname" => "Erika"]),
             )->searchBy(fn (stdClass $item) => $item->lastname === "Meyer")
         );
-    }
-}
-
-
-
-class StringableObject {
-    private $value;
-    public function __construct($value)
-    {
-        $this->value = $value;
-    }
-    public function setValue($value) {
-        $this->value = $value;
-    }
-    public function getValue($value) {
-        return $value;
-    }
-    public function toString(): string {
-        return strval($this->value);
-    }
-    public function __toString(): string {
-        return $this->toString();
-    }
-}
-
-
-class ComparableObject implements Comparable {
-    private string $value;
-    public function __construct(string $value)
-    {
-        $this->value = $value;
-    }
-
-    public function compareTo(Comparable $b): int
-    {
-        return strcasecmp($this->value, $b->getValue());
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
     }
 }
 

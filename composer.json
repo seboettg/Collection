@@ -29,7 +29,8 @@
         "files": [
             "src/Assert/Functions.php",
             "src/Lists/Functions.php",
-            "src/Map/Functions.php"
+            "src/Map/Functions.php",
+            "src/Common/Functions.php"
         ]
     },
     "autoload-dev": {

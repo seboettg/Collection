@@ -18,6 +18,10 @@ use Seboettg\Collection\Lists\MapFeatures\MapFeaturesTrait;
 use Seboettg\Collection\NativePhp\IteratorTrait;
 use function Seboettg\Collection\Assert\assertComparable;
 use function Seboettg\Collection\Assert\assertStringable;
+use function Seboettg\Collection\Common\isComparable;
+use function Seboettg\Collection\Common\isScalarOrStringable;
+use function Seboettg\Collection\Common\in_array;
+use function Seboettg\Collection\Common\strval;
 
 /**
  * @property array $array Base array of this data structure
@@ -75,13 +79,12 @@ trait ArrayListTrait
     public function contains($value): bool
     {
         if (
-            isScalarOrStringable($value) /* && $this->all(fn($item) => isScalarOrStringable($item)))*/ ||
-            isComparable($value)
+            isScalarOrStringable($value) /* && $this->all(fn($item) => isScalarOrStringable($item))) */ ||
+            isComparable($value) /* && $this->all(fn($item) => isComparable($item))) */
         ) {
             // use custom in_array function
             return in_array($value, $this->array) !== false;
-        }
-        else {
+        } else {
             // use PHP's native \in_array function
             return \in_array(
                 print_r($value, true),

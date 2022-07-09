@@ -21,11 +21,11 @@ use function Seboettg\Collection\Assert\assertScalar;
 use function Seboettg\Collection\Assert\assertType;
 use function Seboettg\Collection\Assert\assertValidCallable;
 use function Seboettg\Collection\Lists\emptyList;
-use function Seboettg\Collection\Lists\isComparable;
-use function Seboettg\Collection\Lists\isScalarOrStringable;
-use function Seboettg\Collection\Lists\isStringable;
 use function Seboettg\Collection\Lists\listOf;
-use function Seboettg\Collection\Lists\in_array;
+use function Seboettg\Collection\Common\in_array;
+use function Seboettg\Collection\Common\isComparable;
+use function Seboettg\Collection\Common\isScalarOrStringable;
+
 /**
  * @property array $array base array of this data structure
  */

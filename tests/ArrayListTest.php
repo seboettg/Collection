@@ -28,10 +28,9 @@ use Seboettg\Collection\Stack;
 use stdClass;
 use function Seboettg\Collection\Lists\emptyList;
 use function Seboettg\Collection\Lists\listOf;
-use function Seboettg\Collection\Lists\strval;
-use function Seboettg\Collection\Lists\in_array;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
+use function Seboettg\Collection\Common\strval;
 
 class ArrayListTest extends TestCase
 {

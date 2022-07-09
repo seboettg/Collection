@@ -23,8 +23,8 @@ namespace Seboettg\Collection\Comparable;
 interface Comparable
 {
     /**
-     * Compares this object with the specified object for order. Returns a negative integer, zero, or a positive
-     * integer as this object is less than, equal to, or greater than the specified object.
+     * Compares this object with the specified object for order and equality. Returns a negative integer, zero, or a
+     * positive integer as this object is less than, equal to, or greater than the specified object.
      *
      * The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
      *

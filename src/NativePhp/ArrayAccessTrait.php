@@ -9,9 +9,7 @@ declare(strict_types=1);
  * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
  */
 
-namespace Seboettg\Collection\ArrayList;
-
-use ArrayIterator;
+namespace Seboettg\Collection\NativePhp;
 
 /**
  * Trait ArrayAccessTrait
@@ -20,14 +18,6 @@ use ArrayIterator;
  */
 trait ArrayAccessTrait
 {
-    /**
-     * {@inheritDoc}
-     */
-    #[\ReturnTypeWillChange]
-    public function getIterator()
-    {
-        return new ArrayIterator($this->array);
-    }
 
     /**
      * Offset to retrieve
@@ -39,7 +29,7 @@ trait ArrayAccessTrait
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return isset($this->array[$offset]) ? $this->array[$offset] : null;
+        return $this->array[$offset] ?? null;
     }
 
     /**
@@ -62,7 +52,7 @@ trait ArrayAccessTrait
      * @return bool
      */
     #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->array[$offset]);
     }
@@ -73,17 +63,8 @@ trait ArrayAccessTrait
      * @param mixed $offset The offset to unset.
      */
     #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->array[$offset]);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    #[\ReturnTypeWillChange]
-    public function count()
-    {
-        return count($this->array);
     }
 }

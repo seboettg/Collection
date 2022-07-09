@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection;
 
-use Seboettg\Collection\ArrayList\ArrayListInterface;
-use Seboettg\Collection\ArrayList\ArrayListTrait;
+use Seboettg\Collection\Lists\ListInterface;
+use Seboettg\Collection\Lists\ArrayListTrait;
 
 /**
  * ArrayList is a useful wrapper class for an array, similar to Java's ArrayList
@@ -20,7 +20,7 @@ use Seboettg\Collection\ArrayList\ArrayListTrait;
  *
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
-class ArrayList implements ArrayListInterface
+class ArrayList implements ListInterface
 {
     use ArrayListTrait;
 

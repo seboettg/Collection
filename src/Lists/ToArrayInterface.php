@@ -8,7 +8,7 @@
  * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
  */
 
-namespace Seboettg\Collection\ArrayList;
+namespace Seboettg\Collection\Lists;
 
 /**
  *

@@ -33,13 +33,10 @@ final class Functions
     public final static function mapOf(...$pairs): MapInterface
     {
         $map = emptyMap();
-        foreach ($pairs as $pair) {
-            if (!$pair instanceof Pair) {
-                throw new InvalidArgumentException(sprintf(
-                    "At least one pair is not of type %s", Pair::class));
-            }
-            $map->put($pair->getKey(), $pair->getValue());
-        }
+        $map->setArray(array_combine(
+            array_map(fn (Pair $pair) => $pair->getKey(), $pairs), //keys
+            array_map(fn (Pair $pair) => $pair->getValue(), $pairs) //values
+        ));
         return $map;
     }
 

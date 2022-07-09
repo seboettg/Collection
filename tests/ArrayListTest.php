@@ -237,10 +237,28 @@ class ArrayListTest extends TestCase
             new Element("d", "dd")
         );
         $this->assertEquals("a", $arrayList->first()->getAttr1());
+    }
 
+    public function testFirstShouldReturnNullIfListIsEmpty()
+    {
+        $this->assertNull(emptyList()->first());
+    }
 
-
+    public function testLast()
+    {
+        $arrayList = listOf(
+            new Element("a", "aa"),
+            new Element("b", "bb"),
+            new Element("c", "cc"),
+            new Element("k", "kk"),
+            new Element("d", "dd")
+        );
         $this->assertEquals("d", $arrayList->last()->getAttr1());
+    }
+
+    public function testLastShouldReturnNullIfListIsEmpty()
+    {
+        $this->assertNull(emptyList()->last());
     }
 
     public function testFilter()
@@ -390,11 +408,25 @@ class ArrayListTest extends TestCase
 
     /**
      */
-    public function testJoinToStringWithToStringObjects()
+    public function testJoinToStringWithToStringables()
     {
         $arrayList = listOf(new StringableObject(2), new StringableObject(3.1), new StringableObject(true));
         $result = $arrayList->joinToString("; ");
         $this->assertEquals("2; 3.1; true", $result);
+    }
+
+    public function testJoinToStringWithAffixes()
+    {
+        $arrayList = listOf(new StringableObject(2), new StringableObject(3.1), new StringableObject(true));
+        $result = $arrayList->joinToString("#", "###", "###");
+        $this->assertEquals("###2#3.1#true###", $result);
+    }
+
+    public function testJoinToStringWithSuffix()
+    {
+        $arrayList = listOf(new StringableObject(2), new StringableObject(3.1), new StringableObject(true));
+        $result = $arrayList->joinToString("#", null, "###");
+        $this->assertEquals("2#3.1#true###", $result);
     }
 
     public function testShouldThrowExceptionWhenCollectToStringIsCalledOnListWithNotStringableObjects()
@@ -530,6 +562,14 @@ class ArrayListTest extends TestCase
                 new Element("d", "dd"),
                 new Element("d", "dd")
             )->distinct()
+        );
+    }
+
+    public function testDistinctShouldWorkWithScalarValues()
+    {
+        $this->assertEquals(
+            listOf("a", "b", "c"),
+            listOf("a", "a", "b", "c", "c", "c")->distinct()
         );
     }
 

@@ -20,6 +20,7 @@ use Seboettg\Collection\Map\MapTrait;
 use Seboettg\Collection\Map\Pair;
 use Seboettg\Collection\Test\Common\ComparableObject;
 use Seboettg\Collection\Test\Common\StringableObject;
+use Seboettg\Collection\Test\Common\Element;
 use stdClass;
 use function Seboettg\Collection\Lists\listOf;
 use function Seboettg\Collection\Map\mapOf;
@@ -266,9 +267,11 @@ class MapTest extends TestCase
 
     public function testFilterShouldRemoveNullEntriesIfCallableNull()
     {
+        $map = emptyMap();
+        $map->setArray([1 => "a", 2 => "b", 3 => "c", 4 => null, 5 => "e", 6 => null]);
         $this->assertEquals(
-            listOf("a", "b", "c", "e"),
-            listOf("a", "b", "c", null, "e", null)->filter()
+            mapOf(pair(1, "a"), pair(2, "b"), pair(3, "c"), pair(5, "e")),
+            $map->filter()
         );
     }
 
@@ -462,5 +465,16 @@ class MapTest extends TestCase
         $map = mapOf(pair(1, new Element("a", "aa")), pair(2, new Element("b", "bb")));
         $this->assertTrue($map->containsValue(new Element("b", "bb")));
         $this->assertFalse($map->containsValue(new Element("b", "bc")));
+    }
+
+    public function testClear()
+    {
+        $map = mapOf(pair(1, "a"), pair(2, "b"));
+        $this->assertCount(2, $map);
+        $map->clear();
+        $this->assertEquals(
+            emptyMap(),
+            $map
+        );
     }
 }

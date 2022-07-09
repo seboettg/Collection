@@ -252,27 +252,19 @@ trait ArrayListTrait
 
     public function distinct(): ListInterface
     {
-        $this->forEach(fn($item) => assertComparable($item,
-            sprintf(
-                "Each item must be of type scalar or implement \Stringable or implement %s",
-                Comparable::class
-            )
-        ));
-        $newList = emptyList();
+
         if ($this->all(fn($item): bool => isScalarOrStringable($item))) {
             return listFromArray(array_unique($this->toArray()));
         } else {
-            if ($this->all(fn($item): bool => isComparable($item))) {
-                $values = $this->array;
-                foreach ($values as $value) {
-                    if (!$newList->contains($value)) {
-                        $newList->add($value);
-                    }
+            $newList = emptyList();
+            $values = $this->array;
+            foreach ($values as $value) {
+                if (!$newList->contains($value)) {
+                    $newList->add($value);
                 }
-                return $newList;
             }
+            return $newList;
         }
-        return listFromArray($this->array);
     }
 
     /**

@@ -14,6 +14,7 @@ namespace Seboettg\Collection\NativePhp;
 /**
  * Trait ArrayAccessTrait
  * @package Seboettg\Collection\ArrayList
+ * @property $array Base array of this data structure
  */
 trait ArrayAccessTrait
 {
@@ -25,6 +26,7 @@ trait ArrayAccessTrait
      *
      * @return mixed Can return all value types.
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->array[$offset] ?? null;
@@ -36,6 +38,7 @@ trait ArrayAccessTrait
      * @param mixed $offset The offset to assign the value to.
      * @param mixed $value The value to set.
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->array[$offset] = $value;
@@ -48,6 +51,7 @@ trait ArrayAccessTrait
      * @param mixed $offset
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset): bool
     {
         return isset($this->array[$offset]);
@@ -58,7 +62,8 @@ trait ArrayAccessTrait
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
      * @param mixed $offset The offset to unset.
      */
-    public function offsetUnset($offset)
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($offset): void
     {
         unset($this->array[$offset]);
     }

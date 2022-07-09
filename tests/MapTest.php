@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Seboettg\Collection\Test;
 
 use ReflectionClass;
+use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
 use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\Lists\ListInterface;
@@ -252,6 +253,23 @@ class MapTest extends TestCase
         );
     }
 
+    public function testFilterShouldThrowNotApplicableCallableExceptionIfCallableInvalid()
+    {
+        $this->expectException(NotApplicableCallableException::class);
+        $this->expectExceptionMessage("Parameter 0 of type stdClass does not match the expected type of scalar");
+        $map = mapOf(pair(0, "a"), pair(1, "b"));
+        //stdClass not allowed as key
+        $map->filter(fn(stdClass $x, string $y) => $y === "b");
+    }
+
+    public function testFilterShouldRemoveNullEntriesIfCallableNull()
+    {
+        $this->assertEquals(
+            listOf("a", "b", "c", "e"),
+            listOf("a", "b", "c", null, "e", null)->filter()
+        );
+    }
+
     public function testGetOrElseShouldReturnValueIfKeyExists()
     {
         $this->assertEquals(
@@ -392,6 +410,17 @@ class MapTest extends TestCase
         $this->assertEquals(
             mapOf(pair(1, "a"), pair(3, "c")),
             $map
+        );
+    }
+
+    public function testToArrayShouldReturnAArray()
+    {
+        $this->assertIsArray(
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->toArray()
+        );
+        $this->assertEquals(
+            ["a" => 1, "b" => 2, "c" => 3],
+            mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->toArray()
         );
     }
 }

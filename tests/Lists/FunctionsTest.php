@@ -5,6 +5,7 @@ namespace Seboettg\Collection\Test\Lists;
 use PHPUnit\Framework\TestCase;
 use Seboettg\Collection\Lists\ListInterface;
 use function Seboettg\Collection\Lists\emptyList;
+use function Seboettg\Collection\Lists\listFromArray;
 use function Seboettg\Collection\Lists\listOf;
 
 class FunctionsTest extends TestCase
@@ -12,8 +13,7 @@ class FunctionsTest extends TestCase
 
     public function testEmptyListShouldReturnAInstanceOfListInterface()
     {
-        $list = emptyList();
-        $this->assertInstanceOf(ListInterface::class, $list);
+        $this->assertInstanceOf(ListInterface::class, emptyList());
     }
 
     public function testListOfShouldReturnAListContainingPassedStrings()
@@ -25,7 +25,26 @@ class FunctionsTest extends TestCase
         });
     }
 
-    public function testListOfShouldReturnAListContainingPassedIntegers()
+    public function testListFromArrayShouldReturnAListContainingEachElementOfPassedArray()
+    {
+        $array = ["A", "B", "C"];
+        $list = listFromArray($array);
+        $this->assertInstanceOf(ListInterface::class, $list);
+        $list->forEach(fn ($item) => $this->assertContains($item, $array));
+        foreach ($array as $item) {
+            $this->assertContains($item, $list);
+        }
+    }
+
+    public function testListOfShouldReturnAInstanceOfListInterface()
+    {
+        $this->assertInstanceOf(
+            ListInterface::class,
+            listOf(1, 2, 3)
+        );
+    }
+
+    public function testListOfShouldReturnAListContainingPassedItems()
     {
         $integers = [1, 2, 3];
         $list = listOf(...$integers);

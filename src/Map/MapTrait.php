@@ -21,8 +21,11 @@ use function Seboettg\Collection\Assert\assertScalar;
 use function Seboettg\Collection\Assert\assertType;
 use function Seboettg\Collection\Assert\assertValidCallable;
 use function Seboettg\Collection\Lists\emptyList;
+use function Seboettg\Collection\Lists\isComparable;
+use function Seboettg\Collection\Lists\isScalarOrStringable;
+use function Seboettg\Collection\Lists\isStringable;
 use function Seboettg\Collection\Lists\listOf;
-
+use function Seboettg\Collection\Lists\in_array;
 /**
  * @property array $array base array of this data structure
  */
@@ -119,7 +122,19 @@ trait MapTrait
      */
     public function containsValue($value): bool
     {
-        return in_array($value, $this->array, true) !== false;
+        if (
+            isScalarOrStringable($value) /* && $this->all(fn ($_, $value): bool => is_scalar($value)) */ ||
+            isComparable($value) /* && $this->all(fn ($_, $value): bool => isComparable($value)) */
+        ) {
+            // use custom in_array function
+            return in_array($value, $this->array) !== false;
+        } else {
+            // use PHP's native \in_array function
+            return \in_array(
+                print_r($value, true),
+                array_map(fn($item): string => print_r($item, true), $this->array)
+            );
+        }
     }
 
     /**
@@ -222,7 +237,7 @@ trait MapTrait
                     }
                 }
             } catch (ReflectionException $ex) {
-                throw new NotApplicableCallableException("Invalid callback.");
+                throw new NotApplicableCallableException("Invalid callable passed.");
             }
         } else {
             $map->array = array_filter($this->array, $predicate);

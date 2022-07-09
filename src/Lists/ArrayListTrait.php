@@ -15,12 +15,9 @@ use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Lists\ListFeatures\ListAccessTrait;
 use Seboettg\Collection\Lists\ListFeatures\ListOperationsTrait;
 use Seboettg\Collection\Lists\MapFeatures\MapFeaturesTrait;
-use Seboettg\Collection\Map\MapInterface;
 use Seboettg\Collection\NativePhp\IteratorTrait;
 use function Seboettg\Collection\Assert\assertComparable;
 use function Seboettg\Collection\Assert\assertStringable;
-use function Seboettg\Collection\Map\mapOf;
-use function Seboettg\Collection\Map\pair;
 
 /**
  * @property array $array Base array of this data structure
@@ -77,26 +74,20 @@ trait ArrayListTrait
      */
     public function contains($value): bool
     {
-        if ((isScalarOrStringable($value) && $this->all(fn($item) => isScalarOrStringable($item)))) {
+        if (
+            isScalarOrStringable($value) /* && $this->all(fn($item) => isScalarOrStringable($item)))*/ ||
+            isComparable($value)
+        ) {
+            // use custom in_array function
             return in_array($value, $this->array) !== false;
         }
-        if (isComparable($value) && $this->all(fn($item) => isComparable($item))) {
-            $items = $this->array;
-            /** @var Comparable $value */
-            /** @var Comparable $item */
-            foreach ($items as $item) {
-                if ($item->compareTo($value) === 0) {
-                    return true;
-                }
-            }
-        } else {
-            if ($value instanceof ListInterface && $this->all(fn($item) => $item instanceof ListInterface)) {
-                return in_array(print_r($value->toArray(), true), array_map(fn ($item) => print_r($item->toArray(), true), $this->array)) !== false;
-            } else {
-                return in_array(spl_object_hash($value), array_map(fn($item) => spl_object_hash($item), $this->array));
-            }
+        else {
+            // use PHP's native \in_array function
+            return \in_array(
+                print_r($value, true),
+                array_map(fn($item): string => print_r($item, true), $this->array)
+            );
         }
-        return false;
     }
 
     /**
@@ -299,7 +290,7 @@ trait ArrayListTrait
         if (array_key_exists($index, $this->array)) {
             return $this->array[$index];
         }
-        return $defaultValue();
+        return $defaultValue($this);
     }
 
     /**

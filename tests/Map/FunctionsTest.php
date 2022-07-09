@@ -4,14 +4,16 @@ namespace Seboettg\Collection\Test\Map;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Seboettg\Collection\Map\MapInterface;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
 
 class FunctionsTest extends TestCase
 {
-    public function testMapOfShouldThrowInvalidArgumentExceptionIfPassedParamsAreNotPairs()
+    public function testMapOfShouldCreateMap()
     {
-        $this->expectException(InvalidArgumentException::class);
-        mapOf(pair("a", "b"), "c");
+        $map = mapOf(pair("a", "b"), pair("c", "d"));
+        $this->assertInstanceOf(MapInterface::class, $map);
+        $this->assertCount(2, $map);
     }
 }

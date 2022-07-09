@@ -23,6 +23,7 @@ trait ArrayAccessTrait
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->array);
@@ -35,6 +36,7 @@ trait ArrayAccessTrait
      *
      * @return mixed Can return all value types.
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return isset($this->array[$offset]) ? $this->array[$offset] : null;
@@ -46,6 +48,7 @@ trait ArrayAccessTrait
      * @param mixed $offset The offset to assign the value to.
      * @param mixed $value The value to set.
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->array[$offset] = $value;
@@ -58,6 +61,7 @@ trait ArrayAccessTrait
      * @param mixed $offset
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->array[$offset]);
@@ -68,6 +72,7 @@ trait ArrayAccessTrait
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
      * @param mixed $offset The offset to unset.
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->array[$offset]);
@@ -76,6 +81,7 @@ trait ArrayAccessTrait
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->array);

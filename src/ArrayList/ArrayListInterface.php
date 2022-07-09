@@ -180,6 +180,13 @@ interface ArrayListInterface extends CollectionInterface, Traversable, IteratorA
     public function map(callable $mapFunction): ArrayListInterface;
 
     /**
+     * Same as <code>map</code> but removes null values from the new list
+     * @param callable $mapFunction
+     * @return ArrayListInterface
+     */
+    public function mapNotNull(callable $mapFunction): ArrayListInterface;
+
+    /**
      * Returns a new ArrayList containing an one-dimensional array of all elements of this ArrayList. Keys are going lost.
      * @return ArrayListInterface
      */

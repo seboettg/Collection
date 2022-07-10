@@ -1,36 +1,16 @@
-[![PHP](https://img.shields.io/badge/PHP-%3E=7.1-green.svg?style=flat)](http://docs.php.net/manual/en/migration71.new-features.php)
+[![PHP](https://img.shields.io/badge/PHP-%3E=7.4-green.svg?style=flat)](http://docs.php.net/manual/en/migration74.new-features.php)
 [![Total Downloads](https://poser.pugx.org/seboettg/collection/downloads)](https://packagist.org/packages/seboettg/collection/stats) 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/seboettg/Collection/blob/master/LICENSE)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=version-2.0)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/seboettg/Collection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/build.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/seboettg/Collection/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/seboettg/Collection/code-structure/master)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/seboettg/Collection/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 # Collection
 
-Collection is a set of useful wrapper classes for arrays, similar to Java Collection.
+Collection is a set of useful wrapper classes for arrays, similar to Java's or Kotlin's collection packages. 
 
-## Versions
-Since [Version 2.1](https://github.com/seboettg/Collection/releases/tag/v2.1.0) you need PHP 7.1 to use Collection library. Previous versions are running from PHP 5.6 upwards.
-
-### ArrayList, Stack, Queue ###
-The current version comes with a [ArrayList](#arraylist), a [Stack](#stack), and a [Queue](#queue). These classes can be used as wrapper instead using simple arrays. This approach guarantees consistently object-oriented handling for collection-like data-structures.
-
-### Advantages of ArrayList ###
-ArrayList is powerful alternative with a lot of of features: 
-* Sorting: You may implement the Comparable interface for elements of the ArrayList and the abstract class Comparator to be able to [sort the Elements in the ArrayList](#sorting-an-arraylist) comfortable. 
-* Filter: Apply a [filter](#filter-your-list) function or filter by keys.
-* Map: [Apply a function on each list item](#apply-a-function-on-each-element).
-
-### Easy and versatile to integrate ###
-* Use inheritance to take advantages of the classes, or
-* Use the interfaces and the belonging traits, if you already inherit another class
-
-Take also a look to the UML [class diagram](#class-diagram).
-
-
-
-# Installing Collection ##
+## Installing Collection
 
 The recommended way to install Collection is through
 [Composer](http://getcomposer.org).
@@ -58,128 +38,216 @@ You can then later update Collection using composer:
 composer.phar update
  ```
 
-## ArrayList ##
 
-### Simple Usage ###
+## Versions
+Since [Version 4.0](https://github.com/seboettg/Collection/releases/tag/v4.0.0) you need PHP 7.4 or higher to use this library.
+Since [Version 2.1](https://github.com/seboettg/Collection/releases/tag/v2.1.0) you need PHP 7.1 to use Collection library. Previous versions are running from PHP 5.6 upwards.
 
-Initialize ArrayList
+## Lists
 
-```php
-<?php
-use Seboettg\Collection\Lists;
-use function Seboettg\Collection\Lists\listOf;
-use function Seboettg\Collection\Map\emptyMap;
-use function Seboettg\Collection\Map\pair;
-$list = listOf("a", "c", "h", "k", "j");
-$map = mapOf(pair("c", "cc"), pair("b", "bb"), pair("a", "aa"))
-```
+Lists are completely new implemented for version 4.0. The handling is much more oriented on a functional approach. Further more useful methods for associative arrays are moved to map.
 
-Get elements
+### Getting started
 
 ```php
-
-for ($i = 0; $i < $list->count(); ++$i)
-{
-    echo $list->get($i)." ";
-}
+use Seboettg\Collection\Lists\listOf;
+use Seboettg\Collection\Lists\listFromArray;
+//create a simple list
+$list = listOf("a", "b", "c", "d");
+print_r($list);
 ```
-This will output:
-```bash
-a c h k j 
+Output 
 ```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => a
+            [1] => b
+            [2] => c
+        )
 
-Iterate a Map using foreach
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
+)
+```
+You also create a list from an existing array
+```php
+$array = ["d", "e", "f"];
+$otherList = listFromArray($array);
+```
+Output
+```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => d
+            [1] => e
+            [2] => f
+        )
+
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
+)
+```
+As you may notice, this will reset the array keys
+
+### Iterate over lists
 
 ```php
-foreach ($map as $key => $value) 
-{
+foreach ($list as $key => $value) {
     echo "[".$key."] => ".$value."\n";
 }
 ```
 Output:
-```bash
-c => cc
-b => bb
-a => aa
 ```
+[0] => a
+[1] => b
+[2] => c
+```
+or
+```php
+for ($i = 0; $i < $otherList->count(); ++$i) {
+    echo $otherList->get($i) . " ";
+}
+```
+output
+```
+d e f
+```
+### List operations
 
-Set, add or append Elements
+You may add the elements of another list to a list by using `plus`:
 
 ```php
-//set element
-$map->set("d", "dd");
-//or
-$map["d"] = "dd";
- 
-//add element
-$map->add("d", "ddd")
-print_r($map[$d]);
-/*
-output:
-Array(
-  0 => "dd",
-  1 => "ddd"
+$newList = $list->plus($otherList);
+print_r($newList);
+```
+output
+```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => a
+            [1] => b
+            [2] => c
+            [3] => d
+            [4] => e
+            [5] => f
+        )
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
 )
-*/
+```
+The same operation is applicable with arrays, with the same result:
+```php
+$newList = $list->plus($array);
+```
+You can also subtract the elements of another list or any `iterable` using `minus`:
+```php
+$subtract = $newList->minus($list);
+print_r($subtract);
+```
+output
+```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => d
+            [1] => e
+            [2] => f
+        )
 
-$list->append("z"); //append to the end of $list
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
+)
+```
+To get the intersection of two lists (or an iterable), you can use the `intersect` method:
+```php
+    $intersection = $newList->intersect(listOf("b", "d", "f", "h", "i"));
+    print_r($intersection);
+```
+output
+```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => b
+            [1] => d
+            [2] => f
+        )
+
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
+)
+```
+To get a list containing distinct elements, use `distinct`:
+```php
+    $list = listOf("a", "b", "a", "d", "e", "e", "g")
+    print_r($list->distinct());
+```
+output
+```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => a
+            [1] => b
+            [2] => d
+            [3] => e
+            [4] => g
+        )
+
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
+)
+```
+
+### Map all elements of a list
+If you need to modify all elements in a list, you can do it easily by using the `map` method:
+```php
+    $list = listOf(1, 2, 3, 4, 5);
+    $cubicList = $list->map(fn ($i) => $i * $i * $i);
+    //result of $cubicList: 1, 8, 27, 64, 125
+```
+
+There is also a `mapNotNull` method that eliminates `null` values from the result:
+
+```php
+function divisibleByTwoOrNull(int $number): ?int {
+    return $item % 2 === 0 ? $item : null;
+}
+
+listOf(0, 1, 2, 3, 4, 5)
+    ->map(fn (int $number): ?int => divisibleByTwoOrNull($number));
+//result: 0, 2, 4
 
 ```
 
-remove, replace, clear
+### Filter elements in a list
+
+The `filter` method returns a list containing only elements matching the given predicate.
 
 ```php
-$map->remove("d"); //removes d from $map
-
-$list->replace(["z", "y", "x"]); //replaces all elements by the specified
-
-$list->clear(); //removes all elements of the list
-``` 
-
-
-### Advanced Usage ###
-
-#### Inherit from ArrayList ####
-Inherit from ArrayList to extend your class with the whole functionality from ArrayList:
-
-```php
-<?php 
-namespace Vendor\Project;
-use Seboettg\Collection\Lists;
-class MyCustomList extends ArrayList {
-    
-    protected $myCustomProperty;
-    
-    protected function myCustomFunction()
-    {
-        //...
-    }
-}
-
-``` 
-Or implement ArrayListInterface and use the ArrayListTrait (which implements all functions that are required by the interface) in case of that your custom class inherits already from another class
-
-```php
-<?php 
-namespace Vendor\Project;
-use Seboettg\Collection\Lists\ListInterface;
-use Seboettg\Collection\Lists\ArrayListTrait;
-
-class MyCustomList extends MyOtherCustomClass implements ListInterface {
-    
-    use ArrayListTrait;
-    
-    protected $myCustomProperty;
-    
-    protected function myCustomFunction()
-    {
-        //...
-    }
-}
+    $list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
+    $listOfCharactersThatAsciiNumbersIsOdd = $list
+        ->filter(fn($letter) => ord($letter) % 2 !== 0);
+    //result of $listOfCharactersTharOrderNumbersAreOdd: "a", "c", "e", "g", "i"
 ```
 
+### Logical operations
 
-#### Sorting an ArrayList ####
+With the methods `any` and `all` you can check whether all elements (all) or at least one element (any) match a predicate.
+
+```php
+    $list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
+    $list->all(fn($letter) => ord($letter) % 2 !== 0); // false
+    $list->any(fn($letter) => ord($letter) % 2 !== 0); // true
+    
+    $list->all(fn($letter) => ord($letter) % 1 !== 0); // true
+    $list->any(fn($letter) => $letter === "z"); // false, since no character in the list is a 'z'
+```
+
+### Sorting a list
 Implement the Comparable interface 
 ```php
 <?php
@@ -237,11 +305,12 @@ Sort your list
 use Seboettg\Collection\Lists;
 use Seboettg\Collection\Collections;
 use Seboettg\Collection\Comparable\Comparator;
+use function Seboettg\Collection\Lists\listOf;
 use Vendor\App\Util\Attribute1Comparator;
 use Vendor\App\Model\Element;
 
 
-$list = new ArrayList(
+$list = listOf(
     new Element("b","bar"),
     new Element("a","foo"),
     new Element("c","foobar")
@@ -259,6 +328,7 @@ use Seboettg\Collection\Comparable\Comparator;
 use Seboettg\Collection\Comparable\Comparable;
 use Seboettg\Collection\Lists;
 use Seboettg\Collection\Collections;
+use function Seboettg\Collection\Lists\listOf;
 use Vendor\App\Model\Element;
 
 //Define a custom Comparator
@@ -270,7 +340,7 @@ class MyCustomOrderComparator extends Comparator
     }
 }
 
-$list = new ArrayList(
+$list = listOf(
     new Element("a", "aa"),
     new Element("b", "bb"),
     new Element("c", "cc"),
@@ -282,48 +352,6 @@ Collections::sort(
     $list, new MyCustomOrderComparator(Comparator::ORDER_CUSTOM, ["d", "k", "a", "b", "c"])
 );
 
-```
-
-#### filter your list ####
-
-```php
-$list = new ArrayList(
-    new Element("a", "aa"),
-    new Element("b", "bb"),
-    new Element("c", "cc"),
-    new Element("k", "kk"),
-    new Element("d", "dd"),
-);
-
-$newList = $list->filterByKeys([0, 2]); //returns new list containing 1st and 3rd element of $list
-```
-
-#### custom filter ####
-```php
-$list = new ArrayList(
-    new Element("a", "aa"),
-    new Element("b", "bb"),
-    new Element("c", "cc"),
-    new Element("k", "kk"),
-    new Element("d", "dd"),
-);
-
-$arrayList = $list->filter(function (Element $elem) {
-    return $elem->getAttribute2() === 'bb' || $elem->getAttribute2() === 'kk';
-});
-
-// $arrayList contains just the 2nd and the 4th element of $list
-```
-
-#### apply a function on each element ####
-
-```php
-$list = new ArrayList(1, 2, 3, 4, 5);
-$cubicList = $list->map(function($i) {
-    return $i * $i * $i;
-});
-
-// cubicList looks like this now: [1, 8, 27, 64, 125]
 ```
 
 ## Stack ##

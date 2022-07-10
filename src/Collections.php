@@ -20,7 +20,7 @@ use Seboettg\Collection\Comparable\Comparator;
  *
  * @author Sebastian Böttger <seboettg@gmail.com>
  */
-class Collections
+final class Collections
 {
     /**
      * Sorts the specified list according to the order induced by the specified comparator. All elements in the list

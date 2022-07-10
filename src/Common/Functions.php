@@ -1,4 +1,13 @@
 <?php
+declare(strict_types=1);
+/*
+ * Copyright (C) 2022 Sebastian Böttger <seboettg@gmail.com>
+ * You may use, distribute and modify this code under the
+ * terms of the MIT license.
+ *
+ * You should have received a copy of the MIT license with
+ * this file. If not, please visit: https://opensource.org/licenses/mit-license.php
+ */
 
 namespace Seboettg\Collection\Common;
 
@@ -11,10 +20,10 @@ final class Functions
     {
         if (is_double($value)) {
             $str = \strval($value);
-            if (strlen($str) == 1) {
+            if (strlen($str) === 1) {
                 return sprintf("%1\$.1f",$value);
             }
-            return \strval($value);
+            return $str;
         }
         if (is_bool($value)) {
             return $value ? "true" : "false";

@@ -47,7 +47,7 @@ final class Functions
      */
     public final static function pair($key, $value): Pair
     {
-        return new Pair($key, $value);
+        return Pair::factory($key, $value);
     }
 }
 

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Seboettg\Collection\Assert\Exception;
 
-class ObjectIsNotComparableException extends AssertionException
+final class ObjectIsNotComparableException extends AssertionException
 {
 
 }

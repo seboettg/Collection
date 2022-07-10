@@ -29,6 +29,7 @@ use Seboettg\Collection\Test\Common\ComparableObject;
 use Seboettg\Collection\Test\Common\StringableObject;
 use stdClass;
 use function Seboettg\Collection\Lists\emptyList;
+use function Seboettg\Collection\Lists\listFromArray;
 use function Seboettg\Collection\Lists\listOf;
 use function Seboettg\Collection\Map\mapOf;
 use function Seboettg\Collection\Map\pair;
@@ -272,15 +273,12 @@ class ArrayListTest extends TestCase
 
     public function testMap()
     {
-        $cubic = function($i) {
-            return $i * $i * $i;
-        };
-        $list = new ArrayList(1, 2, 3, 4, 5);
-        $cubicList = $list->map($cubic);
+        $list = listOf(1, 2, 3, 4, 5);
+        $cubicList = $list->map(fn ($item) => $item * $item * $item);
         $this->assertEquals(listOf(1, 8, 27, 64, 125), $cubicList);
 
-        $list = new ArrayList('a', 'b', 'c');
-        $toUpper = $list->map(function($item) { return ucfirst($item); });
+        $list = listOf('a', 'b', 'c');
+        $toUpper = $list->map(fn($item) => ucfirst($item));
         $this->assertEquals(listOf('A', 'B', 'C'), $toUpper);
     }
 
@@ -341,7 +339,7 @@ class ArrayListTest extends TestCase
             }
         ]';
         $customerArray = json_decode($customers);
-        $customerList = listOf(...$customerArray);
+        $customerList = listFromArray($customerArray);
         $customerMap = $customerList
             ->filter(fn($customer) => strpos($customer->lastname, "Mustermann") === false)
             ->map(function ($customer) {

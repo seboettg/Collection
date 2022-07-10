@@ -50,8 +50,8 @@ Lists are completely new implemented for version 4.0. The handling is much more 
 ### Getting started
 
 ```php
-use Seboettg\Collection\Lists\listOf;
-use Seboettg\Collection\Lists\listFromArray;
+use function Seboettg\Collection\Lists\listOf;
+use function Seboettg\Collection\Lists\listFromArray;
 //create a simple list
 $list = listOf("a", "b", "c", "d");
 print_r($list);

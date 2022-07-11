@@ -25,8 +25,10 @@ Collection is a set of useful wrapper classes for arrays, similar to Java's or K
 4. [Maps](#maps)
    1. [Getting started](#maps-getting-started)
    2. [Access elements](#maps-access-elements)
-   3. 
-   4. 
+   3. [Manipulate](#maps-manipulate)
+5. [Stack](#stack)
+6. [Queue](#queue)
+7. [Contribution](#contribution)
 
 
 <a name="versions"/>
@@ -70,7 +72,13 @@ composer.phar update
 
 ## Lists
 
-Lists are completely new implemented for version 4.0. The handling is much more oriented on a functional approach. Further more useful methods for associative arrays are moved to map.
+List is an ordered collection with access to elements by indices – integer numbers that reflect their position. Elements
+can occur more than once in a list. In other words: a list can contain any number of equal objects or occurrences of a 
+single object. Two lists are considered equal if they have the same sizes and structurally equal elements at the same 
+positions.
+
+Lists are completely new implemented for version 4.0. The handling is much more oriented on a functional approach. 
+Further more methods for associative arrays are moved to map.
 
 <a name="lists-getting-started"/>
 
@@ -117,6 +125,17 @@ Seboettg\Collection\Lists\ListInterface@anonymous Object
 )
 ```
 As you may notice, this will reset the array keys
+
+You can also create an empty List:
+```php
+use function Seboettg\Collection\Lists\emptyList;
+$emptyList = emptyList();
+echo $emptyList->count();
+```
+output
+```
+0
+```
 
 <a name="lists-iterate"/>
 
@@ -411,6 +430,132 @@ Collections::sort(
 
 ```
 
+<a name="maps"/>
+
+## Maps
+
+A Map stores key-value pairs; keys are unique, but different keys can be paired with equal values. The Map interface 
+provides specific methods, such as access to value by key, searching keys and values, and so on.
+
+<a name="maps-getting-started"/>
+
+### Getting started
+
+A Map is a collection of keys that are paired with values. Therefore, to create a Map you need pairs first:
+
+```php
+use Seboettg\Collection\Map\Pair;
+use function Seboettg\Collection\Map\pair;
+use function Seboettg\Collection\Map\mapOf;
+
+$pair1 = pair("Ceres", "Giuseppe Piazzi")
+
+//or you use the factory, with the same result:
+$pair2 = Pair::factory("Pallas", "Heinrich Wilhelm Olbers");
+
+//Now you can add both pairs to a map
+$map = mapOf($pair1, $pair2);
+print_r($map);
+```
+output
+```
+Seboettg\Collection\Map\MapInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Map\MapInterface@anonymous:private] => Array
+        (
+            [Ceres] => Giuseppe Piazzi
+            [Pallas] => Heinrich Wilhelm Olbers
+        )
+
+)
+```
+You can also create an empty Map:
+```php
+use function Seboettg\Collection\Map\emptyMap;
+$emptyMap = emptyMap();
+echo $emptyMap->count();
+```
+output
+```
+0
+```
+
+### Access elements
+
+```php
+use function Seboettg\Collection\Map\mapOf;
+$asteroidExplorerMap = mapOf(
+    pair("Ceres", "Giuseppe Piazzi"),
+    pair("Pallas", "Heinrich Wilhelm Olbers"),
+    pair("Juno", "Karl Ludwig Harding"),
+    pair("Vesta", "Heinrich Wilhelm Olbers")
+);
+
+$juno = $asteroidExplorerMap->get("Juno"); //Karl Ludwig Harding
+
+// or access elements like an array
+$pallas = $asteroidExplorerMap["Pallas"]; //Heinrich Wilhelm Olbers
+
+//get a list of all keys
+$asteroids = $asteroidExplorerMap->getKeys(); //Ceres, Pallas, Juno, Vesta
+
+//get a list of all values
+$explorer = $asteroidExplorerMap
+    ->values()
+    ->distinct(); // "Giuseppe Piazzi", "Heinrich Wilhelm Olbers", "Karl Ludwig Harding"
+
+$explorer = $asteroidExplorerMap
+    ->getOrElse("Iris", fn() => "unknown"); //$explorer = "unknown"
+
+```
+you are also able to get all map entries as a list of pairs
+```php
+$keyValuePairs = $asteroidExplorerMap->getEntries();
+```
+output
+```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => Seboettg\Collection\Map\Pair Object
+                (
+                    [key:Seboettg\Collection\Map\Pair:private] => Ceres
+                    [value:Seboettg\Collection\Map\Pair:private] => Giuseppe Piazzi
+                )
+
+            [1] => Seboettg\Collection\Map\Pair Object
+                (
+                    [key:Seboettg\Collection\Map\Pair:private] => Pallas
+                    [value:Seboettg\Collection\Map\Pair:private] => Heinrich Wilhelm Olbers
+                )
+
+            [2] => Seboettg\Collection\Map\Pair Object
+                (
+                    [key:Seboettg\Collection\Map\Pair:private] => Juno
+                    [value:Seboettg\Collection\Map\Pair:private] => Karl Ludwig Harding
+                )
+
+            [3] => Seboettg\Collection\Map\Pair Object
+                (
+                    [key:Seboettg\Collection\Map\Pair:private] => Vesta
+                    [value:Seboettg\Collection\Map\Pair:private] => Heinrich Wilhelm Olbers
+                )
+
+        )
+
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
+)
+```
+
+<a name="maps-manipulate"/>
+
+### Manipulate a map
+
+
+
+<a name="stack"/>
+
 ## Stack ##
 
 A stack is a collection of elements, with two principal operations:
@@ -448,6 +593,8 @@ echo $stack->search("a"); //outputs 2
 echo $stack->search("b"); //outputs 1
 ```
 
+<a name="queue"/>
+
 ## Queue ##
 A queue is a collection in which the elements are kept in order. A queue has two principle operations:
 
@@ -468,9 +615,7 @@ echo $queue->dequeue(); // outputs b
 echo $queue->count(); // outputs 1
 ```
 
-## Class diagram ##
-![class diagram](https://github.com/seboettg/collection/raw/master/class-diagram.png "class diagram")
-
+<a name="contribution"/>
 
 ## Contribution ##
 Fork this Repo and feel free to contribute your ideas using pull requests.

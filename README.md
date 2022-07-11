@@ -195,8 +195,8 @@ Seboettg\Collection\Lists\ListInterface@anonymous Object
 ```
 To get the intersection of two lists (or an iterable), you can use the `intersect` method:
 ```php
-    $intersection = $newList->intersect(listOf("b", "d", "f", "h", "i"));
-    print_r($intersection);
+$intersection = $newList->intersect(listOf("b", "d", "f", "h", "i"));
+print_r($intersection);
 ```
 output
 ```
@@ -214,8 +214,8 @@ Seboettg\Collection\Lists\ListInterface@anonymous Object
 ```
 To get a list containing distinct elements, use `distinct`:
 ```php
-    $list = listOf("a", "b", "a", "d", "e", "e", "g")
-    print_r($list->distinct());
+$list = listOf("a", "b", "a", "d", "e", "e", "g")
+print_r($list->distinct());
 ```
 output
 ```
@@ -239,9 +239,9 @@ Seboettg\Collection\Lists\ListInterface@anonymous Object
 ### Map all elements of a list
 If you need to modify all elements in a list, you can do it easily by using the `map` method:
 ```php
-    $list = listOf(1, 2, 3, 4, 5);
-    $cubicList = $list->map(fn ($i) => $i * $i * $i);
-    //result of $cubicList: 1, 8, 27, 64, 125
+$list = listOf(1, 2, 3, 4, 5);
+$cubicList = $list->map(fn ($i) => $i * $i * $i);
+//result of $cubicList: 1, 8, 27, 64, 125
 ```
 
 There is also a `mapNotNull` method that eliminates `null` values from the result:
@@ -264,10 +264,10 @@ listOf(0, 1, 2, 3, 4, 5)
 The `filter` method returns a list containing only elements matching the given predicate.
 
 ```php
-    $list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
-    $listOfCharactersThatAsciiNumbersIsOdd = $list
-        ->filter(fn($letter) => ord($letter) % 2 !== 0);
-    //result of $listOfCharactersTharOrderNumbersAreOdd: "a", "c", "e", "g", "i"
+$list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
+$listOfCharactersThatAsciiNumbersIsOdd = $list
+    ->filter(fn($letter) => ord($letter) % 2 !== 0);
+//result of $listOfCharactersTharOrderNumbersAreOdd: "a", "c", "e", "g", "i"
 ```
 
 <a name="lists-logical-operations"/>
@@ -277,12 +277,12 @@ The `filter` method returns a list containing only elements matching the given p
 With the methods `any` and `all` you can check whether all elements (all) or at least one element (any) match a predicate.
 
 ```php
-    $list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
-    $list->all(fn($letter) => ord($letter) % 2 !== 0); // false
-    $list->any(fn($letter) => ord($letter) % 2 !== 0); // true
-    
-    $list->all(fn($letter) => ord($letter) % 1 !== 0); // true
-    $list->any(fn($letter) => $letter === "z"); // false, since no character in the list is a 'z'
+$list = listOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
+$list->all(fn($letter) => ord($letter) % 2 !== 0); // false
+$list->any(fn($letter) => ord($letter) % 2 !== 0); // true
+
+$list->all(fn($letter) => ord($letter) % 1 !== 0); // true
+$list->any(fn($letter) => $letter === "z"); // false, since no character in the list is a 'z'
 ```
 
 <a name="lists-foreach"/>

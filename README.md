@@ -10,6 +10,34 @@
 
 Collection is a set of useful wrapper classes for arrays, similar to Java's or Kotlin's collection packages. 
 
+## Table of Contents
+1. [Versions](#versions)
+2. [Installing Collection](#install)
+3. [Lists](#lists)
+   1. [Getting started](#lists-getting-started)
+   2. [Iterate over lists](#lists-iterate)
+   3. [List operations](#lists-operations)
+   4. [Map elements](#lists-map)
+   5. [Filter elements](#lists-filter)
+   6. [Logical operations](#lists-logical-operations)
+   7. [forEach](#lists-foreach)
+   8. [sorting](#lists-sorting)
+4. [Maps](#maps)
+   1. [Getting started](#maps-getting-started)
+   2. [Access elements](#maps-access-elements)
+   3. 
+   4. 
+
+
+<a name="versions"/>
+
+## Versions
+Since [Version 4.0](https://github.com/seboettg/Collection/releases/tag/v4.0.0) you need PHP 7.4 or higher to use this library.
+Since [Version 2.1](https://github.com/seboettg/Collection/releases/tag/v2.1.0) you need PHP 7.1 to use Collection library. Previous versions are running from PHP 5.6 upwards.
+
+
+<a name="install"/>
+
 ## Installing Collection
 
 The recommended way to install Collection is through
@@ -38,14 +66,13 @@ You can then later update Collection using composer:
 composer.phar update
  ```
 
-
-## Versions
-Since [Version 4.0](https://github.com/seboettg/Collection/releases/tag/v4.0.0) you need PHP 7.4 or higher to use this library.
-Since [Version 2.1](https://github.com/seboettg/Collection/releases/tag/v2.1.0) you need PHP 7.1 to use Collection library. Previous versions are running from PHP 5.6 upwards.
+<a name="lists"/>
 
 ## Lists
 
 Lists are completely new implemented for version 4.0. The handling is much more oriented on a functional approach. Further more useful methods for associative arrays are moved to map.
+
+<a name="lists-getting-started"/>
 
 ### Getting started
 
@@ -91,6 +118,8 @@ Seboettg\Collection\Lists\ListInterface@anonymous Object
 ```
 As you may notice, this will reset the array keys
 
+<a name="lists-iterate"/>
+
 ### Iterate over lists
 
 ```php
@@ -114,6 +143,9 @@ output
 ```
 d e f
 ```
+
+<a name="lists-operations"/>
+
 ### List operations
 
 You may add the elements of another list to a list by using `plus`:
@@ -202,6 +234,8 @@ Seboettg\Collection\Lists\ListInterface@anonymous Object
 )
 ```
 
+<a name="lists-map"/>
+
 ### Map all elements of a list
 If you need to modify all elements in a list, you can do it easily by using the `map` method:
 ```php
@@ -223,6 +257,8 @@ listOf(0, 1, 2, 3, 4, 5)
 
 ```
 
+<a name="lists-filter"/>
+
 ### Filter elements in a list
 
 The `filter` method returns a list containing only elements matching the given predicate.
@@ -233,6 +269,8 @@ The `filter` method returns a list containing only elements matching the given p
         ->filter(fn($letter) => ord($letter) % 2 !== 0);
     //result of $listOfCharactersTharOrderNumbersAreOdd: "a", "c", "e", "g", "i"
 ```
+
+<a name="lists-logical-operations"/>
 
 ### Logical operations
 
@@ -246,6 +284,25 @@ With the methods `any` and `all` you can check whether all elements (all) or at 
     $list->all(fn($letter) => ord($letter) % 1 !== 0); // true
     $list->any(fn($letter) => $letter === "z"); // false, since no character in the list is a 'z'
 ```
+
+<a name="lists-foreach"/>
+
+### forEach method
+
+With the forEach method you can apply a closure or lambda functions on each element.
+
+```php
+$list = listOf("a", "b", "c");
+$list->forEach(fn (string $item) => print($item . PHP_EOL));
+```
+output:
+```
+a
+b
+c
+```
+
+<a name="lists-sorting"/>
 
 ### Sorting a list
 Implement the Comparable interface 

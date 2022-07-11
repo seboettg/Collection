@@ -34,7 +34,7 @@ class MapTest extends TestCase
     {
         $map = mapOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"]));
         $this->assertEquals(
-            listOf(new Pair("a", ["a"]), new Pair("b", ["b"]), new Pair("c", ["c"])),
+            listOf(pair("a", ["a"]), pair("b", ["b"]), pair("c", ["c"])),
             $map->getEntries()
         );
     }

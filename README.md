@@ -667,7 +667,7 @@ $asteroidExplorerMap->filter(fn (string $key, string $value): bool => $key !== "
 There are a lot of opportunities to use lists and maps in real world scenarios with a lot of 
 advantages e.g. less boilerplate code and better code readability. 
 
-The following json file represents a customer file that we want to use processing.
+The following json file represents a customer file that we want to use for processing.
 
 _customer.json_
 ```json

@@ -26,9 +26,12 @@ Collection is a set of useful wrapper classes for arrays, similar to Java's or K
    1. [Getting started](#maps-getting-started)
    2. [Access elements](#maps-access-elements)
    3. [Manipulate](#maps-manipulate)
-5. [Stack](#stack)
-6. [Queue](#queue)
-7. [Contribution](#contribution)
+   4. [Map elements](#maps-map)
+   5. [Filter map entries](#maps-filter)
+5. [Combining Lists and Maps](#lists-maps)
+6. [Stack](#stack)
+7. [Queue](#queue)
+8. [Contribution](#contribution)
 
 
 <a name="versions"/>
@@ -552,8 +555,246 @@ Seboettg\Collection\Lists\ListInterface@anonymous Object
 
 ### Manipulate a map
 
+```php
+use function Seboettg\Collection\Map\emptyMap;
 
+$map = emptyMap();
 
+//put
+$map->put("ABC", 1);
+echo $map["ABC"]; // 1
+
+//put via array assignment
+$map["ABC"] = 2;
+echo $map["ABC"]; // 2
+
+//remove
+$map->put("DEF", 3);
+$map->remove("DEF");
+echo $map->get("DEF"); // null
+```
+
+<a name="maps-map"/>
+
+### Map elements
+
+The signature of given transform function for mapping must have either a `Pair` parameter or a `key` and a `value` parameter.
+The map function always returns a list of type `ListInterface`:
+
+```php
+use function Seboettg\Collection\Map\mapOf;
+
+class Asteroid {
+    public string $name;
+    public ?string $explorer;
+    public ?float $diameter;
+    public function __construct(string $name, string $explorer, float $diameter = null)
+    {
+        $this->name = $name;
+        $this->explorer = $explorer;
+        $this->diameter = $diameter;
+    }
+}
+
+$asteroids = $asteroidExplorerMap
+    ->map(fn (Pair $pair): Asteroid => new Asteroid($pair->getKey(), $pair->getValue()));
+
+print_r($asteroids);
+```
+output
+```
+Seboettg\Collection\Lists\ListInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Lists\ListInterface@anonymous:private] => Array
+        (
+            [0] => Asteroid Object
+                (
+                    [name] => Ceres
+                    [explorer] => Giuseppe Piazzi
+                    [diameter] => 
+                )
+
+            [1] => Asteroid Object
+                (
+                    [name] => Pallas
+                    [explorer] => Heinrich Wilhelm Olbers
+                    [diameter] => 
+                )
+
+            [2] => Asteroid Object
+                (
+                    [name] => Juno
+                    [explorer] => Karl Ludwig Harding
+                    [diameter] => 
+                )
+
+            [3] => Asteroid Object
+                (
+                    [name] => Vesta
+                    [explorer] => Heinrich Wilhelm Olbers
+                    [diameter] => 
+                )
+
+        )
+
+    [offset:Seboettg\Collection\Lists\ListInterface@anonymous:private] => 0
+)
+```
+You get the same result with a key-value signature:
+```php
+$asteroids = $asteroidExplorerMap
+    ->map(fn (string $key, string $value): Asteroid => new Asteroid($key, $value));
+```
+
+<a name="maps-filter"/>
+
+### Filter entries of a map
+
+You may filter for elements by this way:
+
+```php
+$asteroidExplorerMap->filter(fn (Pair $pair): bool => $pair->getKey() !== "Juno");
+```
+or by this way:
+```php
+$asteroidExplorerMap->filter(fn (string $key, string $value): bool => $key !== "Juno");
+```
+
+<a name="lists-maps"/>
+
+### Combining Lists and Maps
+
+There are a lot of opportunities to use lists and maps in real world scenarios with a lot of 
+advantages e.g. less boilerplate code and better code readability. 
+
+The following json file represents a customer file that we want to use processing.
+
+_customer.json_
+```json
+[
+   {
+       "id": "A001",
+       "lastname": "Doe",
+       "firstname": "John",
+       "createDate": "2022-06-10 09:21:12"
+   },
+   {
+       "id": "A002",
+       "lastname": "Doe",
+       "firstname": "Jane",
+       "createDate": "2022-06-10 09:21:13"
+   },
+   {
+       "id": "A004",
+       "lastname": "Mustermann",
+       "firstname": "Erika",
+       "createDate": "2022-06-11 08:21:13"
+   }
+]
+```
+We would like to get a map that associates the customer id with respective objects of type `Customer` and we want to apply a filter
+so that we get only customers with lastname Doe.
+
+```php
+use function Seboettg\Collection\Lists\listFromArray;
+
+class Customer {
+    public string $id;
+    public string $lastname;
+    public string $firstname;
+    public DateTime $createDate;
+    public function __construct(
+        string $id,
+        string $lastname,
+        string $firstname,
+        DateTime $createDate
+    ) {
+        $this->id = $id;
+        $this->lastname = $lastname;
+        $this->firstname = $firstname;
+        $this->createDate = $createDate;
+    }
+}
+
+$customerList = listFromArray(json_decode(file_get_contents("customer.json"), true));
+$customerMap = $customerList
+    ->filter(fn (array $customerArray) => $customerArray["lastname"] === "Doe") // filter for lastname Doe
+    ->map(fn (array $customerArray) => new Customer(
+        $customerArray["id"],
+        $customerArray["lastname"],
+        $customerArray["firstname"],
+        DateTime::createFromFormat("Y-m-d H:i:s", $customerArray["createDate"])
+     )) // map array to customer object
+    ->associateBy(fn(Customer $customer) => $customer->id); // link the id with the respective customer object
+print_($customerMap);
+```
+output
+```
+Seboettg\Collection\Map\MapInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Map\MapInterface@anonymous:private] => Array
+        (
+            [A001] => Customer Object
+                (
+                    [id] => A001
+                    [lastname] => Doe
+                    [firstname] => John
+                    [createDate] => DateTime Object
+                        (
+                            [date] => 2022-06-10 09:21:12.000000
+                            [timezone_type] => 3
+                            [timezone] => UTC
+                        )
+
+                )
+            [A002] => Customer Object
+                (
+                    [id] => A002
+                    [lastname] => Doe
+                    [firstname] => Jane
+                    [createDate] => DateTime Object
+                        (
+                            [date] => 2022-06-10 09:21:13.000000
+                            [timezone_type] => 3
+                            [timezone] => UTC
+                        )
+                )
+        )
+)
+```
+
+Another example: Assuming we have a customer service with a `getCustomerById` method.
+We have a list of IDs with which we want to request the service. 
+
+```php
+$listOfIds = listOf("A001", "A002", "A004");
+$customerMap = $listOfIds
+    ->associateWith(fn ($customerId) => $customerService->getById($customerId))
+```
+output
+```
+Seboettg\Collection\Map\MapInterface@anonymous Object
+(
+    [array:Seboettg\Collection\Map\MapInterface@anonymous:private] => Array
+        (
+            [A001] => Customer Object
+                (
+                    [id] => A001
+                    [lastname] => Doe
+                    [firstname] => John
+                    [createDate] => DateTime Object
+                        (
+                            [date] => 2022-06-10 09:21:12.000000
+                            [timezone_type] => 3
+                            [timezone] => UTC
+                        )
+
+                )
+            [A002] ...
+            [A004] ...
+        )
+)
+```
 <a name="stack"/>
 
 ## Stack ##

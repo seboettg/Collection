@@ -264,8 +264,23 @@ trait MapTrait
     public function map(callable $transform): ListInterface
     {
         $list = emptyList();
-        foreach ($this->array as $key => $value) {
-            $list->add($transform(pair($key, $value)));
+        try {
+            $reflected = new ReflectionFunction($transform);
+            if (count($reflected->getParameters()) === 1) {
+                assertValidCallable($transform, [Pair::class]);
+                foreach ($this->array as $key => $value) {
+                    $list->add($transform(pair($key, $value)));
+                }
+            } else {
+                if (count($reflected->getParameters()) === 2) {
+                    assertValidCallable($transform, ["scalar", "mixed"]);
+                }
+                foreach ($this->array as $key => $value) {
+                    $list->add($transform($key, $value));
+                }
+            }
+        } catch (ReflectionException $ex) {
+            throw new NotApplicableCallableException("Invalid callable passed.");
         }
         return $list;
     }

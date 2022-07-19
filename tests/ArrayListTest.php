@@ -364,7 +364,7 @@ class ArrayListTest extends TestCase
         $map = [
             "A001" => \Seboettg\Collection\Test\stdclass(["id" => "A001", "lastname" => "Doe", "firstname" => "John", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-10 09:21:12")]),
             "A002" => \Seboettg\Collection\Test\stdclass(["id" => "A002", "lastname" => "Doe", "firstname" => "Jane", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-10 09:21:13")]),
-            "A004" => \Seboettg\Collection\Test\stdclass(["id" => "A002", "lastname" => "Mustermann", "firstname" => "Erika", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-11 08:21:13")]),
+            "A004" => \Seboettg\Collection\Test\stdclass(["id" => "A004", "lastname" => "Mustermann", "firstname" => "Erika", "createDate" => DateTime::createFromFormat("Y-m-d H:i:s", "2022-06-11 08:21:13")]),
         ];
 
         $customerRepository = $this->getMockBuilder(CustomerRepository::class)
@@ -375,9 +375,9 @@ class ArrayListTest extends TestCase
             ->method("getById")
             ->willReturnCallback(fn($id) => $map[$id]);
 
-        $customerMap = $listOfIds->associateWith(function ($customerId) use ($customerRepository) {
-            return $customerRepository->getById($customerId);
-        });
+        $customerMap = $listOfIds->associateWith(fn ($customerId) =>
+            $customerRepository->getById($customerId)
+        );
 
         $this->assertEquals(
             mapOf(

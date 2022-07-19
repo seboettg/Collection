@@ -662,7 +662,7 @@ $asteroidExplorerMap->filter(fn (string $key, string $value): bool => $key !== "
 
 <a name="lists-maps"/>
 
-### Combining Lists and Maps
+## Combining Lists and Maps
 
 There are a lot of opportunities to use lists and maps in real world scenarios with a lot of 
 advantages e.g. less boilerplate code and better code readability. 

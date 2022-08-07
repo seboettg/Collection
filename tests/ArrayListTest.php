@@ -803,6 +803,12 @@ class ArrayListTest extends TestCase
             )->searchBy(fn (stdClass $item) => $item->lastname === "Meyer")
         );
     }
+
+    public function test_has_shouldReturnTrueIfIndexExistsOtherwiseFalse()
+    {
+        $this->assertTrue(listOf("a", "b", "c")->has(2));
+        $this->assertFalse(listOf("a", "b", "c")->has(3));
+    }
 }
 
 function stdclass($array): stdClass

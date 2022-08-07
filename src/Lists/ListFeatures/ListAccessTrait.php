@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Copyright (C) 2022 Sebastian Böttger <seboettg@gmail.com>
  * You may use, distribute and modify this code under the
@@ -15,6 +16,14 @@ namespace Seboettg\Collection\Lists\ListFeatures;
  */
 trait ListAccessTrait
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function has(int $index): bool
+    {
+        return array_key_exists($index, $this->array);
+    }
+
     /**
      * {@inheritdoc}
      */

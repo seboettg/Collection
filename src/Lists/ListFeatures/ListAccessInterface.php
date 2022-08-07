@@ -14,6 +14,13 @@ namespace Seboettg\Collection\Lists\ListFeatures;
 interface ListAccessInterface
 {
     /**
+     * Returns true if the specified index exists
+     * @param int $index
+     * @return bool
+     */
+    public function has(int $index): bool;
+
+    /**
      * Returns the element of the specified index
      * @param int $index
      * @return mixed|null

@@ -392,14 +392,14 @@ class ArrayListTest extends TestCase
 
     public function testJoinToString()
     {
-        $arrayList = new ArrayList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h');
+        $arrayList = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h');
         $result = $arrayList->joinToString(", ");
         $this->assertEquals("a, b, c, d, e, f, g, h", $result);
     }
 
     public function testJoinToStringWithDoubleValues()
     {
-        $arrayList = new ArrayList(1.0, 1.1, 1.2, 1.3);
+        $arrayList = listOf(1.0, 1.1, 1.2, 1.3);
         $result = $arrayList->joinToString("; ");
         $this->assertEquals("1.0; 1.1; 1.2; 1.3", $result);
     }

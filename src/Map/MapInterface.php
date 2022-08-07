@@ -92,6 +92,11 @@ interface MapInterface extends Countable, ArrayAccess, IteratorAggregate, ToArra
     public function isEmpty(): bool;
 
     /**
+     * @return bool
+     */
+    public function isNotEmpty(): bool;
+
+    /**
      * Returns the value corresponding to the given key, or null if such a key is not present in the map.
      *
      * @param scalar $key

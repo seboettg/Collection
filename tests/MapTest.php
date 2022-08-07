@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Seboettg\Collection\Test;
 
 use ReflectionClass;
+use ReflectionException;
 use Seboettg\Collection\Assert\Exception\NotApplicableCallableException;
 use Seboettg\Collection\Assert\Exception\TypeIsNotAScalarException;
 use PHPUnit\Framework\TestCase;
@@ -360,6 +361,9 @@ class MapTest extends TestCase
         );
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function testForEachShouldExecuteCallableForEachElement()
     {
         $map = mapOf(pair("a", 1), pair("b", 2), pair("c", 3), pair("d", 4), pair("e", 5));
@@ -367,6 +371,7 @@ class MapTest extends TestCase
             public int $i = 0;
             public array $array = [];
             public function increase() { $this->i++; }
+            public function reset() { $this->i = 0; $this->array = []; }
         };
 
         $map->forEach(function (Pair $item) use ($class) {
@@ -374,6 +379,20 @@ class MapTest extends TestCase
             $class->array[$item->getKey()] = $item->getValue();
         });
 
+        //ensure that increase was called as much as elements are in the map
+        $this->assertTrue($map->count() === $class->i);
+
+        $reflectedMap = new ReflectionClass($map);
+        $arrayOfMap = $reflectedMap->getProperty("array");
+        $arrayOfMap->setAccessible(true);
+        $this->assertEquals($arrayOfMap->getValue($map), $class->array);
+
+        $class->reset();
+
+        $map->forEach(function (string $key, int $value) use ($class) {
+            $class->increase();
+            $class->array[$key] = $value;
+        });
         //ensure that increase was called as much as elements are in the map
         $this->assertTrue($map->count() === $class->i);
 
@@ -418,7 +437,7 @@ class MapTest extends TestCase
         );
     }
 
-    public function testToArrayShouldReturnAArray()
+    public function test_toArray_shouldReturnAArray()
     {
         $this->assertIsArray(
             mapOf(pair("a", 1), pair("b", 2), pair("c", 3))->toArray()
@@ -429,7 +448,7 @@ class MapTest extends TestCase
         );
     }
 
-    public function testSetArray()
+    public function test_setArray()
     {
         $map = mapOf(pair("a", 1), pair("b", 2));
         $map->setArray(["b" => 2]);
@@ -439,28 +458,28 @@ class MapTest extends TestCase
         );
     }
 
-    public function testContainsValueShouldWorkWithScalars()
+    public function test_containsValue_shouldWorkWithScalars()
     {
         $map = mapOf(pair("a", 1), pair("b", 2));
         $this->assertTrue($map->containsValue(2));
         $this->assertFalse($map->containsValue(3));
     }
 
-    public function testContainsValueShouldWorkWithStringable()
+    public function test_containsValue_shouldWorkWithStringable()
     {
         $map = mapOf(pair(1, new StringableObject("a")), pair(2, new StringableObject("b")));
         $this->assertTrue($map->containsValue(new StringableObject("b")));
         $this->assertFalse($map->containsValue(new StringableObject("c")));
     }
 
-    public function testContainsValueShouldWorkWithComparable()
+    public function test_containsValue_shouldWorkWithComparable()
     {
         $map = mapOf(pair(1, new ComparableObject("a")), pair(2, new ComparableObject("b")));
         $this->assertTrue($map->containsValue(new ComparableObject("b")));
         $this->assertFalse($map->containsValue(new ComparableObject("c")));
     }
 
-    public function testContainsValueShouldWorkWithAnyType()
+    public function test_containsValue_shouldWorkWithAnyType()
     {
         $map = mapOf(pair(1, new Element("a", "aa")), pair(2, new Element("b", "bb")));
         $this->assertTrue($map->containsValue(new Element("b", "bb")));
@@ -476,5 +495,15 @@ class MapTest extends TestCase
             emptyMap(),
             $map
         );
+    }
+
+    public function test_isNotEmpty_true()
+    {
+        $this->assertTrue(listOf(pair("a", 1))->isNotEmpty());
+    }
+
+    public function test_isNotEmpty_false()
+    {
+        $this->assertFalse(emptyMap()->isNotEmpty());
     }
 }

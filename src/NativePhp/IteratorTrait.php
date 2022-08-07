@@ -2,12 +2,15 @@
 
 namespace Seboettg\Collection\NativePhp;
 
+use ReturnTypeWillChange;
+
 trait IteratorTrait
 {
     private int $offset = 0;
     /**
      * {@inheritdoc}
      */
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->valid() ? $this->array[$this->offset] : false;

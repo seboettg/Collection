@@ -148,6 +148,15 @@ trait MapTrait
 
     /**
      * @inheritDoc
+     * @return bool
+     */
+    public function isNotEmpty(): bool
+    {
+        return !$this->isEmpty();
+    }
+
+    /**
+     * @inheritDoc
      * @param scalar
      * @return mixed
      */
@@ -351,13 +360,28 @@ trait MapTrait
 
     /**
      * @inheritDoc
-     * @param callable $action f(entry: Pair<scalar, mixed>) -> mixed|void
+     * @param callable $action f(entry: Pair<scalar, mixed>) -> mixed|void OR f(key: scalar, value: mixed>) -> mixed|void
      * @return void
      */
     public function forEach(callable $action): void
     {
-        foreach ($this->array as $key => $value) {
-            $action(pair($key, $value));
+        try {
+            $reflected = new ReflectionFunction($action);
+            if (count($reflected->getParameters()) === 1) {
+                assertValidCallable($action, [Pair::class]);
+                foreach ($this->array as $key => $value) {
+                    $action(pair($key, $value));
+                }
+            } else {
+                if (count($reflected->getParameters()) === 2) {
+                    assertValidCallable($action, ["scalar", "mixed"]);
+                }
+                foreach ($this->array as $key => $value) {
+                    $action($key, $value);
+                }
+            }
+        } catch (ReflectionException $ex) {
+            throw new NotApplicableCallableException("Invalid callable passed.");
         }
     }
 

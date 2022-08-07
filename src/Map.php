@@ -20,6 +20,5 @@ class Map implements MapInterface
     /**
      * @var array $array
      */
-    protected $array;
+    protected $array = [];
 }
-

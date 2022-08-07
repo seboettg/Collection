@@ -214,4 +214,9 @@ interface ListInterface extends CollectionInterface, ListAccessInterface, Traver
      * @return bool
      */
     public function isEmpty(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isNotEmpty(): bool;
 }

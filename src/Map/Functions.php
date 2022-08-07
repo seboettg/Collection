@@ -49,6 +49,11 @@ final class Functions
     {
         return Pair::factory($key, $value);
     }
+
+    public static function isMap($value): bool
+    {
+        return $value instanceof MapInterface;
+    }
 }
 
 /**
@@ -76,4 +81,9 @@ function mapOf(...$pairs): MapInterface
 function pair($key, $value): Pair
 {
     return Functions::pair($key, $value);
+}
+
+function isMap($value): bool
+{
+    return Functions::isMap($value);
 }

@@ -25,6 +25,11 @@ final class Functions
         $list->setArray(array_values($elements));
         return $list;
     }
+
+    public static function isList($value): bool
+    {
+        return $value instanceof ListInterface;
+    }
 }
 
 function emptyList(): ListInterface
@@ -40,4 +45,9 @@ function listOf(...$elements): ListInterface
 function listFromArray(array $elements): ListInterface
 {
     return Functions::listFromArray($elements);
+}
+
+function isList($value): bool
+{
+    return Functions::isList($value);
 }

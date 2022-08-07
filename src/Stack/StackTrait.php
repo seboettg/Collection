@@ -22,7 +22,7 @@ trait StackTrait
     /**
      * {@inheritdoc}
      */
-    public function push($item)
+    public function push($item): StackInterface
     {
         $this->array[] = $item;
         return $this;
@@ -60,7 +60,7 @@ trait StackTrait
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
         return count($this->array);
     }

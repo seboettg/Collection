@@ -57,6 +57,7 @@ final class Functions
 }
 
 /**
+ * Returns an instance of `MapInterface` containing no entries.
  * @return MapInterface
  */
 function emptyMap(): MapInterface
@@ -65,6 +66,7 @@ function emptyMap(): MapInterface
 }
 
 /**
+ * Returns an implemenation of MapInterface from the passed pairs.
  * @param array<Pair> ...$pairs
  * @return MapInterface
  */
@@ -74,6 +76,7 @@ function mapOf(...$pairs): MapInterface
 }
 
 /**
+ * Returns a Pair object from `$key` and `$value`.
  * @param scalar $key
  * @param mixed $value
  * @return Pair
@@ -83,6 +86,10 @@ function pair($key, $value): Pair
     return Functions::pair($key, $value);
 }
 
+/**
+ * Returns `true` when the passed `$value` is an instance of `MapInterface`, `false` otherwise.
+ * @return bool
+ */
 function isMap($value): bool
 {
     return Functions::isMap($value);

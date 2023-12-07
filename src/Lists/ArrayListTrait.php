@@ -203,15 +203,6 @@ trait ArrayListTrait
 
     /**
      * @inheritDoc
-     * @deprecated use joinToString instead
-     */
-    public function collectToString(string $delimiter): string
-    {
-        return $this->joinToString($delimiter);
-    }
-
-    /**
-     * @inheritDoc
      * @return int
      */
     public function count(): int

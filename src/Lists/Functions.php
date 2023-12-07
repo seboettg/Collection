@@ -41,21 +41,33 @@ final class Functions
     }
 }
 
+/**
+ * Returns an implmentation of `ListInterface` with no entries.
+ */
 function emptyList(): ListInterface
 {
     return Functions::emptyList();
 }
 
+/**
+ * Returns an implementation of `ListInterface` containing passed elements
+ */
 function listOf(...$elements): ListInterface
 {
     return Functions::listOf(...$elements);
 }
 
+/**
+ * Returns an implementation of `ListInterface` containing all values of the passed array. The array keys are discarded.
+ */
 function listFromArray(array $elements): ListInterface
 {
     return Functions::listFromArray($elements);
 }
 
+/**
+ * Returns true when `$value` is an instance of `ListInterface`, otherwise false.
+ */
 function isList($value): bool
 {
     return Functions::isList($value);

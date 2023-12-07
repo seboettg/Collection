@@ -24,21 +24,21 @@ use function method_exists;
 
 final class Functions
 {
-    public static final function assertScalar($value, string $message): void
+    final public static function assertScalar($value, string $message): void
     {
         if (!is_scalar($value)) {
             throw new TypeIsNotAScalarException($message);
         }
     }
 
-    public static final function assertType($value, string $fqcn, string $message)
+    final public static function assertType($value, string $fqcn, string $message)
     {
         if (!$value instanceof $fqcn) {
             throw new WrongTypeException($message);
         }
     }
 
-    public static final function assertStringable($value, string $message)
+    final public static function assertStringable($value, string $message)
     {
         if (!is_scalar($value)) {
             if (!self::isStrigableObject($value)) {
@@ -52,7 +52,7 @@ final class Functions
         return is_object($value) && method_exists($value, "__toString");
     }
 
-    public static final function assertValidCallable(callable $callable, array $parameters)
+    final public static function assertValidCallable(callable $callable, array $parameters)
     {
         $reflected = new ReflectionFunction($callable);
         if (count($reflected->getParameters()) !== count($parameters)) {
@@ -80,7 +80,7 @@ final class Functions
         }
     }
 
-    private static final function throwNotApplicableCallableException($paramNumber, $expectedType, $actualType)
+    private static function throwNotApplicableCallableException($paramNumber, $expectedType, $actualType)
     {
         throw new NotApplicableCallableException(
             sprintf(
@@ -97,7 +97,7 @@ final class Functions
      * @param string $message
      * @return void
      */
-    public static final function assertComparable($object, string $message): void {
+    final public static function assertComparable($object, string $message): void {
         if (is_scalar($object)) {
             return;
         }

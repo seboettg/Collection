@@ -14,6 +14,9 @@ use Seboettg\Collection\Lists\ListInterface;
 use function Seboettg\Collection\Lists\emptyList;
 use function Seboettg\Collection\Lists\listOf;
 
+/**
+ * @property array $array
+ */
 trait ListOperationsTrait
 {
     /**

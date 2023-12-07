@@ -120,7 +120,7 @@ function isComparable($object): bool
  * is an instance of Comparable or `strcmp`, when `$object` is a string or `$object` implements the Stringable interface.
  * @param string $needle
  * @param string $array
- * @return true
+ * @return bool
  */
 function in_array($needle, $array): bool
 {

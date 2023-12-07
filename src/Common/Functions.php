@@ -65,7 +65,7 @@ final class Functions
         }
         if (isStringable($needle)) {
             foreach ($array as $item) {
-                if (strcmp((string)$needle, (string) $item) === 0) {
+                if (strcmp((string) $needle, (string) $item) === 0) {
                     return true;
                 }
             }
@@ -74,27 +74,54 @@ final class Functions
     }
 }
 
-
+/**
+ * Get string value of a variable. It differs from the original function in that it is also – next to scalar values – able to handle objects.
+ * @param mixed $value
+ * @return string
+ */
 function strval($value): string
 {
     return Functions::strval($value);
 }
 
+/**
+ * Returns true when $object is a scalar value or when `isStringable` returns true for $object
+ * @param mixed $object
+ * @return bool
+ */
 function isScalarOrStringable($object): bool
 {
     return Functions::isScalarOrStringable($object);
 }
 
+/**
+ * Returns `true` when $object implements `__toString` or `$object` is a scalar value
+ * @param mixed $object
+ * @return bool
+ */
 function isStringable($object): bool
 {
     return Functions::isStringable($object);
 }
 
+/**
+ * Returns true when `$object` implements the `Comparable` interface.
+ * @param mixed $object
+ * @return bool
+ */
 function isComparable($object): bool
 {
     return Functions::isComparable($object);
 }
 
+/**
+ * Returns `true` when the given `$array` contains `$needle`. It differs from the original function in that 
+ * it is also – next to scalar values – able to handle objects by using either `compareTo` method, when `$object`
+ * is an instance of Comparable or `strcmp`, when `$object` is a string or `$object` implements the Stringable interface.
+ * @param string $needle
+ * @param string $array
+ * @return true
+ */
 function in_array($needle, $array): bool
 {
     return Functions::in_array($needle, $array);

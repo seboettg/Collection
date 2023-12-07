@@ -119,7 +119,7 @@ function isComparable($object): bool
  * it is also – next to scalar values – able to handle objects by using either `compareTo` method, when `$object`
  * is an instance of Comparable or `strcmp`, when `$object` is a string or `$object` implements the Stringable interface.
  * @param string $needle
- * @param string $array
+ * @param array $array
  * @return bool
  */
 function in_array($needle, $array): bool

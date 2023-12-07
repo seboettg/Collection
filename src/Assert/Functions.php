@@ -52,7 +52,7 @@ final class Functions
         return is_object($value) && method_exists($value, "__toString");
     }
 
-    public static function assertValidCallable(callable $callable, array $parameters)
+    public static final function assertValidCallable(callable $callable, array $parameters)
     {
         $reflected = new ReflectionFunction($callable);
         if (count($reflected->getParameters()) !== count($parameters)) {
@@ -80,7 +80,7 @@ final class Functions
         }
     }
 
-    private static function throwNotApplicableCallableException($paramNumber, $expectedType, $actualType)
+    private static final function throwNotApplicableCallableException($paramNumber, $expectedType, $actualType)
     {
         throw new NotApplicableCallableException(
             sprintf(
@@ -97,7 +97,7 @@ final class Functions
      * @param string $message
      * @return void
      */
-    public static function assertComparable($object, string $message): void {
+    public static final function assertComparable($object, string $message): void {
         if (is_scalar($object)) {
             return;
         }

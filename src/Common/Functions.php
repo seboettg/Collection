@@ -21,7 +21,7 @@ final class Functions
         if (is_double($value)) {
             $str = \strval($value);
             if (strlen($str) === 1) {
-                return sprintf("%1\$.1f",$value);
+                return sprintf("%1\$.1f", $value);
             }
             return $str;
         }

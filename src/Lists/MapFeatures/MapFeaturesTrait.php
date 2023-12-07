@@ -110,6 +110,9 @@ trait MapFeaturesTrait
         return $map;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function toMap(): MapInterface
     {
         $result = emptyMap();

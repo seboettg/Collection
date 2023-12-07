@@ -125,11 +125,6 @@ interface ListInterface extends CollectionInterface, ListAccessInterface, Traver
     public function collect(callable $collectionFunction);
 
     /**
-     * @deprecated use joinToString instead
-     */
-    public function collectToString(string $delimiter): string;
-
-    /**
      * Tries to convert each element of the list to a string and concatenates them with given delimiter.
      * Throws a <code>NotConvertibleToStringException</code> if any of the objects in the list is not a
      * string or is not convertible to string.

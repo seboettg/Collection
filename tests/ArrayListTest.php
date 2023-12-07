@@ -427,11 +427,11 @@ class ArrayListTest extends TestCase
         $this->assertEquals("2#3.1#true###", $result);
     }
 
-    public function testShouldThrowExceptionWhenCollectToStringIsCalledOnListWithNotStringableObjects()
+    public function testShouldThrowExceptionWhenJoinToStringIsCalledOnListWithNotStringableObjects()
     {
         $arrayList = new ArrayList(new Element("0", "a"), new Element("1", "b"), new Element("2", "c"));
         $this->expectException(NotConvertibleToStringException::class);
-        $arrayList->collectToString("; ");
+        $arrayList->joinToString("; ");
     }
 
     public function testPartitionShouldSplitListIntoAMapOfTwoEntries()
